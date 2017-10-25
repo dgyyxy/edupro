@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.common.dao.mapper.EduJobCoursewareMapper">
+    <resultMap id="BaseResultMap" type="com.edu.common.dao.model.EduJobCourseware">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="job_id" jdbcType="INTEGER" property="jobId"/>
+        <result column="sort_num" jdbcType="INTEGER" property="sortNum"/>
+        <association property="courseware" column="courseware_id" javaType="com.edu.common.dao.model.EduCourseware" select="selectCourse"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+      id, courseware_id, job_id, sort_num
+    </sql>
+
+    <select id="selectCourse" resultType="com.edu.common.dao.model.EduCourseware" parameterType="java.lang.Integer" flushCache="false" useCache="true">
+        select
+        id, name, time, content, picture, uri_str uriStr, (select ect.name from edu_courseware_type ect where ect.id = category_id) category, category_id categoryId
+        from edu_courseware
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByExample" parameterType="com.edu.common.dao.model.EduJobCoursewareExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from edu_job_courseware
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edu_job_courseware
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edu_job_courseware
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.edu.common.dao.model.EduJobCoursewareExample">
+        delete from edu_job_courseware
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.edu.common.dao.model.EduJobCourseware">
+    insert into edu_job_courseware (id, courseware_id, job_id, sort_num)
+    values (#{id,jdbcType=INTEGER}, #{coursewareId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into edu_job_courseware (courseware_id, job_id, sort_num)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.coursewareId,jdbcType=INTEGER},#{item.jobId,jdbcType=INTEGER},#{item.sortNum,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduJobCourseware">
+        insert into edu_job_courseware
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="coursewareId != null">
+                courseware_id,
+            </if>
+            <if test="jobId != null">
+                job_id,
+            </if>
+            <if test="sortNum != null">
+                sort_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="coursewareId != null">
+                #{coursewareId,jdbcType=INTEGER},
+            </if>
+            <if test="jobId != null">
+                #{jobId,jdbcType=INTEGER},
+            </if>
+            <if test="sortNum != null">
+                #{sortNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.edu.common.dao.model.EduJobCoursewareExample"
+            resultType="java.lang.Long">
+        select count(1) from edu_job_courseware
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <select id="maxByExample" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(sort_num) from edu_job_courseware where job_id = #{jobId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectBySortNum" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edu_job_courseware
+        where sort_num = #{sortNum,jdbcType=INTEGER} and job_id = #{jobId,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update edu_job_courseware
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.coursewareId != null">
+                courseware_id = #{record.coursewareId,jdbcType=INTEGER},
+            </if>
+            <if test="record.jobId != null">
+                job_id = #{record.jobId,jdbcType=INTEGER},
+            </if>
+            <if test="record.sortNum != null">
+                sort_num = #{record.sortNum,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update edu_job_courseware
+        set id = #{record.id,jdbcType=INTEGER},
+        courseware_id = #{record.coursewareId,jdbcType=INTEGER},
+        job_id = #{record.jobId,jdbcType=INTEGER},
+        sort_num = #{record.sortNum,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.edu.common.dao.model.EduJobCourseware">
+        update edu_job_courseware
+        <set>
+            <if test="coursewareId != null">
+                courseware_id = #{coursewareId,jdbcType=INTEGER},
+            </if>
+            <if test="jobId != null">
+                job_id = #{jobId,jdbcType=INTEGER},
+            </if>
+            <if test="sortNum != null">
+                sort_num = #{sortNum,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.edu.common.dao.model.EduJobCourseware">
+        update edu_job_courseware
+        set courseware_id = #{coursewareId,jdbcType=INTEGER},
+          job_id = #{jobId,jdbcType=INTEGER},sort_num = #{sortNum,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteBatch">
+        delete from edu_job_courseware where courseware_id IN
+        <foreach collection="courseIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and job_id = #{jobId,jdbcType=INTEGER}
+    </delete>
+
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+</mapper>

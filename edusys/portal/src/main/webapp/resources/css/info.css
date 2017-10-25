@@ -1,0 +1,114 @@
+.info-content {
+	padding: 0px;
+	width: 100%;
+}
+
+.info-content .info-head {
+	position: relative;
+    padding: 0 20px;
+}
+
+.info-header h1 {
+	margin: 0px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 49px;
+    height: 49px;
+    color: #787d82;
+    border-bottom: 1px solid #d0d6d9;
+}
+
+.info-header .active-title, .info-header span:hover {
+    border-bottom: 2px solid #1abc9c;
+    color: #1abc9c;
+}
+
+.categories > li {
+	border: 1px solid rgba(26,188,156,0.80);
+	border-radius: 5rem;
+	margin-top: 10px;
+}
+
+.categories li.active {
+	background: rgba(26,188,156,0.80) !important;
+	
+}
+
+.categories li.active>a{
+	color: #ffffff;
+}
+
+.categories li a {
+	margin-left: 20px;
+}
+
+.info-header h1 span {
+    float: left;
+    width: 80px;
+    text-align: center;
+    height: 49px;
+    line-height: 49px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.info-body {
+	padding: 20px 15px;
+}
+
+.info-item-list {
+	width: 100%;
+}
+
+.info-item-list .info-item {
+	height: 45px;
+	line-height: 44px;
+	margin-top: 20px;
+}
+
+.info-label {
+	width: 200px;
+	font-size: 13px;
+	font-weight: 500px;
+}
+
+span.label {
+	border-radius: 0px;
+}
+
+table>tbody>tr>td {
+	border-bottom: 1px solid #ddd;
+}
+
+.moco-course-list {
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+}
+
+.moco-course-wrap {
+	margin-left: 0px;
+	margin-top: 5px;
+	margin-right: 15px;
+}
+
+.r {
+	color: red;
+}
+
+.input-append {
+	margin-bottom: 8px;
+}
+
+.time {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+.time>span {
+	border: 1px solid rgba(26,188,156,0.80) !important;
+	padding: 10px 15px;
+	color: red;
+}
+
+a:focus{outline:none;text-decoration:none;}

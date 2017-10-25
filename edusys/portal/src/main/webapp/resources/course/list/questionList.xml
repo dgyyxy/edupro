@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="GB2312"?>
+<test>
+	
+	<item type="是非" daan="a">
+	<text str="保证交易安全最重要的是一切按照标准流程来操作，交易状态非“买家已付款”的就绝对不能发货；顾客如果要求修改收货地址的话，一定要使用购买商品的ID来通知，务必要确定对方的真实身份。" />
+	<text str="正确" />
+	<text str="错误" />
+	</item>
+	
+	<item type="单选" daan="b">
+	<text str="支付宝的密码分为登录密码和____，如果仅有登录密码只能查看帐户，不能操作帐户资金往来。" />
+	<text str="交易密码" />
+	<text str="支付密码" />
+	<text str="数字口令" />
+	<text str="信使密码" />
+	</item>
+	
+	<item type="单选" daan="c">
+	<text str="设置安全性较强的密码是帐户安全的有效保障，淘宝网的帐户密码是由____个字符组成，最好是使用英文字母、数字和标点符号三种元素来进行自由组合。" />
+	<text str="8—10" />
+	<text str="6—12" />
+	<text str="6—10" />
+	<text str="8—12" />
+	</item>
+	
+	<item type="多选" daan="ac">
+	<text str="重视交易安全、防骗防盗是网店经营中的一个长期行为，交易安全分为____。" />
+	<text str="帐户安全" />
+	<text str="网络安全" />
+	<text str="支付安全" />
+	<text str="商家机密安全" />
+	</item>
+	
+	<item type="多选" daan="ad">
+	<text str="店铺需要严格保证各项机密信息的安全，常见的商业机密主要包括____等信息。" />
+	<text str="密码、口令" />
+	<text str="商品信息" />
+        <text str="个人信息" />
+        <text str="内部文件" />
+	</item>
+	
+	
+</test>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

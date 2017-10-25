@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.common.dao.mapper.EduStudentMapper">
+  <resultMap id="BaseResultMap" type="com.edu.common.dao.model.EduStudent">
+    <id column="stu_id" jdbcType="INTEGER" property="stuId" />
+    <result column="stu_name" jdbcType="VARCHAR" property="stuName" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="stu_no" jdbcType="VARCHAR" property="stuNo" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="organization_id1" jdbcType="INTEGER" property="organizationId1" />
+    <result column="organization_name1" jdbcType="VARCHAR" property="organizationName1" />
+    <result column="organization_id2" jdbcType="INTEGER" property="organizationId2" />
+    <result column="organization_name2" jdbcType="VARCHAR" property="organizationName2" />
+    <result column="job_count" jdbcType="INTEGER" property="jobCount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    stu_id, stu_name, card_no, stu_no, phone, password, organization_id1, organization_name1, 
+    organization_id2, organization_name2
+  </sql>
+  <select id="selectByExample" parameterType="com.edu.common.dao.model.EduStudentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from edu_student
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edu_student
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectLearnRecordList" parameterType="com.edu.common.dao.model.EduStudentExample" resultMap="BaseResultMap">
+    select es.*,count(ej.id) job_count
+    from edu_student es left join edu_jobs ej on es.organization_id2 = ej.organization_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by es.stu_id
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+
+  <select id="countLearnRecord" parameterType="com.edu.common.dao.model.EduStudentExample" resultType="java.lang.Long">
+    select count(1)
+    from (select es.stu_id from edu_student es left join edu_jobs ej on es.organization_id2 = ej.organization_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by es.stu_id) tab
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edu_student
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.edu.common.dao.model.EduStudentExample">
+    delete from edu_student
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.edu.common.dao.model.EduStudent">
+    insert into edu_student (stu_id, stu_name, card_no, 
+      stu_no, phone, password, 
+      organization_id1, organization_name1, organization_id2, 
+      organization_name2)
+    values (#{stuId,jdbcType=INTEGER}, #{stuName,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
+      #{stuNo,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{organizationId1,jdbcType=INTEGER}, #{organizationName1,jdbcType=VARCHAR}, #{organizationId2,jdbcType=INTEGER}, 
+      #{organizationName2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
+    insert into edu_student (stu_name, card_no,
+      stu_no, phone, password,
+      organization_id1, organization_name1, organization_id2,
+      organization_name2)
+    values
+      <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.stuName,jdbcType=VARCHAR}, #{item.cardNo,jdbcType=VARCHAR},
+      #{item.stuNo,jdbcType=VARCHAR}, #{item.phone,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR},
+      #{item.organizationId1,jdbcType=INTEGER}, #{item.organizationName1,jdbcType=VARCHAR}, #{item.organizationId2,jdbcType=INTEGER},
+      #{item.organizationName2,jdbcType=VARCHAR})
+      </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduStudent">
+    insert into edu_student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stuId != null">
+        stu_id,
+      </if>
+      <if test="stuName != null">
+        stu_name,
+      </if>
+      <if test="cardNo != null">
+        card_no,
+      </if>
+      <if test="stuNo != null">
+        stu_no,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="organizationId1 != null">
+        organization_id1,
+      </if>
+      <if test="organizationName1 != null">
+        organization_name1,
+      </if>
+      <if test="organizationId2 != null">
+        organization_id2,
+      </if>
+      <if test="organizationName2 != null">
+        organization_name2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stuId != null">
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="stuName != null">
+        #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNo != null">
+        #{stuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationId1 != null">
+        #{organizationId1,jdbcType=INTEGER},
+      </if>
+      <if test="organizationName1 != null">
+        #{organizationName1,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationId2 != null">
+        #{organizationId2,jdbcType=INTEGER},
+      </if>
+      <if test="organizationName2 != null">
+        #{organizationName2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.edu.common.dao.model.EduStudentExample" resultType="java.lang.Long">
+    select count(*) from edu_student
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update edu_student
+    <set>
+      <if test="record.stuId != null">
+        stu_id = #{record.stuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stuName != null">
+        stu_name = #{record.stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardNo != null">
+        card_no = #{record.cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuNo != null">
+        stu_no = #{record.stuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationId1 != null">
+        organization_id1 = #{record.organizationId1,jdbcType=INTEGER},
+      </if>
+      <if test="record.organizationName1 != null">
+        organization_name1 = #{record.organizationName1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationId2 != null">
+        organization_id2 = #{record.organizationId2,jdbcType=INTEGER},
+      </if>
+      <if test="record.organizationName2 != null">
+        organization_name2 = #{record.organizationName2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update edu_student
+    set stu_id = #{record.stuId,jdbcType=INTEGER},
+      stu_name = #{record.stuName,jdbcType=VARCHAR},
+      card_no = #{record.cardNo,jdbcType=VARCHAR},
+      stu_no = #{record.stuNo,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      organization_id1 = #{record.organizationId1,jdbcType=INTEGER},
+      organization_name1 = #{record.organizationName1,jdbcType=VARCHAR},
+      organization_id2 = #{record.organizationId2,jdbcType=INTEGER},
+      organization_name2 = #{record.organizationName2,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.edu.common.dao.model.EduStudent">
+    update edu_student
+    <set>
+      <if test="stuName != null">
+        stu_name = #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNo != null">
+        stu_no = #{stuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationId1 != null">
+        organization_id1 = #{organizationId1,jdbcType=INTEGER},
+      </if>
+      <if test="organizationName1 != null">
+        organization_name1 = #{organizationName1,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationId2 != null">
+        organization_id2 = #{organizationId2,jdbcType=INTEGER},
+      </if>
+      <if test="organizationName2 != null">
+        organization_name2 = #{organizationName2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.edu.common.dao.model.EduStudent">
+    update edu_student
+    set stu_name = #{stuName,jdbcType=VARCHAR},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      stu_no = #{stuNo,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      organization_id1 = #{organizationId1,jdbcType=INTEGER},
+      organization_name1 = #{organizationName1,jdbcType=VARCHAR},
+      organization_id2 = #{organizationId2,jdbcType=INTEGER},
+      organization_name2 = #{organizationName2,jdbcType=VARCHAR}
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </update>
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+</mapper>
