@@ -5,11 +5,7 @@
             <select id="pid" name="organizationId1">
 
             </select>
-            <select id="subId" name="organizationId2">
-                <option value="0">请选择上级</option>
-            </select>
             <input type="hidden" name="organizationName1" id="organizationName1"/>
-            <input type="hidden" name="organizationName2" id="organizationName2"/>
         </div>
         <div class="form-group row">
             <input id="lefile" type="file" name="importFile" style="display: none;"/>
@@ -21,7 +17,7 @@
             </div>
         </div>
         <div class="form-group">
-            请先点击 <a href="${basePath}/resources/templete/students.xls" class="label label-primary">下载模板</a>
+            请先点击 <a href="${basePath}/resources/templete/organ.xls" class="label label-primary">下载模板</a>
         </div>
         <div class="form-group text-right dialog-buttons">
             <a class="waves-effect waves-button" href="javascript:;" onclick="createSubmit();">保存</a>
@@ -33,19 +29,12 @@
 
     $(function(){
         initSelect(0, 'pid');
-
-        $('#subId').select2({width:150});
-
-        $('#pid').change(function(){
-            var pid = $(this).val();
-            initSelect(pid, 'subId');
-        });
     });
 
     function initSelect(pid, targetId) {
         $.getJSON('${basePath}/manage/organization/list', {pid: pid, limit: 10000}, function(json) {
             var datas = [];
-            if(pid == 0) datas = [{id: 0, text: '请选择机构'}];
+            if(pid == 0) datas = [{id: 0, text: '请选择一级机构'}];
             for (var i = 0; i < json.rows.length; i ++) {
                 var data = {};
                 data.id = json.rows[i].organizationId;
@@ -68,32 +57,21 @@
         var loading;
         $.ajax({
             type: 'post',
-            url: '${basePath}/manage/student/import',
+            url: '${basePath}/manage/organization/import',
             processData: false,
             contentType: false,
             data: new FormData($('#importForm')[0]),
             beforeSend: function() {
-                if ($('#pid').val() == '0') {
-                    $('#pid').focus();
+
+                var pidval = $('#pid').select2('val');
+                if (pidval == '0') {
                     alertMsg("请选择一级机构");
-                    return false;
-                }
-                if ($('#subId').val() == '0') {
-                    $('#subId').focus();
-                    alertMsg("请选择所属二级机构");
                     return false;
                 }
                 if ($('#photoCover').val()==''){
                     alertMsg("请选择上传文件！");
                     return false;
                 }
-                //获取选中的机构名称
-                if($('#pid').val != '0')
-                    $('#organizationName1').val($('#pid option:selected').text());
-                if($('#subId').val != '0')
-                    $('#organizationName2').val($('#subId option:selected').text());
-                //this.data = $('#importForm').serialize();
-                this.data = new FormData($('#importForm')[0]);
                 loading = $.dialog({
                     theme: 'white',
                     animation: 'rotateX',
@@ -102,6 +80,7 @@
                     closeIcon: false,
                     content: "正在处理，请稍等。。。"
                 });
+                this.data = new FormData($('#importForm')[0]);
             },
             success: function(result) {
                 loading.close();
@@ -117,7 +96,6 @@
                     importDialog.close();
                     $table.bootstrapTable('refresh');
                 }
-                console.log(result);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alertMsg(textStatus);

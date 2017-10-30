@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
 * EduOrganizationService实现
 * Created by Gary on 2017/4/1.
@@ -26,4 +28,14 @@ public class EduOrganizationServiceImpl extends BaseServiceImpl<EduOrganizationM
     @Autowired
     EduOrganizationMapper eduOrganizationMapper;
 
+    @Override
+    public int insertBatch(List<EduOrganization> organizationList) {
+        eduOrganizationMapper.insertBatch(organizationList);
+        return 1;
+    }
+
+    @Override
+    public List<String> selectOrganNameList(Integer parentId) {
+        return eduOrganizationMapper.selectOrganNameList(parentId);
+    }
 }

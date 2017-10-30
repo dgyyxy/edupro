@@ -6,7 +6,11 @@ import com.baidu.unbiz.fluentvalidator.ResultCollectors;
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.EduOrganization;
 import com.edu.common.dao.model.EduOrganizationExample;
+import com.edu.common.dao.model.EduStudent;
+import com.edu.common.util.ExcelUtil;
+import com.edu.common.validator.ExcelValidator;
 import com.edu.common.validator.LengthValidator;
+import com.edu.common.validator.NotNullValidator;
 import com.edusys.manager.common.SysResult;
 import com.edusys.manager.common.SysResultConstant;
 import com.edusys.manager.service.EduOrganizationService;
@@ -20,11 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * 组织机构Controller
@@ -118,6 +122,60 @@ public class OrganizationController extends BaseController{
         organization.setCtime(time);
         int count = organizationService.insertSelective(organization);
         return new SysResult(SysResultConstant.SUCCESS, count);
+    }
+
+    @ApiOperation(value = "导入二级机构")
+    @RequestMapping(value = "/import", method = RequestMethod.GET)
+    public String importOrgan(){
+        return "/manage/organization/import.jsp";
+    }
+
+    @ApiOperation(value = "导入二级机构")
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    @ResponseBody
+    public Object importData(HttpServletRequest request, Integer organizationId1,
+                             String organizationName1) {
+        //取得上传文件
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        CommonsMultipartFile file = (CommonsMultipartFile) multipartRequest.getFile("importFile");
+        ComplexResult result = FluentValidator.checkAll()
+                .on(organizationName1, new NotNullValidator("选择一级机构"))
+                .on(file, new ExcelValidator())
+                .result(ResultCollectors.toComplex());
+        if (!result.isSuccess()) {
+            return new SysResult(SysResultConstant.FAILED, result.getErrors());
+        }
+        String resultMsg = "";
+        List<EduOrganization> organList = new ArrayList<>();
+        //查询该一级机构下面所有二级机构名称列表
+        List<String> organNameList = organizationService.selectOrganNameList(organizationId1);
+        try {
+            List<Map<String, String>> mapList = ExcelUtil.ExcelToList(file);
+            for (int i = 0; i < mapList.size(); i++) {
+                Map<String, String> map = mapList.get(i);
+                EduOrganization eduOrgan = new EduOrganization();
+                String name = map.get("机构名称(必填)");
+                //判断二级机构是否存在
+                if(organNameList!=null && organNameList.size()>0){
+                    if(organNameList.contains(name)){
+                        continue;
+                    }
+                }
+                eduOrgan.setName(name);
+                long time = System.currentTimeMillis();
+                eduOrgan.setCtime(time);
+                eduOrgan.setLevel(Byte.parseByte("2"));
+                eduOrgan.setParentId(organizationId1);
+                organList.add(eduOrgan);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int count = 1;
+        if(organList.size()>0){
+            count = organizationService.insertBatch(organList);
+        }
+        return new SysResult(SysResultConstant.SUCCESS, "success");
     }
 
     @ApiOperation(value = "删除组织")

@@ -233,5 +233,20 @@
       ctime = #{ctime,jdbcType=BIGINT}
     where organization_id = #{organizationId,jdbcType=INTEGER}
   </update>
+  <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
+    insert into edu_organization (organization_id, name, level,
+    parent_id, ctime
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.organizationId,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, #{item.level,jdbcType=TINYINT},
+      #{item.parentId,jdbcType=INTEGER}, #{item.ctime,jdbcType=BIGINT}
+      )
+    </foreach>
+  </insert>
+  <select id="selectOrganNameList" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select name from edu_organization
+    where parent_id = #{parentId,jdbcType=INTEGER}
+  </select>
   <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 </mapper>

@@ -19,6 +19,7 @@
 <div id="main">
 	<div id="toolbar">
         <shiro:hasPermission name="sys:organization:create"><a class="waves-effect waves-button green" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增机构</a></shiro:hasPermission>
+        <a class="waves-effect waves-button cyan" href="javascript:;" onclick="importAction()"><i class="zmdi zmdi-upload"></i> 导入二级机构</a>
         <shiro:hasPermission name="sys:organization:update"><a class="waves-effect waves-button blue" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑机构</a></shiro:hasPermission>
         <shiro:hasPermission name="sys:organization:delete"><a class="waves-effect waves-button red" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除机构</a></shiro:hasPermission>
 	</div>
@@ -90,6 +91,21 @@ function createAction() {
 		}
 	});
 }
+
+// 导入二级机构信息
+var importDialog;
+function importAction(){
+	importDialog = $.dialog({
+		type: 'green',
+		columnClass: 'col-md-6 col-md-offset-2',
+		title: '导入二级机构信息',
+		content: 'url:${basePath}/manage/organization/import',
+		onContentReady: function () {
+			initMaterialInput();
+		}
+	});
+}
+
 // 编辑
 var updateDialog;
 function updateAction() {

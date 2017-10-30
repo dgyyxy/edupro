@@ -28,4 +28,8 @@ public interface EduOrganizationMapper {
     int updateByPrimaryKeySelective(EduOrganization record);
 
     int updateByPrimaryKey(EduOrganization record);
+
+    int insertBatch(List<EduOrganization> organizationList);
+
+    List<String> selectOrganNameList(@Param("parentId") Integer parentId);
 }
