@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gary on 2017/5/16.
@@ -62,8 +59,10 @@ public class TaskController extends BaseController{
 
         EduJobsExample eje = new EduJobsExample();
         EduJobsExample.Criteria criteria = eje.createCriteria();
-
-        criteria.andOrganizationIdEqualTo(student.getOrganizationId2());//指定当前登录学员所属班级
+        List<Integer> organIdList = new ArrayList<>();
+        organIdList.add(student.getOrganizationId2());
+        organIdList.add(0);
+        criteria.andOrganizationIdIn(organIdList);
 
         long nowtime = new Date().getTime();
 

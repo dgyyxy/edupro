@@ -92,9 +92,8 @@
                     alertMsg("请输入结束时间");
                     return false;
                 }
-                if ($('#organizationId').val()==0){
-                    alertMsg("请选择开课机构");
-                    return false;
+                if ($('#organizationId').val()!=0){
+                    $('#organization').val($('#organizationId option:selected').text());
                 }
 
                 // 处理日期
@@ -102,7 +101,7 @@
                 $('#startTime').val(Date.parse(new Date(starTime.replace(/-/g, "/"))));
                 var endTime = $('#time2').val();
                 $('#endTime').val(Date.parse(new Date(endTime.replace(/-/g, "/"))));
-                $('#organization').val($('#organizationId option:selected').text());
+
                 this.data = $('#createForm').serialize();
             },
            success: function(result) {

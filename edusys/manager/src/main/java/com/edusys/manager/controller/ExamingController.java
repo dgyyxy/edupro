@@ -116,6 +116,24 @@ public class ExamingController extends BaseController {
         return result;
     }
 
+    @ApiOperation("强制交卷页面")
+    @RequestMapping(value = "/proctor/{id}", method = RequestMethod.GET)
+    public String proctor(@PathVariable("id") Integer id, ModelMap map){
+        EduStudentExam studentExam = studentExamService.selectByPrimaryKey(id);
+        map.put("studentExam", studentExam);
+        return "/manage/examing/proctor.jsp";
+    }
+
+    @ApiOperation("强制交卷处理操作")
+    @RequestMapping(value = "/proctor/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Object proctorExam(@PathVariable("id") Integer id,EduStudentExam studentExam){
+        studentExam.setId(id);
+        studentExam.setApproved(4);//代表已强制交卷
+        studentExamService.updateByPrimaryKeySelective(studentExam);
+        return new SysResult(SysResultConstant.SUCCESS, "success");
+    }
+
     @ApiOperation("强制交卷")
     @RequestMapping(value = "/stopexam/{ids}", method = RequestMethod.GET)
     @ResponseBody

@@ -127,6 +127,17 @@ public class EduStudentExam implements Serializable {
 
     private String idcard;
 
+    //监考强制交卷原因
+    private String proctor;
+
+    public String getProctor() {
+        return proctor;
+    }
+
+    public void setProctor(String proctor) {
+        this.proctor = proctor;
+    }
+
     public String getIdcard() {
         return idcard;
     }

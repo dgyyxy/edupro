@@ -429,5 +429,11 @@
       difficulty = #{difficulty,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+  <select id="selectQuestionNameList" parameterType="java.lang.Integer" resultType="java.lang.String">
+      select name from edu_question
+      where question_category_id = #{qcId,jdbcType=INTEGER}
+  </select>
+
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 </mapper>

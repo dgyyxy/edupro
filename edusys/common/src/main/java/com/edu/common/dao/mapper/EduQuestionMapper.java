@@ -36,4 +36,6 @@ public interface EduQuestionMapper {
     int updateByPrimaryKey(EduQuestion record);
 
     int insertBatch(List<EduQuestion> questionList);
+
+    List<String> selectQuestionNameList(@Param("qcId") Integer qcId);
 }

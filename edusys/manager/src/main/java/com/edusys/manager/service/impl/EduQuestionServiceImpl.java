@@ -9,6 +9,7 @@ import com.edu.common.dao.pojo.QuestionContent;
 import com.edu.common.util.ExcelUtil;
 import com.edusys.manager.service.EduQuestionService;
 import com.google.gson.Gson;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,25 @@ public class EduQuestionServiceImpl extends BaseServiceImpl<EduQuestionMapper, E
     @Override
     public void uploadQuestions(CommonsMultipartFile file, int categoryId, String username) {
         int index = 2;
+        //获取该题目分类下面所有题目名称列表
+        List<String> qnameList = eduQuestionMapper.selectQuestionNameList(categoryId);
+
         try{
             List<EduQuestion> questions = new ArrayList<>();
             List<Map<String, String>> questionMapList = ExcelUtil.ExcelToList(file);
             for (Map<String, String> map : questionMapList) {
                 EduQuestion question = new EduQuestion();
-                question.setName(map.get("题目").length() > 30 ? map.get("题目").substring(0, 30) + "..." : map.get("题目"));
+                String namestr = map.get("题目").length() > 30 ? map.get("题目").substring(0, 30) + "..." : map.get("题目");
+                if(StringUtils.isBlank(namestr)){
+                    throw new RuntimeException("题目不能为空！");
+                }
+                question.setName(namestr);
+                if(qnameList.contains(namestr)){
+                    throw new RuntimeException("该分类下题目已重复！");
+                }
+                if(StringUtils.isBlank(map.get("类型"))){
+                    throw new RuntimeException("题目类型不能为空！");
+                }
                 if(map.get("类型").equals("单选题")
                         || map.get("类型").equals("单项选择题")){
                     question.setQuestionTypeId(1);
@@ -53,6 +67,9 @@ public class EduQuestionServiceImpl extends BaseServiceImpl<EduQuestionMapper, E
                     question.setQuestionTypeId(3);
                 }else if (map.get("类型").equals("填空题")){
                     question.setQuestionTypeId(4);
+                }
+                if(StringUtils.isBlank(map.get("答案"))){
+                    throw new RuntimeException("题目答案不能为空！");
                 }
                 question.setAnswer(map.get("答案"));
 
@@ -101,5 +118,10 @@ public class EduQuestionServiceImpl extends BaseServiceImpl<EduQuestionMapper, E
             e.printStackTrace();
             throw new RuntimeException("第" + index + "行有错误，请检查！" + e.getMessage());
         }
+    }
+
+    @Override
+    public List<String> selectQuestionNameList(Integer qcId) {
+        return eduQuestionMapper.selectQuestionNameList(qcId);
     }
 }

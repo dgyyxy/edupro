@@ -82,6 +82,17 @@
             contentType: false,
             data: new FormData($('#importForm')[0]),
             beforeSend: function() {
+
+                if ($('#categoryId').val() == 0) {
+                    $('#categoryId').focus();
+                    alertMsg("请选择试题分类！");
+                    return false;
+                }
+                if ($('#photoCover').val() == '') {
+                    alertMsg("请选择上传文件！");
+                    return false;
+                }
+                this.data = new FormData($('#importForm')[0]);
                 loading = $.dialog({
                     theme: 'white',
                     animation: 'rotateX',
@@ -90,12 +101,6 @@
                     closeIcon: false,
                     content: "正在处理，请稍等。。。"
                 });
-                if ($('#categoryId').val() == 0) {
-                    $('#categoryId').focus();
-                    alertMsg("请选择试题分类！");
-                    return false;
-                }
-                this.data = new FormData($('#importForm')[0]);
             },
             success: function(result) {
                 loading.close();

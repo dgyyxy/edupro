@@ -8,7 +8,7 @@
 <c:set var="basePath" value="${pageContext.request.contextPath}"/>
 <div id="submain">
     <div id="subtoolbar">
-        <a class="waves-effect waves-button orange" href="javascript:void(0);" onclick="stopExamAction()"><i class="zmdi zmdi-settings"></i> 强制交卷</a>
+        <!--<a class="waves-effect waves-button orange" href="javascript:void(0);" onclick="stopExamAction()"><i class="zmdi zmdi-settings"></i> 强制交卷</a>-->
     </div>
     <table id="subtable"></table>
 </div>
@@ -44,10 +44,31 @@
                 {field: 'stuName', title: '姓名'},
                 {field: 'idcard', title: '身份证件号'},
                 {field: 'stuOrgan', title: '所属机构'},
-                {field: 'approved', title: '考试状态', formatter: 'statusFormatter'}
+                {field: 'proctor', title:'原因', visible: false},
+                {field: 'approved', title: '考试状态', formatter: 'statusFormatter'},
+                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ]
         });
     });
+
+    // 格式化操作按钮
+    function actionFormatter(value, row, index) {
+        var id = row.id;
+        var approved = row.approved;
+        var proctor = row.proctor;
+        if(approved == 1){
+            return [
+                '<a class="update" href="javascript:;" onclick="proctorAction('+id+',0)" data-toggle="tooltip"><i class="glyphicon glyphicon-edit"></i>&nbsp;强制交卷</a>'
+            ].join('');
+        }
+        if(proctor!=null && proctor!=''){
+            return [
+                '<a class="update" href="javascript:;" onclick="proctorAction('+id+',1)" data-toggle="tooltip"><i class="zmdi zmdi-file-text"></i>&nbsp;查看原因</a>'
+            ].join('');
+        }
+        return '';
+
+    }
 
     function queryParams(params){
         return params;
@@ -67,7 +88,26 @@
         }
     }
 
-    //强制交卷
+    // 监考强制交卷
+    var proctorDialog;
+    function proctorAction(id, tag) {
+        proctorDialog = $.dialog({
+            type: 'green',
+            animationSpeed: 300,
+            columnClass: 'col-md-6 col-md-offset-3',
+            title: '强制交卷',
+            content: 'url:${basePath}/manage/examing/proctor/'+id,
+            onContentReady: function () {
+                if(tag == 1) {//查看
+                    $('#btngroup').hide();
+                    $('#proctor').attr('readonly',true);
+                }
+                initMaterialInput();
+            }
+        });
+    }
+
+    /*//强制交卷
     var stopExamDialog;
     function stopExamAction() {
         var rows = $subtable.bootstrapTable('getSelections');
@@ -134,6 +174,6 @@
                 }
             });
         }
-    }
+    }*/
 
 </script>
