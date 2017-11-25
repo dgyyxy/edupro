@@ -10,10 +10,7 @@ import com.edusys.front.common.SysResult;
 import com.edusys.front.common.SysResultConstant;
 import com.edusys.front.listener.MemoryData;
 import com.edusys.front.listener.SessionListener;
-import com.edusys.front.service.EduAdvertService;
-import com.edusys.front.service.EduNoticeService;
-import com.edusys.front.service.OrganizationService;
-import com.edusys.front.service.StudentService;
+import com.edusys.front.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +51,70 @@ public class IndexController extends BaseController{
 
     @Autowired
     private EduAdvertService advertService;
+
+    @Autowired
+    private IssuesService issuesService;
+
+    /**
+     * 获取安全问题列表
+     * @return
+     */
+    @RequestMapping(value = "issues", method = RequestMethod.GET)
+    @ResponseBody
+    public Object getIssuesList(){
+        EduStudentAnswerExample studentAnswerExample = new EduStudentAnswerExample();
+        EduStudentAnswerExample.Criteria criteria = studentAnswerExample.createCriteria();
+        criteria.andStuIdIsNull();
+        criteria.andCardNoIsNull();
+        criteria.andAnswerIsNull();
+        List<EduStudentAnswer> list = issuesService.selectByExample(studentAnswerExample);
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", list);
+        return result;
+    }
+
+    /**
+     * 忘记密码处理
+     * @param cardno
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "resetpwd", method = RequestMethod.POST)
+    @ResponseBody
+    public Object resetpwd(String cardno, HttpServletRequest request){
+        String[] questionIds = request.getParameterValues("questionId");
+        String[] answers = request.getParameterValues("answer");
+
+        String question = StringUtils.join(questionIds, ",");
+        String answer = StringUtils.join(answers, ",");
+
+        EduStudentAnswerExample studentAnswerExample = new EduStudentAnswerExample();
+        EduStudentAnswerExample.Criteria criteria = studentAnswerExample.createCriteria();
+        criteria.andCardNoEqualTo(cardno);
+        List<EduStudentAnswer> list = issuesService.selectByExample(studentAnswerExample);
+        EduStudentAnswer studentAnswer = null;
+        if(list!=null && list.size()>0){
+            studentAnswer = list.get(0);
+
+            if(studentAnswer.getQuestion().equals(question)
+                    && studentAnswer.getAnswer().equals(answer)){
+                //安全问题回答正确后，重置密码
+                EduStudentExample studentExample = new EduStudentExample();
+                studentExample.createCriteria().andCardNoEqualTo(cardno);
+                List<EduStudent> students = studentService.selectByExample(studentExample);
+                if(students!=null && students.size()>0){
+                    EduStudent student = students.get(0);
+                    student.setPassword(student.getCardNo().substring(student.getCardNo().length() - 4));
+                    studentService.updateByPrimaryKeySelective(student);
+                }
+                return new SysResult(SysResultConstant.INVALID_USERNAME, "success");
+            }else{
+                return new SysResult(SysResultConstant.INVALID_USERNAME, "issues_fail");
+            }
+        }else{
+            return new SysResult(SysResultConstant.INVALID_USERNAME, "cardno_fail");
+        }
+    }
 
     /**
      * 首页
@@ -139,6 +201,23 @@ public class IndexController extends BaseController{
         return new SysResult(SysResultConstant.INVALID_USERNAME, "fail");
     }
 
+    /**
+     * 校验身份证是否存在
+     * @param cardNo
+     * @return
+     */
+    @RequestMapping(value = "/register/valid", method = RequestMethod.GET)
+    @ResponseBody
+    public Object vaildStudent(String cardNo){
+        EduStudentExample studentExample = new EduStudentExample();
+        studentExample.createCriteria().andCardNoEqualTo(cardNo);
+        long count = studentService.countByExample(studentExample);
+        if(count>0) {
+            return new SysResult(SysResultConstant.FAILED, "fail");
+        }
+        return new SysResult(SysResultConstant.INVALID_USERNAME, "success");
+    }
+
 
     /**
      * 注册
@@ -147,18 +226,18 @@ public class IndexController extends BaseController{
      */
     @RequestMapping(value = "/register/done", method = RequestMethod.POST)
     @ResponseBody
-    public Object register(EduStudent student){
+    public Object register(EduStudent student,HttpServletRequest request){
         ComplexResult result = FluentValidator.checkAll()
-                .on(student.getStuName(), new LengthValidator(1, 20, "学员姓名"))
-                .on(student.getCardNo(), new LengthValidator(1, 20, "学员身份证"))
-                .on(student.getOrganizationName1(), new LengthValidator(1, 20, "一级机构"))
-                .on(student.getOrganizationName2(), new LengthValidator(1, 20, "二级机构"))
                 .doValidate()
                 .result(ResultCollectors.toComplex());
 
         if (!result.isSuccess()) {
             return new SysResult(SysResultConstant.INVALID_LENGTH, result.getErrors());
         }
+
+        String[] questionId = request.getParameterValues("questionId");
+        String[] answers = request.getParameterValues("answer");
+
         EduStudentExample studentExample = new EduStudentExample();
         studentExample.createCriteria().andCardNoEqualTo(student.getCardNo());
         long count = studentService.countByExample(studentExample);
@@ -166,6 +245,18 @@ public class IndexController extends BaseController{
             return new SysResult(SysResultConstant.FAILED, "fail");
         }else{
             studentService.insertSelective(student);
+            EduStudentAnswer studentAnswer = new EduStudentAnswer();
+            studentAnswer.setCardNo(student.getCardNo());
+            studentAnswer.setStuId(student.getStuId());
+            if(questionId.length>0){
+                String questionstr = StringUtils.join(questionId, ",");
+                studentAnswer.setQuestion(questionstr);
+            }
+            if(answers.length>0){
+                String answerstr = StringUtils.join(answers, ",");
+                studentAnswer.setAnswer(answerstr);
+            }
+            issuesService.insertSelective(studentAnswer);
             return new SysResult(SysResultConstant.INVALID_USERNAME, "success");
         }
     }

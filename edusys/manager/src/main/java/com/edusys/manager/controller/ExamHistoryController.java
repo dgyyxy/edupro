@@ -3,9 +3,12 @@ package com.edusys.manager.controller;
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
 import com.edu.common.dao.pojo.AnswerSheet;
+import com.edu.common.dao.pojo.ExamPassRate;
 import com.edu.common.dao.pojo.QuestionAdapter;
+import com.edu.common.util.NumberUtils;
 import com.edusys.manager.service.EduExamService;
 import com.edusys.manager.service.EduStudentExamService;
+import com.edusys.manager.service.EduStudentService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.swagger.annotations.Api;
@@ -18,14 +21,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Created by Gary on 2017/8/16.
- *
+ * <p>
  * 考试记录
  */
 @Api("考试记录管理")
@@ -37,6 +41,9 @@ public class ExamHistoryController extends BaseController {
 
     @Autowired
     private EduExamService examService;
+
+    @Autowired
+    private EduStudentService studentService;
 
     @Autowired
     private EduStudentExamService studentExamService;
@@ -68,17 +75,35 @@ public class ExamHistoryController extends BaseController {
             criteria.andExamNameLike(search);
         }
         List<EduExam> rows = examService.selectByExample(examExample);
+        //考试对应的及格率
+        List<ExamPassRate> passRateList = examService.selectPassRate();
+        Map<Integer, String> rateMap = new HashMap<>();
+        if(passRateList!=null && passRateList.size()>0){
+            for(ExamPassRate examPassRate : passRateList){
+                rateMap.put(examPassRate.getExamId(), NumberUtils.formatDouble(examPassRate.getPassRate())+'%');
+            }
+        }
+
+        List<EduExam> showList = new ArrayList<>();
+        if (rows != null && rows.size() > 0) {
+            for (EduExam exam : rows) {
+                if(rateMap!=null && rateMap.size()>0)
+                    exam.setPassRate(rateMap.get(exam.getId()));
+                showList.add(exam);
+            }
+        }
+
 
         long total = examService.countByExample(examExample);
         Map<String, Object> result = new HashMap<>();
-        result.put("rows", rows);
+        result.put("rows", showList);
         result.put("total", total);
         return result;
     }
 
     @ApiOperation("参考的考生列表")
     @RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
-    public String student(@PathVariable("id") int id, ModelMap map){
+    public String student(@PathVariable("id") int id, ModelMap map) {
         map.put("id", id);
         return "/manage/examHistory/students.jsp";
     }
@@ -90,7 +115,10 @@ public class ExamHistoryController extends BaseController {
                               @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
                               @RequestParam(required = false, value = "sort") String sort,
                               @RequestParam(required = false, value = "order") String order,
-                              @PathVariable("id") int id, String search){
+                              @PathVariable("id") int id, String search,
+                              @RequestParam(required = false, defaultValue = "0") int organId,
+                              @RequestParam(required = false, defaultValue = "0") int compare,
+                              @RequestParam(required = false, defaultValue = "0") int score) {
         EduStudentExamExample studentExamExample = new EduStudentExamExample();
         EduStudentExamExample.Criteria criteria = studentExamExample.createCriteria();
         studentExamExample.setOffset(offset);
@@ -101,9 +129,25 @@ public class ExamHistoryController extends BaseController {
 
         criteria.andExamIdEqualTo(id);
 
-        // 模糊查询
-        if (StringUtils.isNotBlank(search)) {
-            search = "%" + search + "%";
+        List<Integer> stuIds = new ArrayList<>();
+        //查询
+        if (organId != 0) {
+            stuIds = studentService.selectIdByOrganId(organId);
+            criteria.andStuIdIn(stuIds);
+        }
+        if (score != 0) {
+            float scoreFloat = Float.parseFloat(score + "");
+            switch (compare) {
+                case 1:
+                    criteria.andPointGetGreaterThanOrEqualTo(scoreFloat);
+                    break;
+                case 2:
+                    criteria.andPointGetEqualTo(scoreFloat);
+                    break;
+                case 3:
+                    criteria.andPointGetLessThan(scoreFloat);
+                    break;
+            }
         }
         List<EduStudentExam> rows = studentExamService.selectByExample(studentExamExample);
         long total = studentExamService.countByExample(studentExamExample);
@@ -113,20 +157,53 @@ public class ExamHistoryController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value = "导出学员成绩")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    public String export(HttpServletResponse response, String ids, int isAll) {
+        response.setContentType("application/binary;charset=ISO8859_1");
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            String fileName = new String(("学员成绩").getBytes(), "ISO8859_1") + new Date().getTime();
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
+            List<EduStudentExam> studentExamList = new ArrayList<>();
+
+            EduStudentExamExample studentExamExample = new EduStudentExamExample();
+            EduStudentExamExample.Criteria criteria = studentExamExample.createCriteria();
+
+            if (isAll == 0) {//只选择已勾选的学员导出
+                if (StringUtils.isNotBlank(ids)) {
+                    List<Integer> idList = new ArrayList<>();
+                    String[] idArray = ids.split("-");
+                    for (String idstr : idArray) {
+                        idList.add(Integer.parseInt(idstr));
+                    }
+                    criteria.andIdIn(idList);
+                }
+            }
+            studentExamList = studentExamService.selectByExample(studentExamExample);
+            String[] titles = new String[]{"姓名", "所属机构", "总分", "得分", "是否通过"};
+            studentExamService.exportExcel(titles, outputStream, studentExamList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @ApiOperation("查看试卷")
     @RequestMapping(value = "/paper/{id}", method = RequestMethod.GET)
-    public String paperView(@PathVariable("id") int id, ModelMap modelMap, HttpServletRequest request){
+    public String paperView(@PathVariable("id") int id, ModelMap modelMap, HttpServletRequest request) {
         String strurl = "http://" + request.getServerName() // 服务器地址
                 + ":" + request.getServerPort() + "/";
 
         EduStudentExam studentExam = studentExamService.selectByPrimaryKey(id);
         Gson gson = new Gson();
         StringBuffer sb = new StringBuffer();
-        if(StringUtils.isNotBlank(studentExam.getContent())){
+        if (StringUtils.isNotBlank(studentExam.getContent())) {
 
-            List<QuestionResult> questionResults = gson.fromJson(studentExam.getContent(), new TypeToken<List<QuestionResult>>(){}.getType());
-            for(QuestionResult qr : questionResults){
+            List<QuestionResult> questionResults = gson.fromJson(studentExam.getContent(), new TypeToken<List<QuestionResult>>() {
+            }.getType());
+            for (QuestionResult qr : questionResults) {
                 QuestionAdapter adapter = new QuestionAdapter(qr, strurl);
                 sb.append(adapter.getStringFromXML2());
             }

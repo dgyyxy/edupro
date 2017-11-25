@@ -37,7 +37,7 @@ a, button, input, select {
 
 .rl-modal-signup {
     position: fixed;
-    height: 520px;
+    height: 590px;
     background: #fff;
     z-index: 100000;
     width: 360px;
@@ -56,6 +56,48 @@ a, button, input, select {
     opacity: 1;
     filter: alpha(opacity=100);
 }
+
+.rl-modal-issues.in {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+.rl-modal-issues {
+    position: fixed;
+    height: 355px;
+    background: #fff;
+    z-index: 100000;
+    width: 360px;
+    padding-bottom: 30px;
+    left: 50%;
+    top: 50%;
+    margin: -218px 0 0 -180px;
+    box-shadow: 0 0 3px rgba(0,0,0,.25);
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -o-transition: all .2s;
+    overflow: hidden;
+}
+
+.rl-modal-resetpwd {
+    position: fixed;
+    height: 448px;
+    background: #fff;
+    z-index: 100000;
+    width: 360px;
+    padding-bottom: 30px;
+    left: 50%;
+    top: 50%;
+    margin: -218px 0 0 -180px;
+    box-shadow: 0 0 3px rgba(0,0,0,.25);
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -o-transition: all .2s;
+    overflow: hidden;
+}
+
 
 .rl-modal-info {
     position: fixed;

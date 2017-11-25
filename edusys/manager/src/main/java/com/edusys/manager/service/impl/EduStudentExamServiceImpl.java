@@ -4,19 +4,19 @@ import com.edu.common.annotation.BaseService;
 import com.edu.common.base.BaseServiceImpl;
 import com.edu.common.dao.mapper.EduStudentExamMapper;
 import com.edu.common.dao.mapper.EduStudentMapper;
-import com.edu.common.dao.model.EduExam;
-import com.edu.common.dao.model.EduPaper;
-import com.edu.common.dao.model.EduStudentExam;
-import com.edu.common.dao.model.EduStudentExamExample;
+import com.edu.common.dao.model.*;
 import com.edu.common.dao.pojo.AnswerSheet;
+import com.edu.common.util.ExportExcelUtils;
 import com.edu.common.util.RandomUtil;
 import com.edusys.manager.service.EduStudentExamService;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +68,83 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
             //批量新增
             eduStudentExamMapper.insertBatch(studentExams);
         }
+    }
+
+    @Override
+    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList) {
+        // 创建一个workbook 对应的一个excel应用文件
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        // 在workbook中添加一个sheet,对应Excel文件中的sheet
+        XSSFSheet sheet = workbook.createSheet("学员成绩01");
+        sheet.setColumnWidth((short) 0, (short) 15*256);
+        sheet.setColumnWidth((short) 1, (short) 25*256);
+        sheet.setColumnWidth((short) 2, (short) 15*256);
+        sheet.setColumnWidth((short) 3, (short) 15*256);
+        sheet.setColumnWidth((short) 4, (short) 15*256);
+        ExportExcelUtils exportExcelUtils = new ExportExcelUtils(workbook, sheet);
+        XSSFCellStyle headStyle = exportExcelUtils.getHeadStyle();
+        XSSFCellStyle bodyStyle = exportExcelUtils.getBodyStyle();
+        // 构建表头
+        XSSFRow headRow = sheet.createRow(0);
+        XSSFCell cell = null;
+        for(int i = 0; i < titles.length; i++){
+            cell = headRow.createCell(i);
+            cell.setCellStyle(headStyle);
+            cell.setCellValue(titles[i]);
+        }
+
+        //构建表体数据
+        if(studentExamList!=null && studentExamList.size()>0){
+            for (int j = 0; j<studentExamList.size(); j++){
+                XSSFRow bodyRow = sheet.createRow(j + 1);
+                EduStudentExam studentExam = studentExamList.get(j);
+                cell = bodyRow.createCell(0);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(studentExam.getStuName());
+
+                cell = bodyRow.createCell(1);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(studentExam.getStuOrgan());
+
+                cell = bodyRow.createCell(2);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(studentExam.getPoint());
+
+                cell = bodyRow.createCell(3);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(studentExam.getPointGet()==null? 0 : studentExam.getPointGet());
+
+                cell = bodyRow.createCell(4);
+                cell.setCellStyle(bodyStyle);
+                int approved = studentExam.getApproved();
+                String approvedStr = "";
+                if(approved == 2){
+                    cell.setCellStyle(exportExcelUtils.getBodyStyle(2));
+                    approvedStr = "及格";
+                }else if(approved == 3){
+                    cell.setCellStyle(exportExcelUtils.getBodyStyle(1));
+                    approvedStr = "不及格";
+                }else{
+                    approvedStr = "";
+                }
+                cell.setCellValue(approvedStr);
+            }
+        }
+
+        try{
+            workbook.write(outputStream);
+            outputStream.flush();
+            outputStream.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try{
+                outputStream.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        return 1;
     }
 
     /**

@@ -3,6 +3,7 @@ package com.edusys.manager.service;
 import com.edu.common.base.BaseService;
 import com.edu.common.dao.model.EduExam;
 import com.edu.common.dao.model.EduExamExample;
+import com.edu.common.dao.pojo.ExamPassRate;
 
 import java.util.List;
 
@@ -22,4 +23,7 @@ public interface EduExamService extends BaseService<EduExam, EduExamExample> {
     public void updateStatus();
 
     public List<EduExam> selectExamingByExample(EduExamExample example);
+
+    // 统计及格率
+    List<ExamPassRate> selectPassRate();
 }

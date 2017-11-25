@@ -5,6 +5,7 @@ import com.edu.common.base.BaseServiceImpl;
 import com.edu.common.dao.mapper.EduExamMapper;
 import com.edu.common.dao.model.EduExam;
 import com.edu.common.dao.model.EduExamExample;
+import com.edu.common.dao.pojo.ExamPassRate;
 import com.edusys.manager.service.EduExamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,5 +48,10 @@ public class EduExamServiceImpl extends BaseServiceImpl<EduExamMapper, EduExam, 
     @Override
     public List<EduExam> selectExamingByExample(EduExamExample example) {
         return eduExamMapper.selectExamingByExample(example);
+    }
+
+    @Override
+    public List<ExamPassRate> selectPassRate() {
+        return eduExamMapper.selectPassRate();
     }
 }

@@ -8,3 +8,23 @@ v20171030
     3. 考试进行中新增强制交卷添加原因
     4. 新增学习任务，如果不选择机构，即面向系统中所有人开放
     5. 学号注册新增前后台安全问题验证功能
+
+    ----sql 脚本更新
+    CREATE TABLE `edu_student_answer` (
+      `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号ID',
+      `card_no` varchar(50) DEFAULT NULL COMMENT '证件号',
+      `stu_id` int(11) DEFAULT NULL COMMENT '学员ID',
+      `question` varchar(200) DEFAULT NULL COMMENT '问题',
+      `answer` varchar(200) DEFAULT NULL COMMENT '答案',
+      PRIMARY KEY (`id`),
+      KEY `stu_id` (`stu_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学员找回密码安全问题表';
+
+    ALTER TABLE `edu_student_exam`
+    ADD COLUMN `proctor` varchar(500) DEFAULT NULL COMMENT '监考强制交卷原因';
+
+    ALTER TABLE `edu_organization`
+    ADD COLUMN `orderby` int(11) DEFAULT NULL COMMENT '排序';
+
+
+

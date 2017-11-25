@@ -27,6 +27,12 @@
         <result column="pointGet" jdbcType="INTEGER" property="pointGet" />
 
     </resultMap>
+
+    <resultMap id="ExamPassRate" type="com.edu.common.dao.pojo.ExamPassRate">
+        <result column="exam_id" jdbcType="INTEGER" property="examId"/>
+        <result column="pass_rate" jdbcType="INTEGER" property="passRate"/>
+    </resultMap>
+
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -496,6 +502,12 @@
     <update id="updateExamingStatus">
         update edu_exam set approved = 2 where approved = 1 AND UNIX_TIMESTAMP(NOW()) BETWEEN UNIX_TIMESTAMP(start_time) AND UNIX_TIMESTAMP(end_time);
     </update>
+
+    <select id="selectPassRate" resultMap="ExamPassRate">
+        <![CDATA[select exam_id, 100*SUM(CASE WHEN approved = 2 THEN 1 ELSE 0 END)/SUM(CASE WHEN approved > 1 AND approved < 5 THEN 1 ELSE 0 END) pass_rate
+        from edu_student_exam
+        group by exam_id]]>
+    </select>
 
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 </mapper>

@@ -54,6 +54,7 @@
 				{field: 'id', title: '编号', sortable: true, align: 'center'},
 				{field: 'examName', title: '考试名称'},
 				{field: 'paperName', title: '试卷名称'},
+				{field: 'passRate', title: '及格率'},
 				{field: 'startTime', title: '起始时间', formatter: 'dateFormatter'},
 				{field: 'endTime', title: '截止时间', formatter: 'dateFormatter'}
 			]

@@ -4,7 +4,7 @@
     <form id="updateForm" method="post">
         <div class="form-group">
             <label for="question">请输入安全问题</label>
-            <input type="text" id="question" name="question" maxlength="20" class="form-control"/>
+            <input type="text" id="question" name="question" value="${studentAnswer.question}" maxlength="20" class="form-control"/>
         </div>
 
         <div class="form-group text-right dialog-buttons">
@@ -18,7 +18,7 @@
     function updateSubmit() {
         $.ajax({
             type: 'post',
-            url: '${basePath}/manage/issues/update/${notice.id}',
+            url: '${basePath}/manage/issues/update/${studentAnswer.id}',
             data: $('#updateForm').serialize(),
             beforeSend: function() {
                 if ($('#question').val() == '') {

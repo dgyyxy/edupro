@@ -18,9 +18,9 @@
 <body>
 <div id="main">
 	<div id="toolbar">
-        <a class="waves-effect waves-button green" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增安全问题</a>
+		<shiro:hasPermission name="edu:issues:create"><a class="waves-effect waves-button green" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增安全问题</a></shiro:hasPermission>
         <a class="waves-effect waves-button blue" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑安全问题</a>
-        <a class="waves-effect waves-button red" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除安全问题</a>
+		<shiro:hasPermission name="edu:issues:delete"><a class="waves-effect waves-button red" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除安全问题</a></shiro:hasPermission>
 	</div>
 	<table id="table"></table>
 </div>
@@ -60,8 +60,8 @@ $(function() {
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [
-		'<a class="update" href="javascript:;" onclick="updateAction()" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>',
-		'<a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+		'<a class="update" href="javascript:;" onclick="updateAction()" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>	&nbsp;',
+		'<shiro:hasPermission name="edu:issues:delete"><a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a></shiro:hasPermission>'
     ].join('');
 }
 

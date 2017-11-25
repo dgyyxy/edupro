@@ -2,6 +2,7 @@ package com.edu.common.dao.mapper;
 
 import com.edu.common.dao.model.EduExamExample;
 import com.edu.common.dao.model.EduExam;
+import com.edu.common.dao.pojo.ExamPassRate;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -42,4 +43,7 @@ public interface EduExamMapper {
     void updateExamStatus();
 
     void updateExamingStatus();
+
+    //获取考试及格率
+    List<ExamPassRate> selectPassRate();
 }

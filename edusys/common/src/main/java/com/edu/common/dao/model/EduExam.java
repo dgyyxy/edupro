@@ -133,13 +133,23 @@ public class EduExam implements Serializable {
     //考试密码
     private String examPwd;
 
-    private Integer status;//0:未登录，1:考试中，2:及格，3:不及格，4:已强制交卷
+    private Integer status;
 
     private Integer pointGet;//得分
 
     private int examingCount;//在考人数
 
     private int submitCount;//交卷人数
+
+    private String passRate;//及格率
+
+    public String getPassRate() {
+        return passRate;
+    }
+
+    public void setPassRate(String passRate) {
+        this.passRate = passRate;
+    }
 
     public Integer getPointGet() {
         return pointGet;

@@ -77,7 +77,8 @@ public class EduStudentExam implements Serializable {
     private Date submitTime;
 
     /**
-     * 0 未审核 1 通过 2 未通过
+     *
+     * 0:未登录，1:考试中，2:及格，3:不及格，4:已强制交卷
      *
      * @mbg.generated
      */

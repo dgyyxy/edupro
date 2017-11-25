@@ -7,6 +7,7 @@ import com.edu.common.dao.model.EduStudentExam;
 import com.edu.common.dao.model.EduStudentExamExample;
 import com.edu.common.dao.pojo.AnswerSheet;
 
+import javax.servlet.ServletOutputStream;
 import java.util.List;
 
 /**
@@ -30,4 +31,6 @@ public interface EduStudentExamService extends BaseService<EduStudentExam, EduSt
     public void updateStudentExamByExamId(EduExam record);
 
     public void stopExamOperate(List<Integer> idList);
+
+    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList);
 }
