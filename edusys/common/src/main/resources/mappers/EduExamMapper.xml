@@ -25,6 +25,8 @@
         <result column="submitCount" jdbcType="INTEGER" property="submitCount" />
         <result column="status" jdbcType="INTEGER" property="status" />
         <result column="pointGet" jdbcType="INTEGER" property="pointGet" />
+        <result column="teacher" jdbcType="VARCHAR" property="teacher" />
+        <result column="watch" jdbcType="VARCHAR" property="watch" />
 
     </resultMap>
 
@@ -95,20 +97,20 @@
     </sql>
     <sql id="Base_Column_List">
     id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, 
-    disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, status, pointGet
+    disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, status, pointGet, teacher
     </sql>
     <sql id="Base_Column_List_Bak">
         id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password,
-        disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd
+        disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, teacher, watch
     </sql>
     <sql id="Base_Column_List_Search">
         id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password,
-        disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type,exam_pwd, (select ep.name from edu_paper ep where ep.id = paper_id) paper_name
+        disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type,exam_pwd, (select ep.name from edu_paper ep where ep.id = paper_id) paper_name, teacher
     </sql>
     <sql id="Base_Column_List_Examing">
         id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password,
         disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type,exam_pwd, (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved = 1) examingCount,
-        (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved > 1) submitCount
+        (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved > 1) submitCount, teacher, watch
     </sql>
     <select id="selectByExample" parameterType="com.edu.common.dao.model.EduExamExample" resultMap="BaseResultMap">
         select
@@ -456,6 +458,12 @@
             <if test="examPwd != null">
                 exam_pwd = #{examPwd,jdbcType=VARCHAR},
             </if>
+            <if test="teacher != null">
+                teacher = #{teacher,jdbcType=VARCHAR},
+            </if>
+            <if test="watch != null">
+                watch = #{watch,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -490,6 +498,13 @@
 
     <update id="batchUpdateUnPublishStatus" parameterType="java.util.List">
         update edu_exam set approved = 0 where id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="batchUpdateEndExamStatus" parameterType="java.util.List">
+        update edu_exam set approved = 3 where id IN
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>

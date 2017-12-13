@@ -33,7 +33,20 @@ public class EduQuestionCategory implements Serializable {
      */
     private Integer level;
 
+    /**
+     * 排序
+     */
+    private Integer orderby;
+
     private static final long serialVersionUID = 1L;
+
+    public Integer getOrderby() {
+        return orderby;
+    }
+
+    public void setOrderby(Integer orderby) {
+        this.orderby = orderby;
+    }
 
     public String getParentName() {
         return parentName;

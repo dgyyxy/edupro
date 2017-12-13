@@ -88,7 +88,28 @@ public class EduQuestion implements Serializable {
 
     private float point;
 
+
+    //用于列表显示字段
+    private int qsum;//答题数
+    private int errorCount;//错题数
+
     private static final long serialVersionUID = 1L;
+
+    public int getQsum() {
+        return qsum;
+    }
+
+    public void setQsum(int qsum) {
+        this.qsum = qsum;
+    }
+
+    public int getErrorCount() {
+        return errorCount;
+    }
+
+    public void setErrorCount(int errorCount) {
+        this.errorCount = errorCount;
+    }
 
     public float getPoint() {
         return point;

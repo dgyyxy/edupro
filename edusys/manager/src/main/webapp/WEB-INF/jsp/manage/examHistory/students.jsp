@@ -59,12 +59,10 @@
                 {field: 'ck', checkbox: true},
                 {field: 'id', title: '编号', sortable: true, align: 'center'},
                 {field: 'stuName', title: '姓名'},
+                {field: 'examName', title: '考试名称', formatter: 'examNameFormatter'},
                 {field: 'stuOrgan', title: '所属机构'},
-                {field: 'point', title: '总分'},
-                {field: 'pointGet', title: '得分'},
+                {field: 'pointGet', title: '得分', formatter: 'scoreFormatter'},
                 {field: 'approved', title: '是否通过', formatter: 'statusFormatter'},
-                {field: 'duration', title: '考试时间'},
-                {field: 'submitTime', title: '交卷时间', formatter: 'dateFormatter'},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ]
         });
@@ -89,6 +87,18 @@
             $subtable.bootstrapTable('refresh', {url: '${basePath}/manage/exam-history/student/list-'+examId+'?organId='+organId+'&compare='+compare+'&score='+score});
         });
     });
+
+    function examNameFormatter(value, row, index){
+        return '${exam.examName}';
+    }
+
+    function scoreFormatter(value, row, index){
+        if(row.approved == 0){
+            return '0';
+        }else{
+            return value;
+        }
+    }
 
     function queryParams(params){
         return params;
@@ -183,7 +193,7 @@
     function exportAction(){
         var rows = $subtable.bootstrapTable('getSelections');
         var content = "导出选中学员成绩";
-        var urlstr = '${basePath}/manage/exam-history/export';
+        var urlstr = '${basePath}/manage/exam-history/export/'+examId;
         if(rows.length == 0){
             content = "导出全部学员成绩";
             urlstr += '?isAll=1';

@@ -8,6 +8,7 @@
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="ctime" jdbcType="BIGINT" property="ctime" />
+    <result column="orderby" jdbcType="INTEGER" property="orderby" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    organization_id, name, level, parent_id, description, ctime
+    organization_id, name, level, parent_id, description, ctime, orderby
   </sql>
   <select id="selectByExample" parameterType="com.edu.common.dao.model.EduOrganizationExample" resultMap="BaseResultMap">
     select
@@ -116,7 +117,8 @@
       #{parentId,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{ctime,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduOrganization">
+  <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduOrganization" useGeneratedKeys="true"
+          keyProperty="organizationId">
     insert into edu_organization
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="organizationId != null">
@@ -137,6 +139,9 @@
       <if test="ctime != null">
         ctime,
       </if>
+      <if test="orderby != null">
+        orderby,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="organizationId != null">
@@ -156,6 +161,9 @@
       </if>
       <if test="ctime != null">
         #{ctime,jdbcType=BIGINT},
+      </if>
+      <if test="orderby != null">
+        #{orderby,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -221,6 +229,9 @@
       <if test="ctime != null">
         ctime = #{ctime,jdbcType=BIGINT},
       </if>
+      <if test="orderby != null">
+        orderby = #{orderby,jdbcType=BIGINT},
+      </if>
     </set>
     where organization_id = #{organizationId,jdbcType=INTEGER}
   </update>
@@ -235,12 +246,12 @@
   </update>
   <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
     insert into edu_organization (organization_id, name, level,
-    parent_id, ctime
+    parent_id, ctime, orderby
     )
     values
     <foreach collection="list" item="item" index="index" separator="," >
       (#{item.organizationId,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, #{item.level,jdbcType=TINYINT},
-      #{item.parentId,jdbcType=INTEGER}, #{item.ctime,jdbcType=BIGINT}
+      #{item.parentId,jdbcType=INTEGER}, #{item.ctime,jdbcType=BIGINT}, #{item.orderby,jdbcType=INTEGER}
       )
     </foreach>
   </insert>

@@ -17,38 +17,18 @@
 </head>
 <body>
 <div id="main">
-	<div class="row">
-		<div class="col-md-3">
-			<div class="panel panel-success">
-				<div class="panel-heading">
-					<h3 class="panel-title">
-						学员机构
-					</h3>
-				</div>
-				<div class="panel-body">
-					<div id="tree"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-9">
-			<div id="toolbar">
-				<shiro:hasPermission name="edu:student:create"><a class="waves-effect waves-button green" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增学员</a></shiro:hasPermission>
-				<shiro:hasPermission name="edu:student:update"><a class="waves-effect waves-button blue" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑学员</a></shiro:hasPermission>
-				<shiro:hasPermission name="edu:student:delete"><a class="waves-effect waves-button red" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除学员</a></shiro:hasPermission>
-				<shiro:hasPermission name="edu:student:resetPassword"><a class="waves-effect waves-button orange" href="javascript:;" onclick="resetPasswordAction()"><i class="zmdi zmdi-key"></i> 重置密码</a></shiro:hasPermission>
-				<shiro:hasPermission name="edu:student:import"><a class="waves-effect waves-button cyan" href="javascript:;" onclick="importAction()"><i class="zmdi zmdi-upload"></i> 学员导入</a></shiro:hasPermission>
-				<shiro:hasPermission name="edu:student:export"><a class="waves-effect waves-button purple" href="javascript:;" onclick="exportAction()"><i class="zmdi zmdi-download"></i> 学员导出</a></shiro:hasPermission>
-			</div>
-			<table id="table"></table>
-		</div>
+	<div id="toolbar">
+        <shiro:hasPermission name="edu:student:create"><a class="waves-effect waves-button green" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增学员</a></shiro:hasPermission>
+        <shiro:hasPermission name="edu:student:update"><a class="waves-effect waves-button blue" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑学员</a></shiro:hasPermission>
+        <shiro:hasPermission name="edu:student:delete"><a class="waves-effect waves-button red" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除学员</a></shiro:hasPermission>
+        <shiro:hasPermission name="edu:student:resetPassword"><a class="waves-effect waves-button orange" href="javascript:;" onclick="resetPasswordAction()"><i class="zmdi zmdi-key"></i> 重置密码</a></shiro:hasPermission>
+        <shiro:hasPermission name="edu:student:import"><a class="waves-effect waves-button cyan" href="javascript:;" onclick="importAction()"><i class="zmdi zmdi-upload"></i> 学员导入</a></shiro:hasPermission>
+        <shiro:hasPermission name="edu:student:export"><a class="waves-effect waves-button purple" href="javascript:;" onclick="exportAction()"><i class="zmdi zmdi-download"></i> 学员导出</a></shiro:hasPermission>
 	</div>
-
+	<table id="table"></table>
 </div>
 <jsp:include page="../../common/js.jsp" flush="true"/>
-<script src="${basePath}/resources/plugins/bootstrap-treeview.js"></script>
 <script>
-var typeId = 0;//类型Id
-var typePid = 0;//父ID
 var $table = $('#table');
 $(function() {
 	// bootstrap table初始化
@@ -57,8 +37,6 @@ $(function() {
 		height: getHeight(),
 		striped: true,
 		search: true,
-		strictSearch: true,
-		queryParams: 'queryParams',
 		showRefresh: true,
 		showColumns: true,
 		minimumCountColumns: 2,
@@ -70,7 +48,8 @@ $(function() {
 		silentSort: false,
 		smartDisplay: false,
 		escape: true,
-		idField: 'stuId',
+//		searchOnEnterKey: true,
+		idField: 'organizationId',
 		maintainSelected: true,
 		toolbar: '#toolbar',
 		columns: [
@@ -85,14 +64,6 @@ $(function() {
 		]
 	});
 });
-
-//搜索传参数
-function queryParams(params){
-	params.typeId = typeId;
-	params.typePid = typePid;
-	return params;
-}
-
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [
@@ -100,63 +71,6 @@ function actionFormatter(value, row, index) {
 		'<shiro:hasPermission name="edu:student:delete"><a class="delete" href="javascript:;" onclick="deleteAction()" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a></shiro:hasPermission>'
     ].join('');
 }
-
-// 学员机构
-function initTree() {
-	$.getJSON('${basePath}/manage/organization/list', {}, function(json) {
-		var datas = [];
-		var list = json.rows;
-		for(var i = 0; i< list.length; i++){
-			var node = {}
-			node.id = list[i].organizationId;
-			node.pid = list[i].parentId;
-			var nodeName = list[i].name;
-			if(nodeName.length > 6) nodeName = nodeName.substring(0,5)+'...';
-			node.text =  nodeName;
-
-			node.level = list[i].level;
-			if(node.level == 2) continue;
-			node.nodes = [];
-			var subList = json.rows;
-			for(var j = 0; j< subList.length; j++){
-
-				var subNode = {};
-				subNode.id = subList[j].organizationId;
-				subNode.pid = subList[j].parentId;
-				var subName = subList[j].name;
-				if(subName.length>5) subName = subName.substring(0,4)+'...';
-				subNode.text = subName;
-
-				subNode.level = subList[j].level;
-				if(subNode.level == 1) continue;
-				if(subNode.pid == node.id) node.nodes.push(subNode);
-			}
-			datas.push(node);
-		}
-		var nodeId;
-		$('#tree').treeview({
-			data: datas,
-			selectedBackColor: '#29A176',
-			emptyIcon: 'glyphicon glyphicon-file',
-			expandIcon: 'glyphicon glyphicon-folder-close',
-			collapseIcon: 'glyphicon glyphicon-folder-open',
-			onNodeUnselected: function(event, node){
-				nodeId = node.nodeId;
-				$('#tree').treeview('selectNode', [ nodeId, { silent: true } ]);
-			},
-			onNodeSelected: function(event, node){
-				if(nodeId != undefined) $('#tree').treeview('unselectNode', [ nodeId, { silent: true } ]);
-				typeId = node.id;
-				typePid = node.pid;
-				$table.bootstrapTable('refresh',{url:'${basePath}/manage/student/list'});
-			}
-		});
-	});
-}
-
-$(function(){
-	initTree();
-});
 
 // 新增
 var createDialog;

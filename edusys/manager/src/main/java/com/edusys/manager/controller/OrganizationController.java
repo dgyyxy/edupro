@@ -37,7 +37,7 @@ import java.util.*;
 @Controller
 @Api(value = "组织机构管理", description = "组织机构管理")
 @RequestMapping("manage/organization")
-public class OrganizationController extends BaseController{
+public class OrganizationController extends BaseController {
 
     private static Logger _log = LoggerFactory.getLogger(OrganizationController.class);
 
@@ -64,25 +64,26 @@ public class OrganizationController extends BaseController{
             String search) {
         EduOrganizationExample organizationExample = new EduOrganizationExample();
         EduOrganizationExample.Criteria criteria = organizationExample.createCriteria();
-        if(null != pid){
+        if (null != pid) {
             criteria.andParentIdEqualTo(pid);
         }
         organizationExample.setOffset(offset);
         organizationExample.setLimit(limit);
-        if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
+        /*if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
             organizationExample.setOrderByClause(sort + " " + order);
-        }
+        }*/
+        organizationExample.setOrderByClause("orderby ASC");
         // 模糊查询
-        if (StringUtils.isNotBlank(search)){
-            search = "%"+search+"%";
+        if (StringUtils.isNotBlank(search)) {
+            search = "%" + search + "%";
             organizationExample.or(organizationExample.createCriteria().andNameLike(search));
             organizationExample.or(organizationExample.createCriteria().andDescriptionLike(search));
         }
         List<EduOrganization> rows = organizationService.selectByExample(organizationExample);
         List<EduOrganization> list = new ArrayList<>();
-        if(rows!=null && rows.size()>0){
-            for(EduOrganization organization : rows){
-                if(organization.getParentId()>0){
+        if (rows != null && rows.size() > 0) {
+            for (EduOrganization organization : rows) {
+                if (organization.getParentId() > 0) {
                     organization.setParentName(organizationService.selectByPrimaryKey(organization.getParentId()).getName());
                 }
                 list.add(organization);
@@ -120,13 +121,20 @@ public class OrganizationController extends BaseController{
         }
         long time = System.currentTimeMillis();
         organization.setCtime(time);
+        if (organization.getLevel() == 2) {
+            organization.setOrderby(organization.getParentId());
+        }
         int count = organizationService.insertSelective(organization);
+        if (organization.getLevel() == 1) {
+            organization.setOrderby(organization.getOrganizationId());
+        }
+        organizationService.updateByPrimaryKeySelective(organization);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }
 
     @ApiOperation(value = "导入二级机构")
     @RequestMapping(value = "/import", method = RequestMethod.GET)
-    public String importOrgan(){
+    public String importOrgan() {
         return "/manage/organization/import.jsp";
     }
 
@@ -149,6 +157,9 @@ public class OrganizationController extends BaseController{
         List<EduOrganization> organList = new ArrayList<>();
         //查询该一级机构下面所有二级机构名称列表
         List<String> organNameList = organizationService.selectOrganNameList(organizationId1);
+        int index = 2;//记录excel行号
+        boolean tag = true;//标识是否进行导入操作
+        String error = "";
         try {
             List<Map<String, String>> mapList = ExcelUtil.ExcelToList(file);
             for (int i = 0; i < mapList.size(); i++) {
@@ -156,23 +167,34 @@ public class OrganizationController extends BaseController{
                 EduOrganization eduOrgan = new EduOrganization();
                 String name = map.get("机构名称(必填)");
                 //判断二级机构是否存在
-                if(organNameList!=null && organNameList.size()>0){
-                    if(organNameList.contains(name)){
-                        continue;
+                if (organNameList != null && organNameList.size() > 0) {
+                    if (organNameList.contains(name)) {
+                        tag = false;
+                        error = error + index +",";
                     }
                 }
-                eduOrgan.setName(name);
-                long time = System.currentTimeMillis();
-                eduOrgan.setCtime(time);
-                eduOrgan.setLevel(Byte.parseByte("2"));
-                eduOrgan.setParentId(organizationId1);
-                organList.add(eduOrgan);
+
+                if(tag) {
+                    eduOrgan.setName(name);
+                    long time = System.currentTimeMillis();
+                    eduOrgan.setCtime(time);
+                    eduOrgan.setLevel(Byte.parseByte("2"));
+                    eduOrgan.setParentId(organizationId1);
+                    eduOrgan.setOrderby(organizationId1);//排序
+                    organList.add(eduOrgan);
+                    organNameList.add(name);//记录二级机构名称是否重复
+                }
+                index++;
+            }
+            if(!tag){
+                throw new RuntimeException(error);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            String errorMsg = "导入表格的第【" + error.substring(0, error.length()-1) + "】行信息有重复，请检查！";
+            return new SysResult(SysResultConstant.FAILED, errorMsg);
         }
         int count = 1;
-        if(organList.size()>0){
+        if (organList.size() > 0) {
             count = organizationService.insertBatch(organList);
         }
         return new SysResult(SysResultConstant.SUCCESS, "success");
@@ -180,7 +202,7 @@ public class OrganizationController extends BaseController{
 
     @ApiOperation(value = "删除组织")
     @RequiresPermissions("sys:organization:delete")
-    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{ids}", method = RequestMethod.GET)
     @ResponseBody
     public Object delete(@PathVariable("ids") String ids) {
         int count = organizationService.deleteByPrimaryKeys(ids);

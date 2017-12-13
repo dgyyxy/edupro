@@ -21,10 +21,24 @@ v20171030
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学员找回密码安全问题表';
 
     ALTER TABLE `edu_student_exam`
-    ADD COLUMN `proctor` varchar(500) DEFAULT NULL COMMENT '监考强制交卷原因';
+        ADD COLUMN `proctor` varchar(500) DEFAULT NULL COMMENT '监考强制交卷原因';
 
     ALTER TABLE `edu_organization`
-    ADD COLUMN `orderby` int(11) DEFAULT NULL COMMENT '排序';
+        ADD COLUMN `orderby` int(11) DEFAULT NULL COMMENT '排序';
+
+    ALTER TABLE `edu_question_category`
+        ADD COLUMN `orderby` int(11) DEFAULT NULL COMMENT '排序';
+
+    ALTER TABLE `edu_paper_category`
+        ADD COLUMN `orderby` int(11) DEFAULT NULL COMMENT '排序';
+
+    ALTER TABLE `edu_exam`
+        ADD COLUMN `teacher` varchar(50) DEFAULT NULL COMMENT '监考老师';
+
+    ALTER TABLE `edu_exam`
+        ADD COLUMN `watch` varchar(500) DEFAULT NULL COMMENT '监考记录';
+
+
 
 
 

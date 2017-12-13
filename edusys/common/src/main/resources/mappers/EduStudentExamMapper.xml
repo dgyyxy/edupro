@@ -94,8 +94,8 @@
     </sql>
     <sql id="Base_Column_List_Search">
         id, stu_id, start_time, exam_id, paper_id, enabled, point, create_time, duration,
-    point_get, submit_time, approved, exam_password, disorganize, islook, proctor, (select es.stu_name from edu_student es where es.stu_id = ese.stu_id) stu_name,
-    (select es.organization_name2 from edu_student es where es.stu_id = ese.stu_id) stu_organ, (select es.card_no from edu_student es where es.stu_id = ese.stu_id) idcard
+    point_get, submit_time, approved, exam_password, disorganize, islook, proctor, (select concat(es.stu_name,'(',es.card_no,')') from edu_student es where es.stu_id = ese.stu_id) stu_name,
+    (select concat(es.organization_name1,'--',es.organization_name2) from edu_student es where es.stu_id = ese.stu_id) stu_organ, (select es.card_no from edu_student es where es.stu_id = ese.stu_id) idcard
     </sql>
     <sql id="Blob_Column_List">
     content, answer_sheet
@@ -558,6 +558,11 @@
             #{item}
         </foreach>
     </update>
+    
+    <select id="statisticalQuestion" resultType="String">
+        select answer_sheet from edu_student_exam  where answer_sheet is not null and approved > 1
+    </select>
+    
 
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 </mapper>

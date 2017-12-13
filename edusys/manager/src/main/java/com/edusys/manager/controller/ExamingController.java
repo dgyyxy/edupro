@@ -151,4 +151,21 @@ public class ExamingController extends BaseController {
         studentExamService.stopExamOperate(examIds);
         return new SysResult(SysResultConstant.SUCCESS, "success");
     }
+
+    @ApiOperation("监考记录")
+    @RequestMapping(value = "/watch/{id}", method = RequestMethod.GET)
+    public String watch(@PathVariable("id") Integer id, ModelMap map){
+        EduExam exam = examService.selectByPrimaryKey(id);
+        map.put("exam", exam);
+        return "/manage/examing/watch.jsp";
+    }
+
+    @ApiOperation("监考记录操作")
+    @RequestMapping(value = "/watch/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Object watch(@PathVariable("id") Integer id,EduExam exam){
+        exam.setId(id);
+        examService.updateByPrimaryKeySelective(exam);
+        return new SysResult(SysResultConstant.SUCCESS, "success");
+    }
 }

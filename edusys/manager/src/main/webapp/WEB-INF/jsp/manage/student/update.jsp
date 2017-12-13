@@ -71,7 +71,6 @@
                 width: 150,
                 data : datas
             });
-            console.log(targetId+'===${student.organizationId1}----${student.organizationId2}')
             if(pid == 0){
                 $('#pid').select2('val', ['${student.organizationId1}'])
             }else{

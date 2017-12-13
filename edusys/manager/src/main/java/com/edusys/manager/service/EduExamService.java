@@ -19,6 +19,9 @@ public interface EduExamService extends BaseService<EduExam, EduExamExample> {
     // 批量更新考试为未发布
     public void batchUpdateUnPublishStatus(List<Integer> idList);
 
+    // 批量更新考试为已结束
+    public void batchUpdateEndExamStatus(List<Integer> idList);
+
     // 更新过期的考试为已结束
     public void updateStatus();
 

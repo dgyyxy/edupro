@@ -56,10 +56,26 @@
 				{field: 'paperName', title: '试卷名称'},
 				{field: 'passRate', title: '及格率'},
 				{field: 'startTime', title: '起始时间', formatter: 'dateFormatter'},
-				{field: 'endTime', title: '截止时间', formatter: 'dateFormatter'}
+				{field: 'endTime', title: '截止时间', formatter: 'dateFormatter'},
+				{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 			]
 		});
 	});
+
+	// 格式化操作按钮
+	function actionFormatter(value, row, index) {
+		var id = row.id;
+		var teacher = row.teacher;
+
+		if(teacher!=null && teacher!=''){
+			return [
+				'<a class="update" href="javascript:;" onclick="watchExamAction('+id+')" data-toggle="tooltip"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;监考记录</a>'
+			].join('');
+		}
+		return '';
+
+	}
+
 
 	function queryParams(params){
 		return params;
@@ -99,6 +115,24 @@
 				}
 			});*/
 		}
+	}
+
+	// 监考记录
+	var watchDialog;
+	function watchExamAction(id) {
+		watchDialog = $.dialog({
+			type: 'green',
+			animationSpeed: 300,
+			columnClass: 'col-md-6 col-md-offset-3',
+			title: '监考记录',
+			content: 'url:${basePath}/manage/examing/watch/'+id,
+			onContentReady: function () {
+				$('#btngroup').hide();
+				$('#teacher').attr('readonly',true);
+				$('#watch').attr('readonly',true);
+				initMaterialInput();
+			}
+		});
 	}
 </script>
 </body>

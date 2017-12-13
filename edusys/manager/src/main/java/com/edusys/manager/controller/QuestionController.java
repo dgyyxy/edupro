@@ -5,6 +5,7 @@ import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
+import com.edu.common.dao.pojo.StatisticBean;
 import com.edu.common.util.ExcelUtil;
 import com.edu.common.validator.LengthValidator;
 import com.edusys.manager.common.SysResult;
@@ -84,8 +85,9 @@ public class QuestionController extends BaseController{
         }
         if (0 != categoryId)
             criteria.andQuestionCategoryIdEqualTo(categoryId);
-        if (0 != typeId)
+        if (0 != typeId) {
             criteria.andQuestionTypeIdEqualTo(typeId);
+        }
         if (0 != difficulty)
             criteria.andDifficultyEqualTo(difficulty);
         if (null != idstr){
@@ -100,8 +102,24 @@ public class QuestionController extends BaseController{
 
         List<EduQuestion> rows = questionService.selectByExample(questionExample);
         long total = questionService.countByExample(questionExample);
+
+        List<EduQuestion> list = new ArrayList<>();
+        if(rows!=null && rows.size()>0){
+            //统计出错率和答题数
+            Map<Integer, StatisticBean> map = questionService.statisticalQuestion();
+            for(EduQuestion question : rows){
+                StatisticBean statisticBean = map.get(question.getId());
+                if(statisticBean!=null) {
+                    question.setQsum(statisticBean.getSum());
+                    question.setErrorCount(statisticBean.getErrorCount());
+                }
+                list.add(question);
+            }
+        }
+
+
         Map<String, Object> result = new HashMap<>();
-        result.put("rows", rows);
+        result.put("rows", list);
         result.put("total", total);
         return result;
     }
@@ -283,7 +301,6 @@ public class QuestionController extends BaseController{
     }
 
     @ApiOperation(value = "试题分类列表")
-    @RequiresPermissions("edu:question:category:read")
     @RequestMapping(value = "/category/list", method = RequestMethod.GET)
     @ResponseBody
     public Object category_list(
@@ -300,6 +317,7 @@ public class QuestionController extends BaseController{
         }
         questionCategoryExample.setOffset(offset);
         questionCategoryExample.setLimit(limit);
+        questionCategoryExample.setOrderByClause("orderby ASC");
         if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
             questionCategoryExample.setOrderByClause(sort + " " + order);
         }
@@ -346,7 +364,12 @@ public class QuestionController extends BaseController{
         if (!result.isSuccess()) {
             return new SysResult(SysResultConstant.INVALID_LENGTH, result.getErrors());
         }
+        if(questionCategory.getLevel() == 2)
+            questionCategory.setOrderby(questionCategory.getPid());
         int count = questionCategoryService.insertSelective(questionCategory);
+        if(questionCategory.getLevel() == 1)
+            questionCategory.setOrderby(questionCategory.getId());
+        questionCategoryService.updateByPrimaryKeySelective(questionCategory);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }
 

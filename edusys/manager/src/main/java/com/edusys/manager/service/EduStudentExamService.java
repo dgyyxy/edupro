@@ -32,5 +32,5 @@ public interface EduStudentExamService extends BaseService<EduStudentExam, EduSt
 
     public void stopExamOperate(List<Integer> idList);
 
-    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList);
+    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList, String examName);
 }

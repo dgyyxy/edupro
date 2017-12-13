@@ -71,16 +71,19 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
     }
 
     @Override
-    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList) {
+    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList, String examName) {
         // 创建一个workbook 对应的一个excel应用文件
         XSSFWorkbook workbook = new XSSFWorkbook();
         // 在workbook中添加一个sheet,对应Excel文件中的sheet
         XSSFSheet sheet = workbook.createSheet("学员成绩01");
         sheet.setColumnWidth((short) 0, (short) 15*256);
         sheet.setColumnWidth((short) 1, (short) 25*256);
-        sheet.setColumnWidth((short) 2, (short) 15*256);
+        sheet.setColumnWidth((short) 2, (short) 30*256);
         sheet.setColumnWidth((short) 3, (short) 15*256);
         sheet.setColumnWidth((short) 4, (short) 15*256);
+        sheet.setColumnWidth((short) 5, (short) 25*256);
+        sheet.setColumnWidth((short) 6, (short) 25*256);
+        sheet.setColumnWidth((short) 7, (short) 15*256);
         ExportExcelUtils exportExcelUtils = new ExportExcelUtils(workbook, sheet);
         XSSFCellStyle headStyle = exportExcelUtils.getHeadStyle();
         XSSFCellStyle bodyStyle = exportExcelUtils.getBodyStyle();
@@ -98,23 +101,43 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
             for (int j = 0; j<studentExamList.size(); j++){
                 XSSFRow bodyRow = sheet.createRow(j + 1);
                 EduStudentExam studentExam = studentExamList.get(j);
+
                 cell = bodyRow.createCell(0);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(studentExam.getStuName());
+                cell.setCellValue(j+1);
+
+                String stuNameCard = studentExam.getStuName();
+                String stuName = stuNameCard.substring(0, stuNameCard.indexOf("("));
+                String cardNo = stuNameCard.substring(stuNameCard.indexOf("(")+1, stuNameCard.length()-1);
 
                 cell = bodyRow.createCell(1);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(studentExam.getStuOrgan());
+                cell.setCellValue(stuName);
 
                 cell = bodyRow.createCell(2);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(studentExam.getPoint());
+                cell.setCellValue(cardNo);
 
                 cell = bodyRow.createCell(3);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(studentExam.getPointGet()==null? 0 : studentExam.getPointGet());
+                cell.setCellValue(examName);
 
                 cell = bodyRow.createCell(4);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(studentExam.getPointGet()==null? 0 : studentExam.getPointGet());
+
+                String stuOrgan = studentExam.getStuOrgan();
+                String[] organs = stuOrgan.split("--");
+
+                cell = bodyRow.createCell(5);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(organs[1]);
+
+                cell = bodyRow.createCell(6);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(organs[0]);
+
+                cell = bodyRow.createCell(7);
                 cell.setCellStyle(bodyStyle);
                 int approved = studentExam.getApproved();
                 String approvedStr = "";
@@ -172,4 +195,15 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
         eduStudentExamMapper.stopExamOperate(idList);
     }
 
+
+    public static void main(String[] args) {
+        String str = "黄超(310222200811112000)";
+        System.out.println(str.indexOf("(")-1);
+        System.out.println(str.substring(0, str.indexOf("(")));
+        System.out.println(str.substring(str.indexOf("(")+1, str.length()-1));
+
+        str = "艾克斯学院--超人班";
+        String[] array = str.split("--");
+        System.out.println(array[0]+"--"+array[1]);
+    }
 }

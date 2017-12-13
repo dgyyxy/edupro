@@ -75,12 +75,21 @@ public class StudentController extends BaseController {
             @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
             @RequestParam(required = false, value = "sort") String sort,
             @RequestParam(required = false, value = "order") String order,
+            Integer typeId,Integer typePid,
             String search) {
         EduStudentExample studentExample = new EduStudentExample();
 
         studentExample.setOffset(offset);
         studentExample.setLimit(limit);
         studentExample.setOrderByClause("stu_id DESC");
+
+        if(typeId!=null && typeId!=0){
+            if(typePid == 0)
+                studentExample.createCriteria().andOrganizationId1EqualTo(typeId);
+            else
+                studentExample.createCriteria().andOrganizationId2EqualTo(typeId);
+        }
+
         // 模糊查询
         if (StringUtils.isNotBlank(search)) {
             search = "%" + search + "%";
@@ -90,6 +99,7 @@ public class StudentController extends BaseController {
             studentExample.or(studentExample.createCriteria().andPhoneLike(search));
             studentExample.or(studentExample.createCriteria().andOrganizationName2Like(search));
         }
+
         List<EduStudent> rows = studentService.selectByExample(studentExample);
         long total = studentService.countByExample(studentExample);
         Map<String, Object> result = new HashMap<>();

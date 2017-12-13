@@ -60,7 +60,7 @@ $(function() {
 			{field: 'endTime', title: '结束时间', formatter: 'dateFormatter'},
 			{field: 'time', title: '课时'},
 			{field: 'teacher', title: '开课老师'},
-			{field: 'organization', title: '开课机构'},
+			{field: 'organization', title: '开课机构', formatter: 'organFormatter'},
 			{field: 'coursewareCount', title: '课件数', formatter: 'courseFormatter'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]
@@ -69,6 +69,14 @@ $(function() {
 
 function queryParams(params){
     return params;
+}
+
+function organFormatter(value, row, index){
+	if(value == '' || value == null){
+		return "所有机构";
+	}else{
+		return value;
+	}
 }
 
 function courseFormatter(value, row, index){

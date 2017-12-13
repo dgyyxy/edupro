@@ -63,7 +63,7 @@
         }
         if(proctor!=null && proctor!=''){
             return [
-                '<a class="update" href="javascript:;" onclick="proctorAction('+id+',1)" data-toggle="tooltip"><i class="zmdi zmdi-file-text"></i>&nbsp;查看原因</a>'
+                '<a class="update" href="javascript:;" onclick="proctorAction('+id+',1)" data-toggle="tooltip"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看原因</a>'
             ].join('');
         }
         return '';

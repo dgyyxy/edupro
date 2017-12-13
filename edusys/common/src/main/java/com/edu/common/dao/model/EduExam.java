@@ -143,6 +143,26 @@ public class EduExam implements Serializable {
 
     private String passRate;//及格率
 
+    private String teacher;//监考老师
+
+    private String watch;//监考记录
+
+    public String getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
+
+    public String getWatch() {
+        return watch;
+    }
+
+    public void setWatch(String watch) {
+        this.watch = watch;
+    }
+
     public String getPassRate() {
         return passRate;
     }

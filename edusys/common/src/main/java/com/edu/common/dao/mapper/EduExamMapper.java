@@ -36,6 +36,8 @@ public interface EduExamMapper {
 
     void batchUpdateUnPublishStatus(List<Integer> idList);
 
+    void batchUpdateEndExamStatus(List<Integer> idList);
+
     List<EduExam> selectExamListByStu(@Param("stuId") Integer stuId, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     long countByStu(@Param("stuId") Integer stuId);

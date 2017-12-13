@@ -67,7 +67,7 @@ public class PaperController extends BaseController{
                        @RequestParam(required = false, value = "sort") String sort,
                        @RequestParam(required = false, value = "order") String order,
                        @RequestParam(required = false, defaultValue = "0", value = "status") int status,
-                       String search){
+                       String search, Integer typeId){
         EduPaperExample paperExample = new EduPaperExample();
         EduPaperExample.Criteria criteria = paperExample.createCriteria();
         paperExample.setOffset(offset);
@@ -76,6 +76,10 @@ public class PaperController extends BaseController{
 
         if(status >0){
             criteria.andStatusEqualTo(true);
+        }
+
+        if(typeId!=null && typeId!=0){
+            criteria.andCategoryIdEqualTo(typeId);
         }
 
         //排除考试自动组卷
@@ -331,6 +335,7 @@ public class PaperController extends BaseController{
         paperCategoryExample.setOffset(offset);
         paperCategoryExample.setLimit(limit);
 
+        paperCategoryExample.setOrderByClause("orderby ASC");
         if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
             paperCategoryExample.setOrderByClause(sort + " " + order);
         }
@@ -377,7 +382,12 @@ public class PaperController extends BaseController{
         if (!result.isSuccess()) {
             return new SysResult(SysResultConstant.INVALID_LENGTH, result.getErrors());
         }
+        if(paperCategory.getLevel() == 2)
+            paperCategory.setOrderby(paperCategory.getPid());
         int count = paperCategoryService.insertSelective(paperCategory);
+        if(paperCategory.getLevel() == 1)
+            paperCategory.setOrderby(paperCategory.getId());
+        paperCategoryService.updateByPrimaryKeySelective(paperCategory);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }
 

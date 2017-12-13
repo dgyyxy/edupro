@@ -57,4 +57,7 @@ public interface EduStudentExamMapper {
     public void updateStudentExamByExamId(@Param("record") EduExam record);
 
     public void stopExamOperate(List<Integer> idList);
+
+    //统计出出错率
+    public List<String> statisticalQuestion();
 }

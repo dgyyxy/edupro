@@ -31,7 +31,20 @@ public class EduPaperCategory implements Serializable {
      */
     private Integer pid;
 
+    /**
+     * 排序
+     */
+    private Integer orderby;
+
     private String parentName;
+
+    public Integer getOrderby() {
+        return orderby;
+    }
+
+    public void setOrderby(Integer orderby) {
+        this.orderby = orderby;
+    }
 
     public String getParentName() {
         return parentName;

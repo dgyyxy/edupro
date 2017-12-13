@@ -264,6 +264,25 @@ public class ExamController extends BaseController {
         return new SysResult(SysResultConstant.SUCCESS, "success");
     }
 
+    @ApiOperation(value = "结束考试")
+    @RequestMapping(value = "/endExam/{ids}", method = RequestMethod.GET)
+    @ResponseBody
+    public Object endExam(@PathVariable("ids") String ids) {
+
+        String[] idArray = ids.split("-");
+        List<Integer> examIds = new ArrayList<>();
+
+        for (String idStr : idArray) {
+            if (StringUtils.isBlank(idStr)) {
+                continue;
+            }
+            examIds.add(Integer.parseInt(idStr));
+        }
+
+        examService.batchUpdateEndExamStatus(examIds);
+        return new SysResult(SysResultConstant.SUCCESS, "success");
+    }
+
     @ApiOperation(value = "考试参考人员页面")
     @RequestMapping(value = "/students/{id}", method = RequestMethod.GET)
     public String students(@PathVariable("id") int id, ModelMap modelMap) {

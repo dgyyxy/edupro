@@ -40,6 +40,11 @@ public class EduExamServiceImpl extends BaseServiceImpl<EduExamMapper, EduExam, 
     }
 
     @Override
+    public void batchUpdateEndExamStatus(List<Integer> idList) {
+        eduExamMapper.batchUpdateEndExamStatus(idList);
+    }
+
+    @Override
     public void updateStatus() {
         eduExamMapper.updateExamStatus();
         eduExamMapper.updateExamingStatus();

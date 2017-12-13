@@ -68,6 +68,14 @@ function initSelect(pid, targetId) {
             width: 150,
             data : datas
         });
+
+        if(pid == 0) {
+            if(typePid==0) $('#pid').select2('val', [''+typeId+'']);
+            else $('#pid').select2('val', [''+typePid+'']);
+        }else{
+            if(typePid==0) $('#subId').select2('val', ['0']);
+            else $('#subId').select2('val', [''+typeId+'']);
+        }
     });
 }
 function createSubmit() {

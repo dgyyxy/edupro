@@ -47,6 +47,11 @@ public class EduOrganization implements Serializable {
      */
     private Long ctime;
 
+    /**
+     * 排序
+     */
+    private int orderby;
+
     public String getParentName() {
         return parentName;
     }
@@ -103,6 +108,14 @@ public class EduOrganization implements Serializable {
 
     public void setCtime(Long ctime) {
         this.ctime = ctime;
+    }
+
+    public int getOrderby() {
+        return orderby;
+    }
+
+    public void setOrderby(int orderby) {
+        this.orderby = orderby;
     }
 
     @Override

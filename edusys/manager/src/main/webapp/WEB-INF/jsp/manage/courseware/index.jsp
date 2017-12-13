@@ -98,6 +98,7 @@
 
     //搜索传参数
     function queryParams(params){
+        if(typeId!=0)   params.typeId = typeId;
         return params;
     }
 
@@ -277,7 +278,7 @@
                     if(nodeId != undefined) $('#tree').treeview('unselectNode', [ nodeId, { silent: true } ]);
                     typeId = node.id;
                     typePid = node.pid;
-                    $table.bootstrapTable('refresh',{url:'${basePath}/manage/courseware/list?typeId='+node.id});
+                    $table.bootstrapTable('refresh',{url:'${basePath}/manage/courseware/list'});
                 }
             });
         });
