@@ -281,38 +281,41 @@ var finishExam = function(tag){
     });
 
     request.done(function(message, tst, jqXHR) {
+		//延迟2秒提醒提交完毕
+		setTimeout(function(){
+			layer.closeAll('loading');
+			if (message.result == "success") {
+				//停止倒计时
+				window.clearInterval(timer);
+				if(islook == '0'){
+					if(tag == 0){
+						layer.alert('试卷已经提交完毕.请点击按钮退出页面.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+							location.href = ctx+'/';
+						});
+					}else{
+						layer.alert('您已经被强制提交试卷.请点击按钮退出页面.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+							location.href = ctx+'/';
+						});
+					}
 
-        layer.closeAll('loading');
-        if (message.result == "success") {
-			//停止倒计时
-			window.clearInterval(timer);
-			if(islook == '0'){
-				if(tag == 0){
-					layer.alert('试卷已经提交完毕.请点击按钮退出页面.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-						location.href = ctx+'/';
-					});
-				}else{
-					layer.alert('您已经被强制提交试卷.请点击按钮退出页面.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-						location.href = ctx+'/';
-					});
+				}else if(islook == '1'){
+					if(tag == 0){
+						layer.alert('试卷已经提交完毕.请点击按钮查看试卷（限时5分钟）.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+							location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
+						});
+					}else{
+						layer.alert('您已经被强制提交试卷.请点击按钮查看试卷（限时5分钟）.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+							location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
+						});
+					}
+
 				}
 
-			}else if(islook == '1'){
-				if(tag == 0){
-					layer.alert('试卷已经提交完毕.请点击按钮查看试卷（限时5分钟）.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-						location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
-					});
-				}else{
-					layer.alert('您已经被强制提交试卷.请点击按钮查看试卷（限时5分钟）.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-						location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
-					});
-				}
-
+			} else {
+				layer.msg(message.result);
 			}
+		}, 2000);
 
-        } else {
-            layer.msg(message.result);
-        }
     });
     request.fail(function(jqXHR, textStatus) {
         layer.closeAll('loading');
@@ -352,7 +355,7 @@ var startTimer = function() {
 	if(timestamp==null || timestamp == undefined  || timestamp<0){
 		timestamp = parseInt($("#exam-timestamp").text())*60;
 	}
-	console.log(timestamp);
+	var tag = true;
     timer = setInterval(function() {
         $("#exam-timestamp").text(timestamp);
         $("#exam-clock").text(toHHMMSS(timestamp));
@@ -361,12 +364,31 @@ var startTimer = function() {
             exam_clock.removeClass("question-time-normal");
             exam_clock.addClass("question-time-warning");
         }
-        var period = timestamp % 60;
-        //console.log("period :" + period);
+        var period = parseInt(timestamp / 60);
+		if(tag && period==10){
+			tipMsg(10);
+			tag = false;
+		}
+
+		if(tag && period==5){
+			tipMsg(5);
+			tag = false;
+		}
+
         timestamp-- || examTimeOut(timer);
 		localStorage.setItem(seId+'-key', timestamp);//保存当前考试时间
     }, 1000);
 };
+
+// 离考试结束时间提醒
+var tipMsg = function(msg){
+	layer.open({
+		skin: 'layui-layer-molv',
+		title: '提醒',
+		content: "离本次考试还剩"+msg+"分钟！",
+		offset: ['30%', '40%']
+	});
+}
 
 // 保存答案
 var saveAnswerSheet = function(){

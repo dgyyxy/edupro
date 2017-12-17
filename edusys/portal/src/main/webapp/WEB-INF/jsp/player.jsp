@@ -10,11 +10,4 @@
 <iframe name="myframe" frameborder='0' width='100%' height='100%' marginheight='0' marginwidth='0' scrolling='yes' src='${url}'></iframe>
 <jsp:include page="common/js.jsp" flush="true"/>
 </body>
-
-<script type="text/javascript">
-    //学完
-    var play_finish = function(){
-        alert('已学完');
-    }
-</script>
 </html>

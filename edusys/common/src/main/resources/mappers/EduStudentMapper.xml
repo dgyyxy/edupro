@@ -13,6 +13,7 @@
     <result column="organization_id2" jdbcType="INTEGER" property="organizationId2" />
     <result column="organization_name2" jdbcType="VARCHAR" property="organizationName2" />
     <result column="job_count" jdbcType="INTEGER" property="jobCount" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     stu_id, stu_name, card_no, stu_no, phone, password, organization_id1, organization_name1, 
-    organization_id2, organization_name2
+    organization_id2, organization_name2, company
   </sql>
   <select id="selectByExample" parameterType="com.edu.common.dao.model.EduStudentExample" resultMap="BaseResultMap">
     select
@@ -152,11 +153,11 @@
     insert into edu_student (stu_id, stu_name, card_no, 
       stu_no, phone, password, 
       organization_id1, organization_name1, organization_id2, 
-      organization_name2)
+      organization_name2, company)
     values (#{stuId,jdbcType=INTEGER}, #{stuName,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
       #{stuNo,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{organizationId1,jdbcType=INTEGER}, #{organizationName1,jdbcType=VARCHAR}, #{organizationId2,jdbcType=INTEGER}, 
-      #{organizationName2,jdbcType=VARCHAR})
+      #{organizationName2,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR})
   </insert>
   <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
     insert into edu_student (stu_name, card_no,
@@ -204,6 +205,9 @@
       <if test="organizationName2 != null">
         organization_name2,
       </if>
+      <if test="company != null">
+        company,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="stuId != null">
@@ -235,6 +239,9 @@
       </if>
       <if test="organizationName2 != null">
         #{organizationName2,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -277,6 +284,9 @@
       <if test="record.organizationName2 != null">
         organization_name2 = #{record.organizationName2,jdbcType=VARCHAR},
       </if>
+      <if test="record.company != null">
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -293,7 +303,8 @@
       organization_id1 = #{record.organizationId1,jdbcType=INTEGER},
       organization_name1 = #{record.organizationName1,jdbcType=VARCHAR},
       organization_id2 = #{record.organizationId2,jdbcType=INTEGER},
-      organization_name2 = #{record.organizationName2,jdbcType=VARCHAR}
+      organization_name2 = #{record.organizationName2,jdbcType=VARCHAR},
+      company = #{record.company,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -328,6 +339,9 @@
       <if test="organizationName2 != null">
         organization_name2 = #{organizationName2,jdbcType=VARCHAR},
       </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
     </set>
     where stu_id = #{stuId,jdbcType=INTEGER}
   </update>
@@ -341,7 +355,8 @@
       organization_id1 = #{organizationId1,jdbcType=INTEGER},
       organization_name1 = #{organizationName1,jdbcType=VARCHAR},
       organization_id2 = #{organizationId2,jdbcType=INTEGER},
-      organization_name2 = #{organizationName2,jdbcType=VARCHAR}
+      organization_name2 = #{organizationName2,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR}
     where stu_id = #{stuId,jdbcType=INTEGER}
   </update>
   <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />

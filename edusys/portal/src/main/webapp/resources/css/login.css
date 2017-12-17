@@ -101,7 +101,7 @@ a, button, input, select {
 
 .rl-modal-info {
     position: fixed;
-    height: 305px;
+    height: 460px;
     background: #fff;
     z-index: 100000;
     width: 360px;

@@ -7,6 +7,7 @@ import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
 import com.edu.common.dao.pojo.StatisticBean;
 import com.edu.common.util.ExcelUtil;
+import com.edu.common.util.NumberUtils;
 import com.edu.common.validator.LengthValidator;
 import com.edusys.manager.common.SysResult;
 import com.edusys.manager.common.SysResultConstant;
@@ -42,7 +43,7 @@ import java.util.Map;
 @Controller
 @Api(value = "题库管理", description = "题库管理")
 @RequestMapping("/manage/question")
-public class QuestionController extends BaseController{
+public class QuestionController extends BaseController {
 
     private static Logger _log = LoggerFactory.getLogger(QuestionController.class);
 
@@ -56,7 +57,7 @@ public class QuestionController extends BaseController{
     @ApiOperation("题库首页")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     @RequiresPermissions("edu:question:read")
-    public String index(){
+    public String index() {
         return "/manage/question/index.jsp";
     }
 
@@ -69,7 +70,7 @@ public class QuestionController extends BaseController{
                        @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
                        @RequestParam(required = false, value = "sort") String sort,
                        @RequestParam(required = false, value = "order") String order,
-                       String search, int categoryId, int typeId, int difficulty, String idstr){
+                       String search, int categoryId, int typeId, int difficulty, String idstr) {
         EduQuestionExample questionExample = new EduQuestionExample();
         EduQuestionExample.Criteria criteria = questionExample.createCriteria();
         questionExample.setOffset(offset);
@@ -79,8 +80,8 @@ public class QuestionController extends BaseController{
             questionExample.setOrderByClause(sort + " " + order);
         }
         // 模糊查询
-        if (StringUtils.isNotBlank(search)){
-            search = "%"+search+"%";
+        if (StringUtils.isNotBlank(search)) {
+            search = "%" + search + "%";
             criteria.andNameLike(search);
         }
         if (0 != categoryId)
@@ -90,23 +91,43 @@ public class QuestionController extends BaseController{
         }
         if (0 != difficulty)
             criteria.andDifficultyEqualTo(difficulty);
-        if (null != idstr){
+        if (null != idstr) {
             String[] idarray = idstr.split("-");
             List<Integer> ids = new ArrayList<>();
-            for(String str : idarray){
+            for (String str : idarray) {
                 ids.add(Integer.parseInt(str));
             }
             criteria.andIdNotIn(ids);
         }
 
+        //统计出错率和答题数
+        Map<Integer, StatisticBean> map = questionService.statisticalQuestion();
+        if (map != null && map.size() > 0) {
+            List<EduQuestion> updateQuestions = new ArrayList<>();
+            //批量更新出错率和答题数
+            for (Integer key : map.keySet()) {
+                StatisticBean statisticBean = map.get(key);
+                int qsum = statisticBean.getSum();
+                int errorcount = statisticBean.getErrorCount();
+                EduQuestion question = new EduQuestion();
+                question.setId(key);
+                question.setQsum(qsum);
+                Double errorRate = NumberUtils.formatDoublePercent((float) errorcount / (float) qsum * 100);
+                question.setErrorRate(errorRate);
+                updateQuestions.add(question);
+            }
+            //批量更新处理
+            questionService.updateQuestionBatch(updateQuestions);
+        }
 
         List<EduQuestion> rows = questionService.selectByExample(questionExample);
         long total = questionService.countByExample(questionExample);
 
+
+/*
         List<EduQuestion> list = new ArrayList<>();
         if(rows!=null && rows.size()>0){
-            //统计出错率和答题数
-            Map<Integer, StatisticBean> map = questionService.statisticalQuestion();
+
             for(EduQuestion question : rows){
                 StatisticBean statisticBean = map.get(question.getId());
                 if(statisticBean!=null) {
@@ -115,18 +136,18 @@ public class QuestionController extends BaseController{
                 }
                 list.add(question);
             }
-        }
+        }*/
 
 
         Map<String, Object> result = new HashMap<>();
-        result.put("rows", list);
+        result.put("rows", rows);
         result.put("total", total);
         return result;
     }
 
     @ApiOperation("试题新增页面")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create(ModelMap modelMap){
+    public String create(ModelMap modelMap) {
 
         return "/manage/question/create.jsp";
     }
@@ -134,7 +155,7 @@ public class QuestionController extends BaseController{
     @ApiOperation("试题新增处理操作")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public Object create(EduQuestion question){
+    public Object create(EduQuestion question) {
         long time = System.currentTimeMillis();
         question.setCreateTime(time);
         Subject subject = SecurityUtils.getSubject();
@@ -146,7 +167,7 @@ public class QuestionController extends BaseController{
 
     @ApiOperation("试题修改页面")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String update(@PathVariable("id") Integer id, ModelMap modelMap){
+    public String update(@PathVariable("id") Integer id, ModelMap modelMap) {
         EduQuestion question = questionService.selectByPrimaryKey(id);
         modelMap.put("question", question);
         return "/manage/question/update.jsp";
@@ -155,7 +176,7 @@ public class QuestionController extends BaseController{
     @ApiOperation("试题修改处理操作")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Object update(EduQuestion question, @PathVariable("id") Integer id){
+    public Object update(EduQuestion question, @PathVariable("id") Integer id) {
         question.setId(id);
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
@@ -166,7 +187,7 @@ public class QuestionController extends BaseController{
 
     @ApiOperation("批量导入试题")
     @RequestMapping(value = "/import", method = RequestMethod.GET)
-    public String importQuestion(){
+    public String importQuestion() {
         return "/manage/question/import.jsp";
     }
 
@@ -193,7 +214,7 @@ public class QuestionController extends BaseController{
 
 
     @ApiOperation(value = "删除试题")
-    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{ids}", method = RequestMethod.GET)
     @ResponseBody
     public Object delete(@PathVariable("ids") String ids) {
         int count = questionService.deleteByPrimaryKeys(ids);
@@ -227,8 +248,8 @@ public class QuestionController extends BaseController{
             questionTypeExample.setOrderByClause(sort + " " + order);
         }
         // 模糊查询
-        if (StringUtils.isNotBlank(search)){
-            search = "%"+search+"%";
+        if (StringUtils.isNotBlank(search)) {
+            search = "%" + search + "%";
             questionTypeExample.or(questionTypeExample.createCriteria().andNameLike(search));
         }
         List<EduQuestionType> rows = questionTypeService.selectByExample(questionTypeExample);
@@ -261,7 +282,7 @@ public class QuestionController extends BaseController{
     }
 
     @ApiOperation(value = "删除试题类型")
-    @RequestMapping(value = "/type/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/type/delete/{ids}", method = RequestMethod.GET)
     @ResponseBody
     public Object type_delete(@PathVariable("ids") String ids) {
         int count = questionTypeService.deleteByPrimaryKeys(ids);
@@ -312,7 +333,7 @@ public class QuestionController extends BaseController{
             String search) {
         EduQuestionCategoryExample questionCategoryExample = new EduQuestionCategoryExample();
         EduQuestionCategoryExample.Criteria criteria = questionCategoryExample.createCriteria();
-        if(null != pid){
+        if (null != pid) {
             criteria.andPidEqualTo(pid);
         }
         questionCategoryExample.setOffset(offset);
@@ -322,15 +343,15 @@ public class QuestionController extends BaseController{
             questionCategoryExample.setOrderByClause(sort + " " + order);
         }
         // 模糊查询
-        if (StringUtils.isNotBlank(search)){
-            search = "%"+search+"%";
+        if (StringUtils.isNotBlank(search)) {
+            search = "%" + search + "%";
             questionCategoryExample.or(questionCategoryExample.createCriteria().andNameLike(search));
         }
         List<EduQuestionCategory> rows = questionCategoryService.selectByExample(questionCategoryExample);
         List<EduQuestionCategory> list = new ArrayList<>();
-        if(rows!=null && rows.size()>0){
-            for(EduQuestionCategory questionCategory : rows){
-                if(questionCategory.getPid()>0){
+        if (rows != null && rows.size() > 0) {
+            for (EduQuestionCategory questionCategory : rows) {
+                if (questionCategory.getPid() > 0) {
                     questionCategory.setParentName(questionCategoryService.selectByPrimaryKey(questionCategory.getPid()).getName());
                 }
                 list.add(questionCategory);
@@ -364,17 +385,17 @@ public class QuestionController extends BaseController{
         if (!result.isSuccess()) {
             return new SysResult(SysResultConstant.INVALID_LENGTH, result.getErrors());
         }
-        if(questionCategory.getLevel() == 2)
+        if (questionCategory.getLevel() == 2)
             questionCategory.setOrderby(questionCategory.getPid());
         int count = questionCategoryService.insertSelective(questionCategory);
-        if(questionCategory.getLevel() == 1)
+        if (questionCategory.getLevel() == 1)
             questionCategory.setOrderby(questionCategory.getId());
         questionCategoryService.updateByPrimaryKeySelective(questionCategory);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }
 
     @ApiOperation(value = "删除试题分类")
-    @RequestMapping(value = "/category/delete/{ids}",method = RequestMethod.GET)
+    @RequestMapping(value = "/category/delete/{ids}", method = RequestMethod.GET)
     @ResponseBody
     public Object category_delete(@PathVariable("ids") String ids) {
         int count = questionCategoryService.deleteByPrimaryKeys(ids);

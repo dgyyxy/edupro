@@ -17,6 +17,8 @@
         <result column="difficulty" jdbcType="INTEGER" property="difficulty"/>
         <result column="category_name" jdbcType="INTEGER" property="categoryName"/>
         <result column="type_name" jdbcType="INTEGER" property="typeName"/>
+        <result column="qsum" jdbcType="INTEGER" property="qsum"/>
+        <result column="error_rate" jdbcType="DOUBLE" property="errorRate"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.edu.common.dao.model.EduQuestion">
         <result column="answer" jdbcType="LONGVARCHAR" property="answer"/>
@@ -83,14 +85,14 @@
     </sql>
     <sql id="Base_Column_List">
     id, name, content, question_type_id, duration, question_category_id, create_time, 
-    creator, answer, expose_times, right_times, wrong_times, difficulty
+    creator, answer, expose_times, right_times, wrong_times, difficulty, qsum, error_rate
   </sql>
 
     <sql id="Base_Column_List_Search">
     id, name, content, question_type_id, duration, question_category_id, create_time,
     creator, answer, expose_times, right_times, wrong_times, difficulty,
     (select eqc.name from edu_question_category eqc where eqc.id = question_category_id) category_name,
-    (select eqt.name from edu_question_type eqt where eqt.id = question_type_id) type_name
+    (select eqt.name from edu_question_type eqt where eqt.id = question_type_id) type_name, qsum, error_rate
     </sql>
     <sql id="Blob_Column_List">
     answer
@@ -434,6 +436,15 @@
       select name from edu_question
       where question_category_id = #{qcId,jdbcType=INTEGER}
   </select>
+
+  <update id="updateBatch" parameterType="java.util.List">
+      <foreach collection="list" item="item">
+          update edu_question set
+          qsum = #{item.qsum},
+          error_rate = #{item.errorRate}
+          where id = #{item.id};
+      </foreach>
+  </update>
 
   <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 </mapper>

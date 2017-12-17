@@ -22,4 +22,6 @@ public interface EduQuestionService extends BaseService<EduQuestion, EduQuestion
     //统计题目出错率(出错率、答题数)
     public Map<Integer, StatisticBean> statisticalQuestion();
 
+    public void updateQuestionBatch(List<EduQuestion> questionList);
+
 }

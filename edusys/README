@@ -38,6 +38,16 @@ v20171030
     ALTER TABLE `edu_exam`
         ADD COLUMN `watch` varchar(500) DEFAULT NULL COMMENT '监考记录';
 
+    ALTER TABLE `edu_student`
+        ADD COLUMN `company` VARCHAR(200) DEFAULT NULL COMMENT '公司名称';
+
+    ALTER TABLE `edu_question`
+            ADD COLUMN `qsum` int(11) DEFAULT NULL COMMENT '答题数';
+
+    ALTER TABLE `edu_question`
+            ADD COLUMN `error_rate` DOUBLE DEFAULT NULL COMMENT '出错率';
+
+    //课件学完跳转的地址：/course/course-end
 
 
 

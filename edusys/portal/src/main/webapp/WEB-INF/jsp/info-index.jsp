@@ -63,6 +63,30 @@
     </section>
 </div>
 
+<!-- issues 安全问题设置 -->
+<div id="issuesSet" class="rl-modal-issues in modal" aria-hidden="true">
+    <div class="rl-modal-header">
+        <h1>
+            <span class="active-title">安全问题</span>
+        </h1>
+        <button type="button" class="rl-close closeBtn" data-dismiss="modal" hidefocus="true"
+                aria-hidden="true"></button>
+    </div>
+
+    <div class="rl-modal-body">
+        <div class="clearfix">
+            <div class="l-left-wrap l">
+                <form id="issuesForm" autocomplete="off">
+                    <p class="rlf-tip-globle color-red"></p>
+                    <div class="rlf-group clearfix">
+                        <input type="button" value="保存" onclick="issuesSetSave()" hidefocus="true" class="btn-red btn-full xa-login">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- editStudent -->
 <div id="editStudent" class="rl-modal-info in modal" aria-hidden="true">
     <div class="rl-modal-header">
@@ -89,6 +113,20 @@
                                data-validate="require-phone" autocomplete="off"
                                class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的手机号">
                         <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的手机号"></p>
+                    </div>
+
+                    <div class="rlf-group pr">
+                        <input type="text" id="stuName" maxlength="37" name="stuName" value="${student.stuName}"
+                               data-validate="require-phone" autocomplete="off"
+                               class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的姓名">
+                        <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的姓名"></p>
+                    </div>
+
+                    <div class="rlf-group pr">
+                        <input type="text" id="company" maxlength="37" name="company" value="${student.company}"
+                               data-validate="require-phone" autocomplete="off"
+                               class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的公司名称">
+                        <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的公司名称"></p>
                     </div>
 
                     <div class="rlf-group clearfix">
@@ -171,6 +209,15 @@
         $('#editStudent').on('show.bs.modal', function (event) {
             $('#stuNo').val($('#stuNoSpan').text());
             $('#phone').val($('#phoneSpan').text());
+        });
+
+        // 监听安全问题窗口显示
+        $('#issuesSet').on('show.bs.modal', function (event) {
+            initIssuesList();
+        });
+
+        // 监听安全问题窗口关闭
+        $('#issuesSet').on('hidden.bs.modal', function (){
         });
 
     });
@@ -301,6 +348,44 @@
                     $(newpwdMsg).empty();
                     $(repwdMsg).empty();
                 }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                layer.msg(textStatus);
+            }
+        });
+    }
+
+    var initIssuesList = function (){
+        $.getJSON('${ctx}/issues',{}, function(json){
+            var htmlstr = '';
+            for(var i=0; i<json.list.length; i++){
+                var obj = json.list[i];
+                htmlstr += '<div class="rlf-group pr question">'
+                        +'<span>'+obj.question+'</span>'
+                        +'</div>'
+                        +'<div class="rlf-group pr question">'
+                        +'<input type="hidden" name="questionId" value="'+obj.id+'"/>'
+                        +'<input type="text" id="answer'+obj.id+'" name="answer" class="xa-emailOrPhone ipt ipt-email js-own-name" data-validate="require-password" maxlength="25" autocomplete="off">'
+                        +'</div>'
+                        +'<div style="line-height: 10px;" class="question">&nbsp;</div>';
+            }
+            $('#issuesForm').find('p').after(htmlstr);
+        });
+    }
+
+    var issuesSetSave = function(){
+        var entity = $('#issuesForm').serializeObject();
+        $.ajax({
+            type: 'post',
+            url: '${basePath}/info/issues-setting',
+            data: entity,
+            beforeSend: function() {
+            },
+            success: function(result) {
+                $('#issuesSet').modal('hide');
+                $('#issuesForm').find('div.question').each(function(){
+                    $(this).remove();
+                });
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 layer.msg(textStatus);

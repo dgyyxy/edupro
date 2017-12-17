@@ -78,6 +78,9 @@ public class EduStudent implements Serializable {
      */
     private Integer jobCount;
 
+    //公司名称
+    private String company;
+
 
     //学习记录属性
     private Integer studyCount;//已学任务数
@@ -87,6 +90,14 @@ public class EduStudent implements Serializable {
     private Integer sumTime;//总学时
 
     private static final long serialVersionUID = 1L;
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
 
     public Integer getStudyCount() {
         return studyCount;

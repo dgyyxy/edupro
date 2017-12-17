@@ -77,10 +77,9 @@ $(function() {
             {field: 'name', title: '试题'},
 			{field: 'typeName', title: '类型'},
 			{field: 'categoryName', title: '所属分类'},
-			{field: 'creator', title: '创建者'},
 			{field: 'difficulty', title: '难度级别', align: 'center'},
-			{field: 'errorCount', title: '出题率', sortable: true, align: 'center', formatter: 'errorRateFormatter'},
-			{field: 'qsum', title: '答题数', align: 'center'},
+			{field: 'error_rate', title: '出题率', sortable: true,align: 'center', formatter: 'errorRateFormatter'},
+			{field: 'qsum', title: '答题数', sortable: true, align: 'center'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]
 	});
@@ -152,7 +151,7 @@ $(function(){
 
 //出错率
 function errorRateFormatter(value, row, index){
-	return getPercent(value, row.qsum);
+	return row.errorRate+'%';
 }
 
 // 格式化操作按钮

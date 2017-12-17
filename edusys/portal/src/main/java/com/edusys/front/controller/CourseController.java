@@ -329,12 +329,12 @@ public class CourseController extends BaseController {
     }
 
     /**
-     * 处理iframe跨域问题
+     * 处理课件学完
      * @return
      */
-    @RequestMapping(value = "/iframe", method = RequestMethod.GET)
-    public String player_iframe(){
-        return "/iframe.jsp";
+    @RequestMapping(value = "/course-end", method = RequestMethod.GET)
+    public String player_course_end(){
+        return "/course-end.jsp";
     }
 
 

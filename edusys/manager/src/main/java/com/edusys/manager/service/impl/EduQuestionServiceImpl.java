@@ -11,6 +11,7 @@ import com.edu.common.dao.pojo.AnswerSheetItem;
 import com.edu.common.dao.pojo.QuestionContent;
 import com.edu.common.dao.pojo.StatisticBean;
 import com.edu.common.util.ExcelUtil;
+import com.edu.common.util.NumberUtils;
 import com.edusys.manager.service.EduQuestionService;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
@@ -154,6 +155,11 @@ public class EduQuestionServiceImpl extends BaseServiceImpl<EduQuestionMapper, E
         return statisticalQuestionOperate(statisticItems);
     }
 
+    @Override
+    public void updateQuestionBatch(List<EduQuestion> questionList) {
+        eduQuestionMapper.updateBatch(questionList);
+    }
+
 
     /**
      * 统计出错率和答题数
@@ -179,8 +185,9 @@ public class EduQuestionServiceImpl extends BaseServiceImpl<EduQuestionMapper, E
         return questionMap;
     }
 
+
     public static void main(String[] args) {
-        EduQuestionServiceImpl impl = new EduQuestionServiceImpl();
+        /*EduQuestionServiceImpl impl = new EduQuestionServiceImpl();
         List<String> answerSheetStrList = new ArrayList<>();
         answerSheetStrList.add("{\"examHistroyId\":1,\"examId\":26,\"examPaperId\":46,\"duration\":0,\"answerSheetItems\":[{\"point\":10.0,\"questionTypeId\":1,\"answer\":\"B\",\"questionId\":81,\"right\":true},{\"point\":10.0,\"questionTypeId\":1,\"answer\":\"C\",\"questionId\":82,\"right\":true},{\"point\":0.0,\"questionTypeId\":2,\"answer\":\" B D\",\"questionId\":91,\"right\":false},{\"point\":0.0,\"questionTypeId\":2,\"answer\":\" A C D\",\"questionId\":87,\"right\":false},{\"point\":10.0,\"questionTypeId\":3,\"answer\":\"F\",\"questionId\":76,\"right\":true},{\"point\":10.0,\"questionTypeId\":3,\"answer\":\"F\",\"questionId\":75,\"right\":true},{\"point\":10.0,\"questionTypeId\":3,\"answer\":\"F\",\"questionId\":79,\"right\":true},{\"point\":10.0,\"questionTypeId\":3,\"answer\":\"T\",\"questionId\":78,\"right\":true},{\"point\":10.0,\"questionTypeId\":4,\"answer\":\"孝\",\"questionId\":92,\"right\":true},{\"point\":10.0,\"questionTypeId\":4,\"answer\":\"仓颉\",\"questionId\":93,\"right\":true}],\"pointMax\":100.0,\"pointRaw\":80.0,\"startTime\":\"Sep 14, 2017 3:09:57 PM\",\"pointPass\":60.0}");
         answerSheetStrList.add("{\"examHistroyId\":12,\"examId\":27,\"examPaperId\":47,\"duration\":0,\"answerSheetItems\":[{\"point\":10.0,\"questionTypeId\":1,\"answer\":\"A\",\"questionId\":56,\"right\":true},{\"point\":10.0,\"questionTypeId\":1,\"answer\":\"D\",\"questionId\":58,\"right\":true},{\"point\":10.0,\"questionTypeId\":1,\"answer\":\"D\",\"questionId\":59,\"right\":true},{\"point\":10.0,\"questionTypeId\":1,\"answer\":\"D\",\"questionId\":60,\"right\":true},{\"point\":0.0,\"questionTypeId\":2,\"answer\":\" A B C\",\"questionId\":61,\"right\":false},{\"point\":0.0,\"questionTypeId\":2,\"answer\":\" A B\",\"questionId\":66,\"right\":false},{\"point\":10.0,\"questionTypeId\":3,\"answer\":\"F\",\"questionId\":76,\"right\":true},{\"point\":0.0,\"questionTypeId\":3,\"answer\":\"F\",\"questionId\":78,\"right\":false},{\"point\":0.0,\"questionTypeId\":4,\"answer\":\"平安夜\",\"questionId\":72,\"right\":false},{\"point\":10.0,\"questionTypeId\":4,\"answer\":\"北京\",\"questionId\":73,\"right\":true}],\"pointMax\":100.0,\"pointRaw\":60.0,\"startTime\":\"Sep 14, 2017 2:49:43 PM\",\"pointPass\":60.0}");
@@ -200,6 +207,10 @@ public class EduQuestionServiceImpl extends BaseServiceImpl<EduQuestionMapper, E
         System.out.println(map.size());
         for(int key : map.keySet()){
             System.out.println(key+"==="+map.get(key).toString());
-        }
+        }*/
+
+        int num1 = 3;
+        int num2 = 5;
+        System.out.println(NumberUtils.formatDoublePercent((float)num1/(float)num2*100));
     }
 }

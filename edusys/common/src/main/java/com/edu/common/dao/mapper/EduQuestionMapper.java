@@ -37,5 +37,7 @@ public interface EduQuestionMapper {
 
     int insertBatch(List<EduQuestion> questionList);
 
+    int updateBatch(List<EduQuestion> questionList);
+
     List<String> selectQuestionNameList(@Param("qcId") Integer qcId);
 }

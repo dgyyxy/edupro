@@ -63,7 +63,8 @@
                 {field: 'name', title: '试题名称'},
                 {field: 'typeName', title: '类型'},
                 {field: 'categoryName', title: '所属分类'},
-                {field: 'creator', title: '创建者'},
+                {field: 'error_rate', title: '出题率', sortable: true,align: 'center', formatter: 'errorRateFormatter'},
+                {field: 'qsum', title: '答题数', sortable: true, align: 'center'},
                 {field: 'difficulty', title: '难度级别', align: 'center'}
             ]
         });
@@ -140,6 +141,11 @@
             }
         });
     });
+
+    //出错率
+    function errorRateFormatter(value, row, index){
+        return row.errorRate+'%';
+    }
 
     // 搜索参数传递
     function queryParams(params){

@@ -7,7 +7,8 @@
 </style>
 <div class="info-item-list l row animated fadeInLeft">
     <div class="row">
-        <div class="col-md-11"><a href="javascript:void(0);" style="float:right;cursor:pointer;" data-toggle="modal" data-target="#updatePassword">修改密码</a></div>
+        <div class="col-md-10"><a href="javascript:void(0);" style="float:right;cursor:pointer;" data-toggle="modal" data-target="#issuesSet">安全问题</a></div>
+        <div class="col-md-1"><a href="javascript:void(0);" style="float:right;cursor:pointer;" data-toggle="modal" data-target="#updatePassword">修改密码</a></div>
         <div class="col-md-1"><a href="javascript:void(0);" style="float:right;cursor:pointer;" data-toggle="modal" data-target="#editStudent">完善资料</a></div>
     </div>
     <div class="info-item col-md-6">
@@ -33,6 +34,10 @@
     <div class="info-item col-md-6">
         <i class="info-label text-right"><a class="btn-default btn-small btn-circle" href="javascript:void(0);">&nbsp;<i class="icon-sitemap"></i>&nbsp;</a>&nbsp;二级机构：</i>
         <span>${student.organizationName2}</span>
+    </div>
+    <div class="info-item col-md-6">
+        <i class="info-label text-right"><a class="btn-default btn-small btn-circle" href="javascript:void(0);">&nbsp;<i class="icon-sitemap"></i>&nbsp;</a>&nbsp;公司名称：</i>
+        <span>${student.company}</span>
     </div>
 </div>
 

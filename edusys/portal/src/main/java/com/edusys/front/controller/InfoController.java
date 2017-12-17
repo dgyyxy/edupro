@@ -1,13 +1,11 @@
 package com.edusys.front.controller;
 
 import com.edu.common.base.BaseController;
-import com.edu.common.dao.model.EduStuJobCourse;
-import com.edu.common.dao.model.EduStuJobCourseExample;
-import com.edu.common.dao.model.EduStudent;
-import com.edu.common.dao.model.EduStudentExam;
+import com.edu.common.dao.model.*;
 import com.edu.common.util.Paginator;
 import com.edusys.front.common.SysResult;
 import com.edusys.front.common.SysResultConstant;
+import com.edusys.front.service.IssuesService;
 import com.edusys.front.service.StuJobCourseService;
 import com.edusys.front.service.StudentExamService;
 import com.edusys.front.service.StudentService;
@@ -44,6 +42,9 @@ public class InfoController extends BaseController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private IssuesService issuesService;
 
     /**
      * 个人中心
@@ -189,6 +190,35 @@ public class InfoController extends BaseController {
         List<EduStudentExam> eduStudentExamList = studentExamService.selectStuExamHistoryList(student.getStuId());
         modelMap.put("list", eduStudentExamList);
         return "/exam-history.jsp";
+    }
+
+    @RequestMapping(value = "/issues-setting", method = RequestMethod.POST)
+    @ResponseBody
+    public Object issuesSet(HttpServletRequest request){
+        String[] questionId = request.getParameterValues("questionId");
+        String[] answers = request.getParameterValues("answer");
+        HttpSession session = request.getSession();
+        EduStudent student = (EduStudent) session.getAttribute("user");
+        EduStudentAnswer studentAnswer = issuesService.selectByPrimaryKey(student.getStuId());
+        if(studentAnswer == null){
+            studentAnswer = new EduStudentAnswer();
+            studentAnswer.setStuId(student.getStuId());
+            studentAnswer.setCardNo(student.getCardNo());
+        }
+        if(questionId.length>0){
+            String questionstr = StringUtils.join(questionId, ",");
+            studentAnswer.setQuestion(questionstr);
+        }
+        if(answers.length>0){
+            String answerstr = StringUtils.join(answers, ",");
+            studentAnswer.setAnswer(answerstr);
+        }
+        if(studentAnswer.getId()!=null){
+            issuesService.updateByPrimaryKeySelective(studentAnswer);
+        }else{
+            issuesService.insertSelective(studentAnswer);
+        }
+        return new SysResult(SysResultConstant.SUCCESS, "success");
     }
 
 }

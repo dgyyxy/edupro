@@ -17,6 +17,24 @@ public class NumberUtils {
         return result + "%";
     }
 
+    public static Double getPercentDouble(int num1, int num2) {
+        // 创建一个数值格式化对象
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        // 设置精确到小数点后0位
+        numberFormat.setMaximumFractionDigits(0);
+        String result = numberFormat.format((float) num1 / (float) num2 * 100);
+        return Double.parseDouble(result);
+    }
+
+    public static double formatDoublePercent(double value) {
+
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        nf.setRoundingMode(RoundingMode.HALF_UP);
+        nf.setGroupingUsed(false);
+        return Double.parseDouble(nf.format(value));
+    }
+
     public static String formatDouble(double value) {
 
         NumberFormat nf = NumberFormat.getNumberInstance();

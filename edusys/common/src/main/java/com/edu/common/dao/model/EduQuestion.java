@@ -92,8 +92,17 @@ public class EduQuestion implements Serializable {
     //用于列表显示字段
     private int qsum;//答题数
     private int errorCount;//错题数
+    private double errorRate;//错题率
 
     private static final long serialVersionUID = 1L;
+
+    public double getErrorRate() {
+        return errorRate;
+    }
+
+    public void setErrorRate(double errorRate) {
+        this.errorRate = errorRate;
+    }
 
     public int getQsum() {
         return qsum;
