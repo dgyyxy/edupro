@@ -103,19 +103,6 @@
                 <form id="info-form" autocomplete="off">
                     <p class="rlf-tip-globle color-red"></p>
                     <div class="rlf-group pr">
-                        <input type="text" id="stuNo" maxlength="37" name="stuNo" value="${student.stuNo}" data-validate="require-stuNo"
-                               autocomplete="off" class="xa-emailOrPhone ipt ipt-email js-own-name"
-                               placeholder="请输入您的学号">
-                        <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的学号"></p>
-                    </div>
-                    <div class="rlf-group pr">
-                        <input type="text" id="phone" maxlength="37" name="phone" value="${student.phone}"
-                               data-validate="require-phone" autocomplete="off"
-                               class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的手机号">
-                        <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的手机号"></p>
-                    </div>
-
-                    <div class="rlf-group pr">
                         <input type="text" id="stuName" maxlength="37" name="stuName" value="${student.stuName}"
                                data-validate="require-phone" autocomplete="off"
                                class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的姓名">
@@ -123,11 +110,27 @@
                     </div>
 
                     <div class="rlf-group pr">
+                        <input type="text" id="stuNo" maxlength="37" name="stuNo" value="${student.stuNo}" data-validate="require-stuNo"
+                               autocomplete="off" class="xa-emailOrPhone ipt ipt-email js-own-name"
+                               placeholder="请输入您的学号">
+                        <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的学号"></p>
+                    </div>
+
+                    <div class="rlf-group pr">
+                        <input type="text" id="phone" maxlength="37" name="phone" value="${student.phone}"
+                               data-validate="require-phone" autocomplete="off"
+                               class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的手机号">
+                        <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的手机号"></p>
+                    </div>
+
+
+
+                    <%--<div class="rlf-group pr">
                         <input type="text" id="company" maxlength="37" name="company" value="${student.company}"
                                data-validate="require-phone" autocomplete="off"
                                class="xa-emailOrPhone ipt ipt-email js-own-name" placeholder="请输入您的公司名称">
                         <p class="rlf-tip-wrap errorHint color-red" data-error-hint="请输入您的公司名称"></p>
-                    </div>
+                    </div>--%>
 
                     <div class="rlf-group clearfix">
                         <input type="button" value="保存" onclick="updateInfo()" hidefocus="true" class="btn-red btn-full xa-login">
@@ -194,7 +197,7 @@
     $(function(){
         //初始个人信息
         var obj = $('.info-header>h1').find('span').eq(0);
-        var url = $(obj).data('target');
+        var url = $(obj).data('target')+'?refresh='+new Date().getTime();
         loadFrame(url);
 
         $('.info-header>h1').find('span').each(function(){
@@ -218,6 +221,9 @@
 
         // 监听安全问题窗口关闭
         $('#issuesSet').on('hidden.bs.modal', function (){
+            $('#issuesForm').find('div.question').each(function(){
+                $(this).remove();
+            });
         });
 
     });

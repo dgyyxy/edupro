@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,9 @@ public class ExamHistoryController extends BaseController {
         Map<Integer, String> rateMap = new HashMap<>();
         if(passRateList!=null && passRateList.size()>0){
             for(ExamPassRate examPassRate : passRateList){
-                rateMap.put(examPassRate.getExamId(), NumberUtils.formatDouble(examPassRate.getPassRate())+'%');
+                double passRate = 0;
+                if(examPassRate.getPassRate()!=null) passRate = examPassRate.getPassRate();
+                rateMap.put(examPassRate.getExamId(), NumberUtils.formatDouble(passRate)+'%');
             }
         }
 
@@ -164,7 +167,7 @@ public class ExamHistoryController extends BaseController {
         response.setContentType("application/binary;charset=ISO8859_1");
         try {
             ServletOutputStream outputStream = response.getOutputStream();
-            String fileName = new String(("学员成绩").getBytes(), "ISO8859_1") + new Date().getTime();
+            String fileName = new String(("学员成绩").getBytes(), "ISO8859_1") + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
             response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
             List<EduStudentExam> studentExamList = new ArrayList<>();
 

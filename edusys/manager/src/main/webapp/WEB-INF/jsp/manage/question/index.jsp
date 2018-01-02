@@ -94,7 +94,7 @@ function queryParams(params){
 
 // 题库分类
 function initTree() {
-	$.getJSON('${basePath}/manage/question/category/list', {}, function(json) {
+	$.getJSON('${basePath}/manage/question/category/list', {limit: 100000}, function(json) {
 		var datas = [];
 		var list = json.rows;
 		for(var i = 0; i< list.length; i++){

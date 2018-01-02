@@ -161,6 +161,13 @@ public class QuestionController extends BaseController {
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
         question.setCreator(username);
+        EduQuestionExample questionExample = new EduQuestionExample();
+        EduQuestionExample.Criteria criteria = questionExample.createCriteria();
+        criteria.andNameEqualTo(question.getName());
+        List<EduQuestion> list = questionService.selectByExample(questionExample);
+        if(list.size()>0){
+            return new SysResult(SysResultConstant.FAILED, "该题目已存在！");
+        }
         int count = questionService.insertSelective(question);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }

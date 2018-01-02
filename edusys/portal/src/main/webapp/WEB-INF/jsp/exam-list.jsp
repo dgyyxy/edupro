@@ -89,7 +89,7 @@
                                             <span class="study-btn" onclick="examing(${item.pointGet});">开始答卷</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="study-btn" data-id="${item.id}" data-status="${item.status}" data-toggle="modal" data-target="#exam-notice-panel">开始答卷</span>
+                                            <span class="study-btn" data-exam="${item.examName}" data-id="${item.id}" data-status="${item.status}" data-toggle="modal" data-target="#exam-notice-panel">开始答卷</span>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -115,7 +115,7 @@
 <div id="exam-notice-panel" class="rl-modal-exam in modal" aria-hidden="true">
     <div class="rl-modal-header-exam">
         <h1>
-            <span class="active-title">考生信息</span>
+            <span class="active-title" style="width: 250px;float: left; text-align: left; padding-left: 8px;" id="showTitle">[]--考生信息</span>
         </h1>
         <button type="button" class="rl-close closeBtn" data-dismiss="modal" hidefocus="true" aria-hidden="true"></button>
     </div>
@@ -162,13 +162,15 @@
     $( function() {
         var stuId = '${user.stuId}';
         var examId = 0;
+        var examName = '';
 
         // 监听开始答卷窗口显示
         $('#exam-notice-panel').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             examId = button.data('id');
             examPwd = button.data('pwd');
-
+            examName = button.data('exam');
+            $('#showTitle').html(examName+'--考生信息');
         });
 
         //开始考试

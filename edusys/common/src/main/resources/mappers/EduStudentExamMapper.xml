@@ -160,6 +160,7 @@
         select ee.exam_name examName,ee.amount amount,ese.*
         from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id
         where ese.approved > 1 and ese.stu_id = #{stuId,jdbcType=INTEGER}
+        order by ese.start_time DESC
     </select>
 
 

@@ -103,7 +103,7 @@ function actionFormatter(value, row, index) {
 
 // 学员机构
 function initTree() {
-	$.getJSON('${basePath}/manage/organization/list', {}, function(json) {
+	$.getJSON('${basePath}/manage/organization/list', {limit: 100000}, function(json) {
 		var datas = [];
 		var list = json.rows;
 		for(var i = 0; i< list.length; i++){
@@ -133,6 +133,7 @@ function initTree() {
 			}
 			datas.push(node);
 		}
+		console.log(datas);
 		var nodeId;
 		$('#tree').treeview({
 			data: datas,

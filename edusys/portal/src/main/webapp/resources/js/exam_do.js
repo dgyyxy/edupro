@@ -356,6 +356,7 @@ var startTimer = function() {
 		timestamp = parseInt($("#exam-timestamp").text())*60;
 	}
 	var tag = true;
+	var vtag = true;
     timer = setInterval(function() {
         $("#exam-timestamp").text(timestamp);
         $("#exam-clock").text(toHHMMSS(timestamp));
@@ -365,14 +366,14 @@ var startTimer = function() {
             exam_clock.addClass("question-time-warning");
         }
         var period = parseInt(timestamp / 60);
-		if(tag && period==10){
+		if(tag && period===10){
 			tipMsg(10);
 			tag = false;
 		}
 
-		if(tag && period==5){
+		if(vtag && period===5){
 			tipMsg(5);
-			tag = false;
+			vtag = false;
 		}
 
         timestamp-- || examTimeOut(timer);

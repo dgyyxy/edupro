@@ -7,7 +7,8 @@
             <input type="text" id="teacher" name="teacher" value="${exam.teacher}" class="form-control" maxlength="20"/>
         </div>
         <div class="form-group">
-            <textarea id="watch" class="form-control" name="watch" placeholder="监考情况(只允许输入400以内字)">${exam.watch}</textarea>
+            <label for="teacher" style="position: relative; color:#499EC7;">监考情况</label>
+            <textarea id="watch" class="form-control" name="watch">${exam.watch}</textarea>
         </div>
         <div class="form-group text-right dialog-buttons" id="btngroup">
             <a class="waves-effect waves-button" href="javascript:;" onclick="watchSubmit();">保存</a>

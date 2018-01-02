@@ -123,6 +123,14 @@ public class OrganizationController extends BaseController {
         organization.setCtime(time);
         if (organization.getLevel() == 2) {
             organization.setOrderby(organization.getParentId());
+            EduOrganizationExample organizationExample = new EduOrganizationExample();
+            EduOrganizationExample.Criteria criteria = organizationExample.createCriteria();
+            criteria.andNameEqualTo(organization.getName());
+            criteria.andParentIdEqualTo(organization.getParentId());
+            List<EduOrganization> list = organizationService.selectByExample(organizationExample);
+            if(list.size()>0){
+                return new SysResult(SysResultConstant.FAILED, "该二级机构已存在！");
+            }
         }
         int count = organizationService.insertSelective(organization);
         if (organization.getLevel() == 1) {

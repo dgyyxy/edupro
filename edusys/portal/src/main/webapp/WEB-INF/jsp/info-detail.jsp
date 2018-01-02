@@ -35,9 +35,9 @@
         <i class="info-label text-right"><a class="btn-default btn-small btn-circle" href="javascript:void(0);">&nbsp;<i class="icon-sitemap"></i>&nbsp;</a>&nbsp;二级机构：</i>
         <span>${student.organizationName2}</span>
     </div>
-    <div class="info-item col-md-6">
+    <%--<div class="info-item col-md-6">
         <i class="info-label text-right"><a class="btn-default btn-small btn-circle" href="javascript:void(0);">&nbsp;<i class="icon-sitemap"></i>&nbsp;</a>&nbsp;公司名称：</i>
         <span>${student.company}</span>
-    </div>
+    </div>--%>
 </div>
 

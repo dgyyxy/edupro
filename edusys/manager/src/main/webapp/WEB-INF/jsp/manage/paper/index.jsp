@@ -93,7 +93,7 @@ function queryParams(params){
 
 // 试卷分类
 function initTree() {
-	$.getJSON('${basePath}/manage/paper/category/list', {}, function(json) {
+	$.getJSON('${basePath}/manage/paper/category/list', {limit: 100000}, function(json) {
 		var datas = [];
 		var list = json.rows;
 		for(var i = 0; i< list.length; i++){

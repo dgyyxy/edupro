@@ -16,18 +16,20 @@
         var userId = window.parent.parent.userId;
 
         var status = window.parent.parent.status;
-        if(status != 2){
-            //记录学习
-            $.ajax({
-                type: 'get',
-                url: '${ctx}/course/study-end/' + userId + '/' + jobId + '/' + courseId,
-                success: function (result) {
-                    //alert(result);
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    //layer.msg(textStatus);
-                }
-            });
+        if(jobId!=undefined && userId!=undefined){
+            if(status != 2){
+                //记录学习
+                $.ajax({
+                    type: 'get',
+                    url: '${ctx}/course/study-end/' + userId + '/' + jobId + '/' + courseId,
+                    success: function (result) {
+                        //alert(result);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //layer.msg(textStatus);
+                    }
+                });
+            }
         }
     }
 
