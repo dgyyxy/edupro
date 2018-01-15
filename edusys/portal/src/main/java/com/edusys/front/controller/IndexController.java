@@ -61,15 +61,30 @@ public class IndexController extends BaseController{
      */
     @RequestMapping(value = "issues", method = RequestMethod.GET)
     @ResponseBody
-    public Object getIssuesList(){
+    public Object getIssuesList(HttpServletRequest request){
         EduStudentAnswerExample studentAnswerExample = new EduStudentAnswerExample();
         EduStudentAnswerExample.Criteria criteria = studentAnswerExample.createCriteria();
         criteria.andStuIdIsNull();
         criteria.andCardNoIsNull();
         criteria.andAnswerIsNull();
         List<EduStudentAnswer> list = issuesService.selectByExample(studentAnswerExample);
+        EduStudentAnswer studentAnswer = new EduStudentAnswer();
+
+        HttpSession session = request.getSession();
+        EduStudent student = (EduStudent) session.getAttribute("user");
+        if(student!=null){
+            studentAnswerExample = new EduStudentAnswerExample();
+            criteria = studentAnswerExample.createCriteria();
+            criteria.andStuIdEqualTo(student.getStuId());
+            criteria.andCardNoEqualTo(student.getCardNo());
+            List<EduStudentAnswer> studentAnswers = issuesService.selectByExample(studentAnswerExample);
+            if(studentAnswers!=null){
+                studentAnswer = studentAnswers.get(0);
+            }
+        }
         Map<String, Object> result = new HashMap<>();
         result.put("list", list);
+        result.put("answer", studentAnswer.getAnswer());
         return result;
     }
 

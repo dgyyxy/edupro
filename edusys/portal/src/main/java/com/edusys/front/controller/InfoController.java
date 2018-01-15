@@ -199,11 +199,19 @@ public class InfoController extends BaseController {
         String[] answers = request.getParameterValues("answer");
         HttpSession session = request.getSession();
         EduStudent student = (EduStudent) session.getAttribute("user");
-        EduStudentAnswer studentAnswer = issuesService.selectByPrimaryKey(student.getStuId());
+        EduStudentAnswerExample studentAnswerExample = new EduStudentAnswerExample();
+        EduStudentAnswerExample.Criteria criteria = studentAnswerExample.createCriteria();
+        criteria.andCardNoEqualTo(student.getCardNo());
+        criteria.andStuIdEqualTo(student.getStuId());
+        List<EduStudentAnswer> list = issuesService.selectByExample(studentAnswerExample);
+        EduStudentAnswer studentAnswer = list.get(0);
         if(studentAnswer == null){
             studentAnswer = new EduStudentAnswer();
             studentAnswer.setStuId(student.getStuId());
             studentAnswer.setCardNo(student.getCardNo());
+        }
+        if(questionId==null || answers==null){
+            return new SysResult(SysResultConstant.FAILED,"error");
         }
         if(questionId.length>0){
             String questionstr = StringUtils.join(questionId, ",");

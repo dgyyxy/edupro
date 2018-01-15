@@ -364,14 +364,19 @@
     var initIssuesList = function (){
         $.getJSON('${ctx}/issues',{}, function(json){
             var htmlstr = '';
+            var answers = json.answer.split(',');
             for(var i=0; i<json.list.length; i++){
                 var obj = json.list[i];
+                var _answer = '';
+                if(answers[i]!=null){
+                    _answer = answers[i];
+                }
                 htmlstr += '<div class="rlf-group pr question">'
                         +'<span>'+obj.question+'</span>'
                         +'</div>'
                         +'<div class="rlf-group pr question">'
                         +'<input type="hidden" name="questionId" value="'+obj.id+'"/>'
-                        +'<input type="text" id="answer'+obj.id+'" name="answer" class="xa-emailOrPhone ipt ipt-email js-own-name" data-validate="require-password" maxlength="25" autocomplete="off">'
+                        +'<input type="text" id="answer'+obj.id+'" name="answer" value="'+_answer+'" class="xa-emailOrPhone ipt ipt-email js-own-name" data-validate="require-password" maxlength="25" autocomplete="off">'
                         +'</div>'
                         +'<div style="line-height: 10px;" class="question">&nbsp;</div>';
             }
@@ -380,7 +385,7 @@
     }
 
     var issuesSetSave = function(){
-        var entity = $('#issuesForm').serializeObject();
+        var entity = $('#issuesForm').serialize();
         $.ajax({
             type: 'post',
             url: '${basePath}/info/issues-setting',
