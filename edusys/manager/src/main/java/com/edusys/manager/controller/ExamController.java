@@ -115,15 +115,17 @@ public class ExamController extends BaseController {
             Subject subject = SecurityUtils.getSubject();
             String username = (String) subject.getPrincipal();
             paper.setCreator(username);
-            paper.setName("选择题库开考");
+            paper.setName("");
             paper.setPaperType(3);
-
+            //保存创建试卷规则
+            exam.setPaperRule(gson.toJson(paper));
             // 创建试卷
             try {
                 paperService.createExamPaper(paper);
             } catch (Exception e) {
                 return new SysResult(SysResultConstant.FAILED, e.getMessage());
             }
+
         } else if (examType.equals("2")) {//随机抽取试卷
             String paperIdStr = request.getParameter("paperIds");
             //处理数组只有一个元素
@@ -434,7 +436,10 @@ public class ExamController extends BaseController {
             stuIds.add(Integer.parseInt(idStr));
         }
         exam.setStuNum(exam.getStuNum() + stuIds.size());
-        EduPaper paper = paperService.selectByPrimaryKey(exam.getPaperId());
+        EduPaper paper = new EduPaper();
+        if(exam.getPaperRule() == null || exam.getPaperRule().equals("")){
+            paper = paperService.selectByPrimaryKey(exam.getPaperId());
+        }
 
         studentExamService.examByStudents(stuIds, paper, exam);
         examService.updateByPrimaryKeySelective(exam);//更新参考人员数量

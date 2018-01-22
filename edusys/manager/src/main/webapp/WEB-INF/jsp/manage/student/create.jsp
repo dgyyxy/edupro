@@ -47,7 +47,7 @@ $(function(){
 
     $('#subId').select2({width:150});
 
-    $('#pid').change(function(){
+    $('#pid').on('select2:select', function(){
         var pid = $(this).val();
         initSelect(pid, 'subId');
     });

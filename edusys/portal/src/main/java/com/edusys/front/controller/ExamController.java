@@ -1,10 +1,7 @@
 package com.edusys.front.controller;
 
 import com.edu.common.base.BaseController;
-import com.edu.common.dao.model.EduExam;
-import com.edu.common.dao.model.EduStudent;
-import com.edu.common.dao.model.EduStudentExam;
-import com.edu.common.dao.model.EduStudentExamExample;
+import com.edu.common.dao.model.*;
 import com.edu.common.dao.pojo.AnswerSheet;
 import com.edu.common.util.Constants;
 import com.edu.common.util.Message;
@@ -89,25 +86,26 @@ public class ExamController extends BaseController{
     @ResponseBody
     public Object password(String exampwd, int examId, int stuId){
         int stuExamId = examService.exampwd(examId, stuId);
+        EduStudentExam studentExam = studentExamService.selectByPrimaryKey(stuExamId);
         EduExam exam = examService.selectByPrimaryKey(examId);
         String pass = "fail";
         if(exam.getExamPwd().equals(exampwd)){
             pass = "success";
+            //按照考试规则组卷
+            if(exam.getPaperRule()!=null){
+                Gson gson = new Gson();
+                EduPaper paper = gson.fromJson(exam.getPaperRule(), EduPaper.class);
+                try {
+                    examService.createPaper(paper, exam, studentExam);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
 
-        EduStudentExamExample studentExamExample = new EduStudentExamExample();
-        EduStudentExamExample.Criteria criteria = studentExamExample.createCriteria();
-        criteria.andStuIdEqualTo(stuId);
-        criteria.andExamIdEqualTo(examId);
-
-        List<EduStudentExam> studentExamList = studentExamService.selectByExample(studentExamExample);
-        int examStatus = -1;
-        double score = 0;
-        if(studentExamList!=null && studentExamList.size()>0){
-            EduStudentExam studentExam = studentExamList.get(0);
-            examStatus = studentExam.getApproved();
-            score = studentExam.getPointGet()==null ? 0 : studentExam.getPointGet();
-        }
+        int examStatus = studentExam.getApproved();
+        double score = studentExam.getPointGet()==null ? 0 : studentExam.getPointGet();
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", pass);

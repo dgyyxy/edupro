@@ -63,7 +63,7 @@
                 {field: 'name', title: '试题名称'},
                 {field: 'typeName', title: '类型'},
                 {field: 'categoryName', title: '所属分类'},
-                {field: 'error_rate', title: '出题率', sortable: true,align: 'center', formatter: 'errorRateFormatter'},
+                {field: 'error_rate', title: '出错率', sortable: true,align: 'center', formatter: 'errorRateFormatter'},
                 {field: 'qsum', title: '答题数', sortable: true, align: 'center'},
                 {field: 'difficulty', title: '难度级别', align: 'center'}
             ]

@@ -67,7 +67,6 @@ function timeFormatter(value, row, index){
 }
 
 function studyCountFormatter(value, row, index){
-	console.log(row);
 	var count = row.studyCount;
 	if(count>0)
 		return '<span onclick="jobsAction('+row.stuId+');" class="label label-primary" style="cursor:pointer;">'+value+'</span>';
@@ -94,7 +93,7 @@ function jobsAction(id) {
 // 已学课件列表
 var courseDialog;
 function courseListAction(stuId, jobId) {
-	jobDialog = $.dialog({
+	courseDialog = $.dialog({
 		type: 'blue',
 		animationSpeed: 300,
 		columnClass: 'col-md-10 col-md-offset-1',

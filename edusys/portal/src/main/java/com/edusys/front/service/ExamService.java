@@ -3,6 +3,7 @@ package com.edusys.front.service;
 import com.edu.common.base.BaseService;
 import com.edu.common.dao.model.EduExam;
 import com.edu.common.dao.model.EduExamExample;
+import com.edu.common.dao.model.EduPaper;
 import com.edu.common.dao.model.EduStudentExam;
 import com.edu.common.dao.pojo.AnswerSheet;
 
@@ -32,4 +33,7 @@ public interface ExamService extends BaseService<EduExam, EduExamExample>{
 
     //提交每一道题
     public void updateExamQuestion(AnswerSheet answerSheet, String answerSheetStr, int approved);
+
+    // 创建临时试卷
+    public void createPaper(EduPaper paper, EduExam exam, EduStudentExam studentExam) throws Exception;
 }

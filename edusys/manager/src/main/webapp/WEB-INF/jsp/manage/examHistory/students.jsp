@@ -61,6 +61,7 @@
                 {field: 'stuName', title: '姓名'},
                 {field: 'examName', title: '考试名称', formatter: 'examNameFormatter'},
                 {field: 'stuOrgan', title: '所属机构'},
+                {field: 'proctor', title:'原因', visible: false},
                 {field: 'pointGet', title: '得分', formatter: 'scoreFormatter'},
                 {field: 'approved', title: '是否通过', formatter: 'statusFormatter'},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
@@ -174,13 +175,15 @@
     // 格式化操作按钮
     function actionFormatter(value, row, index) {
         var id = row.id;
+        var htmlstr = [];
+        var proctor = row.proctor;
         if(row.approved>1){
-            return [
-                '<a class="waves-effect waves-button green" href="javascript:;" onclick="lookPageAction('+id+')" data-toggle="tooltip" title="查看试卷">查看试卷</a>　'
-            ].join('');
-        }else{
-            return '-';
+            htmlstr.push('<a class="update" href="javascript:;" onclick="lookPageAction('+id+')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看试卷</a>　');
         }
+        if(proctor!=null && proctor!=''){
+            htmlstr.push('<a class="update" href="javascript:;" onclick="proctorAction('+id+',1)" data-toggle="tooltip"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看原因</a>');
+        }
+        return htmlstr.join('');
 
     }
 
@@ -221,6 +224,25 @@
                     text: '取消',
                     btnClass: 'waves-effect waves-button'
                 }
+            }
+        });
+    }
+
+    // 监考强制交卷
+    var proctorDialog;
+    function proctorAction(id, tag) {
+        proctorDialog = $.dialog({
+            type: 'green',
+            animationSpeed: 300,
+            columnClass: 'col-md-6 col-md-offset-3',
+            title: '强制交卷',
+            content: 'url:${basePath}/manage/examing/proctor/'+id,
+            onContentReady: function () {
+                if(tag == 1) {//查看
+                    $('#btngroup').hide();
+                    $('#proctor').attr('readonly',true);
+                }
+                initMaterialInput();
             }
         });
     }

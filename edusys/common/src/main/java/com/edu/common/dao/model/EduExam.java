@@ -147,6 +147,16 @@ public class EduExam implements Serializable {
 
     private String watch;//监考记录
 
+    private String paperRule;//组卷规则
+
+    public String getPaperRule() {
+        return paperRule;
+    }
+
+    public void setPaperRule(String paperRule) {
+        this.paperRule = paperRule;
+    }
+
     public String getTeacher() {
         return teacher;
     }

@@ -318,6 +318,7 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
         while(qits.hasNext()){
             qids.add(qits.next());
         }
+
         EduQuestionExample questionExample = new EduQuestionExample();
         EduQuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andIdIn(qids);
@@ -344,14 +345,14 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
         Gson gson = new Gson();
         //试卷题量
         paper.setAmount(qids.size());
-        paper.setContent(gson.toJson(questionResults));
+        //paper.setContent(gson.toJson(questionResults));
 
         as.setPointMax(sum);
         as.setAnswerSheetItems(asList);
         as.setPointPass(paper.getPassPoint());
         String answerSheet = gson.toJson(as);
-        paper.setAnswerSheet(answerSheet);
-        eduPaperMapper.insertSelective(paper);
+        //paper.setAnswerSheet(answerSheet);
+        //eduPaperMapper.insertSelective(paper);
 
         /*as.setExamPaperId(paper.getId());
         answerSheet = gson.toJson(as);

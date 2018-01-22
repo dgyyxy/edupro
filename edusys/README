@@ -47,7 +47,15 @@ v20171030
     ALTER TABLE `edu_question`
             ADD COLUMN `error_rate` DOUBLE DEFAULT NULL COMMENT '出错率';
 
+    ALTER TABLE `edu_exam`
+            ADD COLUMN `paper_rule` mediumtext DEFAULT NULL COMMENT '组卷规则';
+
     //课件学完跳转的地址：/course/course-end
+
+--20180116 处理新增考试--选择试题范围，加了组卷规则，等到考生进入考试生成试卷
+
+--20180122 bug修复
+    -- 修复pdf 关闭记录状态为学完
 
 
 

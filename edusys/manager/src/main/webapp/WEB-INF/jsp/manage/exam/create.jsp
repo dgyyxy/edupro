@@ -82,6 +82,8 @@
         </div>
 
         <div class="form-group paperSelectDiv" hidden>
+            <select id="paperCategorySelect" name="paperCategory">
+            </select>
             <select id="paperSelect" multiple="multiple" name="paperIds">
             </select>
         </div>
@@ -134,6 +136,7 @@
             examCreate.bindChangeAmount();
             examCreate.submitForm();
             examCreate.initOrganization();
+            examCreate.initPaperCategory();
         },
         // 提交表单
         submitForm: function(){
@@ -317,7 +320,8 @@
                 }else if(type == 2){
                     $('.paperSelectDiv').show();
                     $('.questionShowDiv').hide();
-                    examCreate.initPaper();
+                    var typeId = $('#paperCategorySelect').select2('val');
+                    examCreate.initPaper(typeId);
                 }
             });
         },
@@ -363,8 +367,8 @@
             });
         },
         // 试卷列表
-        initPaper: function(){
-            $.getJSON('${basePath}/manage/paper/list', {limit: 10000, status: 1}, function(json) {
+        initPaper: function(typeId){
+            $.getJSON('${basePath}/manage/paper/list', {limit: 10000, status: 1, typeId: typeId}, function(json) {
                 var datas = [];
                 for (var i = 0; i < json.rows.length; i ++) {
                     var data = {};
@@ -372,8 +376,9 @@
                     data.text = json.rows[i].name;
                     datas.push(data);
                 }
+                $('#paperSelect').empty();
                 $('#paperSelect').select2({
-                    width: 300,
+                    width: 200,
                     placeholder: '请选择试卷',
                     data : datas
                 });
@@ -428,11 +433,55 @@
                 else { return 'int'; }
             }
             return 'string';
+        },
+        initPaperCategory: function(){
+            $.ajax({
+                url: '${basePath}/manage/paper/category/list',
+                type: 'get',
+                data: {'offset':0, 'limit':100000},
+                success: function(result){
+                    var rows = result.rows;
+                    var datas = [];
+                    for(var i = 0;i<rows.length; i++){
+                        var data = {};
+                        var obj = rows[i];
+                        if(obj.level == 2){
+                            continue;
+                        }
+                        data.text = obj.name;
+                        data.children = [];
+                        for(var j = 0; j< rows.length; j++){
+                            var subData = {};
+                            var _obj = rows[j];
+                            if(_obj.level == 1){
+                                continue;
+                            }
+                            subData.id = _obj.id;
+                            subData.text = _obj.name;
+                            if(obj.id == _obj.pid){
+                                data.children.push(subData);
+                            }
+                        }
+                        datas.push(data);
+                    }
+                    $('#paperCategorySelect').empty();
+                    $('#paperCategorySelect').select2({
+                        width: 200,
+                        placeholder: '请选择试卷分类',
+                        data: datas
+                    });
+                }
+            });
         }
     };
 
     $(function () {
         examCreate.initial();
+
+        $('#paperCategorySelect').change(function(){
+            console.log('==============='+$(this).val());
+            examCreate.initPaper($(this).val());
+        });
     });
 
 </script>

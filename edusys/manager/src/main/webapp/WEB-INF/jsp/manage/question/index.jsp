@@ -78,7 +78,7 @@ $(function() {
 			{field: 'typeName', title: '类型'},
 			{field: 'categoryName', title: '所属分类'},
 			{field: 'difficulty', title: '难度级别', align: 'center'},
-			{field: 'error_rate', title: '出题率', sortable: true,align: 'center', formatter: 'errorRateFormatter'},
+			{field: 'error_rate', title: '出错率', sortable: true,align: 'center', formatter: 'errorRateFormatter'},
 			{field: 'qsum', title: '答题数', sortable: true, align: 'center'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]

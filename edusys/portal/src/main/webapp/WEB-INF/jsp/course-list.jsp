@@ -181,6 +181,20 @@
 
                     },
                     cancel: function(index, layero){
+                        //pdf 学完
+                        if(filetype == 'pdf'){
+                            if(status != 2){
+                                //记录学习
+                                $.ajax({
+                                    type: 'get',
+                                    url: '${ctx}/course/study-end/' + userId + '/' + jobId + '/' + courseId,
+                                    success: function (result) {
+                                    },
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    }
+                                });
+                            }
+                        }
                         time = new Date().getTime() - time;
                         window.clearTimeout(timer);
                         //记录学习

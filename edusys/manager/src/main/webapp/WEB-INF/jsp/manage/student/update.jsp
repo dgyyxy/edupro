@@ -49,10 +49,11 @@
 
         initUpdateSelect(parseInt('${student.organizationId1}'), 'subId');
 
-        $('#pid').change(function(){
+        $('#pid').on('select2:select', function(){
             var pid = $(this).val();
-            initUpdateSelect(pid, 'subId');
+            initSelect(pid, 'subId');
         });
+
     });
 
     //菜单

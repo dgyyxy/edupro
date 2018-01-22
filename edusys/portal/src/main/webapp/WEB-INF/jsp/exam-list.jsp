@@ -115,7 +115,7 @@
 <div id="exam-notice-panel" class="rl-modal-exam in modal" aria-hidden="true">
     <div class="rl-modal-header-exam">
         <h1>
-            <span class="active-title" style="width: 250px;float: left; text-align: left; padding-left: 8px;" id="showTitle">[]--考生信息</span>
+            <span class="active-title" style="width: 250px;float: left; text-align: left; padding-left: 8px;" id="showTitle"></span>
         </h1>
         <button type="button" class="rl-close closeBtn" data-dismiss="modal" hidefocus="true" aria-hidden="true"></button>
     </div>
@@ -170,7 +170,7 @@
             examId = button.data('id');
             examPwd = button.data('pwd');
             examName = button.data('exam');
-            $('#showTitle').html(examName+'--考生信息');
+            $('#showTitle').html(examName);
         });
 
         //开始考试

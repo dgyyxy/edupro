@@ -8,6 +8,7 @@
 <c:set var="basePath" value="${pageContext.request.contextPath}"/>
 <div id="submain">
 	<div id="subtoolbar">
+		<a class="waves-effect waves-button orange" href="javascript:backJob(${stuId});"><i class="zmdi zmdi-view-comfy"></i> 返回已学任务列表</a>
 	</div>
 	<table id="subtable"></table>
 </div>
@@ -35,7 +36,7 @@ $(function() {
 		escape: true,
 		idField: 'id',
 		maintainSelected: true,
-		toolbar: '#toolbar',
+		toolbar: '#subtoolbar',
 		columns: [
 			{field: 'id', title: '编号', sortable: true, align: 'center'},
             {field: 'courseName', title: '课件名称'},
@@ -45,6 +46,11 @@ $(function() {
 		]
 	});
 });
+
+function backJob(jobId){
+	courseDialog.close();
+	jobsAction(jobId);
+}
 
 function durationFormatter(value, row, index){
 	return value+'分钟';

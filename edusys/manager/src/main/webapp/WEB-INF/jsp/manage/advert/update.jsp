@@ -8,6 +8,8 @@
             <div class="input-append">
                 <input id="imgurl" value="${advert.imgurl}" class="input-large fileinput" type="text" readonly/>
                 <a class="btn btn-success btn-sm" onclick="$('input[id=imgfile]').click();">选择图片</a>
+                <br/><br/>
+                <label style="color:red;">上传图片小于50M,尺寸(1356*325)</label>
             </div>
         </div>
         <div class="form-group text-right dialog-buttons">

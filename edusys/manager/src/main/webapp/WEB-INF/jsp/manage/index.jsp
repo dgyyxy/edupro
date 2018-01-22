@@ -44,7 +44,7 @@
         </li>
         <li class="pull-right">
             <ul class="hi-menu">
-                <!-- 搜索 -->
+               <%-- <!-- 搜索 -->
                 <li class="dropdown">
                     <a class="waves-effect waves-light" data-toggle="dropdown" href="javascript:;">
                         <i class="him-icon zmdi zmdi-search"></i>
@@ -59,7 +59,7 @@
                             </div>
                         </form>
                     </ul>
-                </li>
+                </li>--%>
                 <li>
                     <a class="waves-effect aves-light" data-ma-action="fullscreen" href="javascript:fullPage();" title="全屏模式"><i class="him-icon zmdi zmdi-fullscreen"></i></a>
                 </li>
