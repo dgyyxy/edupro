@@ -1,0 +1,131 @@
+body, html {
+    font: 14px/1.5 "PingFang SC","微软雅黑","Microsoft YaHei",Helvetica,"Helvetica Neue",Tahoma,Arial,sans-serif;
+}
+
+a, button, input, select {
+    outline: 0;
+    margin: 0;
+}
+
+.course-card-learning {
+    position: absolute;
+    width: 45px;
+    height: 24px;
+    font-size: 12px;
+    line-height: 24px;
+    color: #fff;
+    background-color: #2b333b;
+    font-weight: 200;
+    text-align: center;
+    right: -4px;
+    top: 12px;
+    z-index: 1;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.rl-modal-exam.in {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+.rl-modal-exam {
+    position: fixed;
+    height: 560px;
+    background: #fff;
+    z-index: 100000;
+    width: 880px;
+    top: 250px;
+    left: 500px;
+    padding-bottom: 30px;
+    margin: -218px 0 0 -180px;
+    box-shadow: 0 0 3px rgba(0,0,0,.25);
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -o-transition: all .2s;
+}
+
+.rl-modal-header-exam {
+    position: relative;
+    padding: 0 20px;
+}
+
+.rl-modal-header-exam h1 {
+    margin: 0px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 49px;
+    height: 49px;
+    color: #787d82;
+    border-bottom: 1px solid #d0d6d9;
+}
+
+.rl-modal-header-exam .active-title, .rl-modal-header span:hover {
+    border-bottom: 1px solid #1abc9c;
+    color: #1abc9c;
+}
+
+.rl-modal-header-exam h1 span {
+    float: left;
+    width: 80px;
+    text-align: center;
+    height: 49px;
+    line-height: 49px;
+    cursor: pointer;
+}
+
+
+.rl-close {
+    border: 0px;
+    position: absolute;
+    top: 17px;
+    right: 20px;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    background: url(../img/nlogin.png) no-repeat;
+    transition: transform .2s;
+    -webkit-transition: transform .2s;
+    -moz-transition: transform .2s;
+    -o-transition: transform .2s;
+}
+
+.closeBtn:hover {
+    background-position: 0% 22%;
+}
+
+.row {
+    margin-top: 5px;
+}
+
+.rl-modal-body-exam {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.rl-model-footer-exam {
+    padding: 20px 30px 4px;
+    text-align: center;
+}
+
+.rl-modal-body-exam ul {
+    padding: 0px 15px;
+}
+
+.notice-context {
+    padding: 0px 15px;
+}
+
+.btn-green-exam.focus, .btn-green-exam:focus, .btn-green-exam:hover {
+    color: #fff;
+}
+
+.btn-green-exam {
+    background-color: #1abc9c;
+    border-color: #1abc9c;
+    color: #fff;
+}
+
+
+

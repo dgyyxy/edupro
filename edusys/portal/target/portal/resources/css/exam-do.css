@@ -1,0 +1,720 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+    margin:0px;
+    font-size:12px;
+    font-family:"微软雅黑","宋体";
+    list-style-type: none;
+    padding: 0px;
+}
+
+div.clear{
+    clear:both;
+}
+
+.exam-do-300-round-top {
+    height: 10px;
+    width: 300px;
+    background-image: url(../img/exam-do-round-top.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    overflow:hidden;
+}
+.exam-do-300-round-block-top {
+    line-height: 24px;
+    background-image:url(../img/exam-do-round-top-p.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    text-align: center;
+    height: 24px;
+    letter-spacing: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    overflow:hidden;
+    color: #FFF;
+}
+.exam-do-300-round-bottom {
+    background-image: url(../img/exam-do-round-bottom.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    height: 10px;
+    width: 300px;
+    overflow:hidden;
+}
+
+#bodywrapper {
+    width:1005px;
+    height:auto;
+    margin-right: auto;
+    margin-left: auto;
+    overflow:hidden;
+}
+#bodywrapper #leftwrapper{
+    float: left;
+    width: 300px;
+    height:auto;
+    overflow:hidden;
+}
+#bodywrapper #leftwrapper #menuwapper {
+    float: left;
+    width: 300px;
+    overflow:hidden;
+}
+#bodywrapper #workspace {
+    width: 700px;
+    float: left;
+    margin-left:5px;
+}
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper {
+    height: 150px;
+    width: 300px;
+    margin-bottom: 5px;
+}
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper {
+    width: 300px;
+    margin-bottom: 5px;
+    overflow:hidden;
+}
+#bodywrapper #leftwrapper #menuwapper #buttons-wrapper {
+    height: 40px;
+    width: 300px;
+    margin-bottom: 5px;
+}
+#bodywrapper #leftwrapper #menuwapper #notice-wrapper {
+    width: 300px;
+    margin-bottom: 5px;
+}
+#bodywrapper #leftwrapper #menuwapper #monitor-wrapper {
+    width: 300px;
+    margin-bottom: 5px;
+}
+
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper #myinfor-container{
+    width: 298px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-color: #37948D;
+    border-left-color: #37948D;
+    padding:0px;
+    margin:0px;
+    overflow:hidden;
+    border-top-style: none;
+    border-bottom-style: none;
+}
+
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper #myinfor-container #myinfor-title {
+    height: 29px;
+    width: 280px;
+    background-image: url(../img/exam-do-myinfor-title.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    /*	word-spacing: normal;*/
+    color: #FFF;
+    line-height: 29px;
+    text-align: left;
+    vertical-align: middle;
+    margin-left:2px;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper #myinfor-container table tr td .avatar {
+    background-color:#FFF;
+    border:#EEE solid 1px;
+    padding:2px;
+}
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper #myinfor-container table {
+    margin-left: 1px;
+}
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper #myinfor-container table tr td label {
+    font-weight: bold;
+}
+#bodywrapper #leftwrapper #menuwapper #myinfor-wrapper #myinfor-container table tr td .left-time {
+    font-size: 24px;
+    color: #F00;
+}
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper .exam-do-300-round-top {
+    line-height: 24px;
+    background-image: url(../img/exam-do-round-top-p.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    text-align: center;
+    height: 24px;
+    letter-spacing: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container {
+    padding:0px;
+    margin:0px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-color: #37948D;
+    border-left-color: #37948D;
+    height:100%;
+    overflow:hidden;
+}
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul{
+    list-style-type: none;
+    padding-top:0px;
+    padding-left:0px;
+    padding-bottom:5px;
+    padding-right:0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 8px;
+}
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li {
+    padding:0px;
+    list-style-type: none;
+    float: left;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #37948D;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    background-color:#97E6E2;
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    cursor:pointer;
+    overflow:hidden;
+    letter-spacing:0px;
+}
+
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.regular {
+    border: 1px solid #CCC;
+    background-color:#ffffff;
+}
+
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.particular {
+    border: 1px solid #CCC;
+    background-color:#ffffff;
+}
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.particular {
+    margin-right: 8px;
+}
+
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.submiting{
+    border: 1px solid #37948D;
+    background-color:#77D3cd;
+    color:#FFF;
+}
+
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.submited{
+    border: 1px solid #37948D;
+    background-color:#FFF;
+}
+
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.selected{
+    border: 1px solid #37948D;
+    background-color:#37948D;
+    color:#FFF;
+}
+
+#bodywrapper #leftwrapper #menuwapper #numbercard-wrapper #numbercard-container ul li.hover{
+    border: 1px solid #F00;
+}
+
+#bodywrapper #leftwrapper #menuwapper #notice-wrapper #notice-container {
+    padding:0px;
+    margin:0px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-color: #37948D;
+    border-left-color: #37948D;
+    height:110px;
+    overflow:auto;
+}
+
+#bodywrapper #leftwrapper #menuwapper #monitor-wrapper #monitor-container {
+    padding:0px;
+    margin:0px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-color: #37948D;
+    border-left-color: #37948D;
+    height:100%;
+    overflow:hidden;
+    text-align: center;
+}
+#bodywrapper #workspace .exam-do-700-round-top {
+    background-image: url(../img/exam-do-round-top700.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    height: 10px;
+    width: 700px;
+    overflow:hidden;
+}
+#bodywrapper #workspace .exam-do-700-round-bottom {
+    background-image: url(../img/exam-do-round-bottom700.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    height: 10px;
+    width: 700px;
+    overflow:hidden;
+}
+#bodywrapper #workspace #workspace-container {
+    width:698px;
+    margin-left:auto;
+    margin-right:auto;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-color: #37948D;
+    border-left-color: #37948D;
+    overflow:auto;
+    font-size: 14px;
+}
+
+#bodywrapper #workspace #workspace-container #exam-paper {
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 300px;
+    padding-left: 0px;
+    list-style-type: none;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject {
+    list-style-type: none;
+    padding: 0px;
+    margin-top: 40px;
+    margin-right: 0px;
+    margin-bottom: 40px;
+    margin-left: 0px;
+    clear: both;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-tip {
+    height: 35px;
+    background-color: #FF9E17;
+    font-size: 16px;
+    text-align: left;
+    vertical-align: middle;
+    line-height: 35px;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    color: #FFF;
+    background-image:url(../img/exam-do-subject-tip-bg.gif);
+    background-repeat: repeat-x;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-tip .exam-subject-no {
+    font-size: 26px;
+    font-weight: bold;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-title {
+    margin: 0px;
+    padding-top: 0px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+}
+/* #bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-content {
+	margin: 0px;
+	padding-top: 0px;
+	padding-right: 10px;
+	padding-bottom: 0px;
+	padding-left: 10px;
+	height:auto!important;
+	height: 150px;
+	min-height:150px;
+	overflow:auto;
+} */
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-option-container {
+    padding-top: 0px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    margin-top: 20px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-option-container label {
+    text-align: left;
+    vertical-align: middle;
+    margin-top: 15px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    float: left;
+    display: block;
+    width: 98%;
+    height: auto;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    line-height: 23px;
+    border:1px dashed #FFF;
+    overflow: visible;
+    cursor: pointer;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-option-container label.selected {
+    background-image:url(../img/exam-do-option-selected.gif);
+    background-repeat:no-repeat;
+    background-position:left top;
+}
+
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-option-container label.hover {
+    border:1px dashed #F00;
+    cursor:pointer;
+}
+
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-option-container label input {
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 8px;
+    height: 0px;
+    width: 0px;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-option-container label .exam-subject-optionNo {
+    font-size: 14px;
+    font-weight: bold;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-answerpanel {
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 25px;
+    margin-top: 20px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    font-weight: bold;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-answerpanel .exam-subject-myanswer {
+    font-size: 20px;
+    color: #600;
+    font-weight: bold;
+    border-bottom-style: none;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-answerpanel textarea {
+    border:0 none;
+    font-family:arial, "微软雅黑", "宋体";
+    font-size:18px;
+    height:150px;
+    line-height:30px;
+    overflow:hidden;
+    width:600px;
+    background-attachment: scroll;
+    background-color: transparent;
+    background-image: url(../img/textarea-bg.gif);
+    background-repeat: repeat;
+    background-position: 0 0;
+    color: #006;
+}
+#bodywrapper #exam-do-floatbar {
+    width:300px;
+    height:auto;
+    margin-right: auto;
+    margin-left: auto;
+    overflow:hidden;
+    z-index:5;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+}
+
+#bodywrapper #exam-do-floatbar a,
+#bodywrapper #exam-do-floatbar a:link {
+    margin-left: 5px;
+    height: 30px;
+    line-height:30px;
+    width: 90px;
+    display: block;
+    float: left;
+    background-image:url(../img/exam-do-float-bt.gif);
+    text-align:center;
+    vertical-align:middle;
+    font-size:14px;
+    letter-spacing:2px;
+    text-decoration:none;
+    color:#FFF;
+}
+#bodywrapper #exam-do-floatbar a:hover{
+    background-image:url(../img/exam-do-float-bt-hv.gif);
+}
+
+#bodywrapper #exam-do-floatbar .nextsubject ,
+#bodywrapper #exam-do-floatbar .nextsubject:link
+{
+
+}
+
+#bodywrapper #exam-do-floatbar .privioussubject,
+#bodywrapper #exam-do-floatbar .privioussubject:link{
+
+}
+
+#bodywrapper #exam-do-floatbar .leftmenutrriger,#bodywrapper #exam-do-floatbar .leftmenutrriger,link{
+
+}
+
+#bodywrapper #exam-do-floatbar-hover {
+    position: absolute;
+    top: 0px;
+    left:381px;
+    width:300px;
+    height:auto;
+    margin-right: auto;
+    margin-left: auto;
+    overflow:hidden;
+    z-index:5;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+}
+
+#bodywrapper #exam-do-floatbar-hover a,
+#bodywrapper #exam-do-floatbar-hover a:link {
+    margin-left: 5px;
+    height: 30px;
+    line-height:30px;
+    width: 90px;
+    display: block;
+    float: left;
+    background-image:url(../img/exam-do-float-bt.gif);
+    text-align:center;
+    vertical-align:middle;
+    font-size:14px;
+    letter-spacing:2px;
+    text-decoration:none;
+    color:#FFF;
+}
+#bodywrapper #exam-do-floatbar-hover a:hover{
+    background-image:url(../img/exam-do-float-bt-hv.gif);
+}
+
+
+#bodywrapper #exam-do-floatbar-hover .leftmenutrriger,#bodywrapper #exam-do-floatbar-hover .leftmenutrriger,link{
+
+}
+
+.ui-effects-transfer {
+    border: 1px dotted #fba40d;
+}
+#bodywrapper #workspace #workspace-container #exam-paper .exam-subject .exam-subject-answerpanel .extra-hit {
+    font-size: 14px;
+    line-height: 30px;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+    word-spacing: 2em;
+    height: 30px;
+    width: 100px;
+    background-image: url(../img/exam-do-float-bt.gif);
+    display: block;
+    float: left;
+    margin-bottom: 40px;
+}
+#info-panel-hid {
+    height: 100%;
+    width: 100%;
+    margin: 5px;
+    display:none;
+}
+#info-panel-msg {
+    display:block;
+    font-size: 14px;
+    padding:10px;
+}
+/**nyModal*********************************************************************************************************/
+div#nyroModalFull {
+    font-size: 12px;
+    color: #777;
+    z-index:255;
+}
+div#nyroModalFull div#nyroModalLoading {
+    /*border: 4px solid #777;*/
+    border: 1px solid #F0F0F0;
+    width: 150px;
+    height: 150px;
+    text-indent: -9999em;
+    background: #fff url(../img/ajaxLoader.gif) no-repeat;
+    background-position: center;
+}
+div#nyroModalFull div#nyroModalLoading.error {
+    border: 4px solid #f66;
+    line-height: 20px;
+    padding: 20px;
+    width: 300px;
+    height: 100px;
+    text-indent: 0;
+    background: #fff;
+}
+div#nyroModalFull div#nyroModalWrapper {
+    background: #fff;
+    /*border: 4px solid #777;*/
+    border: 1px solid #F0F0F0;
+    z-index:254;
+}
+
+
+div#nyroModalFull div#nyroModalWrapper a#closeBut {
+    position: absolute;
+    display: block;
+    top: -22px;
+    right: -21px;
+    width: 40px;
+    height: 41px;
+    text-indent: -9999em;
+    background: url(../img/close.gif) no-repeat;
+    outline: 0;
+}
+div#nyroModalFull div#nyroModalWrapper h1#nyroModalTitle {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: -22px;
+    left: -1px;
+    font-size: 12px;
+    line-height:21px;
+    color:#666;
+    width:100%;
+    background-color:#F0F0F0;
+}
+div#nyroModalFull div#nyroModalWrapper div#nyroModalContent {
+    overflow: auto;
+}
+div#nyroModalFull div#nyroModalWrapper div.wrapper div#nyroModalContent {
+    padding: 5px;
+}
+div#nyroModalFull div#nyroModalWrapper div.wrapperImg div#nyroModalContent {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+div#nyroModalFull div#nyroModalWrapper div.wrapperImg div#nyroModalContent img {
+    vertical-align: baseline;
+}
+div#nyroModalFull div#nyroModalWrapper div.wrapperImg div#nyroModalContent div {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: black;
+    padding: 10px;
+    margin: 10px;
+    border: 1px white dotted;
+    overflow: hidden;
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+}
+div#nyroModalFull div#nyroModalWrapper div.wrapperImg div#nyroModalContent div:hover {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    cursor: help;
+}
+div#nyroModalFull div#nyroModalWrapper a.nyroModalPrev, div#nyroModalFull div#nyroModalWrapper a.nyroModalNext {
+    z-index: 105;
+    outline: none;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 40%;
+    cursor: pointer;
+    text-indent: -9999em;
+    background: left 20% no-repeat;
+    background-image: url(data:image/gif;base64,AAAA); /* Trick IE6 */
+}
+div#nyroModalFull div#nyroModalWrapper div.wrapperSwf a.nyroModalPrev, div#nyroModalFull div#nyroModalWrapper div.wrapperSwf a.nyroModalNext, div#nyroModalFull div#nyroModalWrapper div.wrapper a.nyroModalPrev, div#nyroModalFull div#nyroModalWrapper div.wrapper a.nyroModalNext {
+    height: 60%;
+    width: 20%;
+}
+div#nyroModalFull div#nyroModalWrapper div#nyroModalContent a.nyroModalPrev {
+    left: 0;
+}
+div#nyroModalFull div#nyroModalWrapper div#nyroModalContent a.nyroModalPrev:hover {
+    background-image: url(../img/prev.gif);
+}
+div#nyroModalFull div#nyroModalWrapper div#nyroModalContent a.nyroModalNext {
+    right: 0;
+    background-position: right 20%;
+}
+div#nyroModalFull div#nyroModalWrapper div#nyroModalContent a.nyroModalNext:hover {
+    background-image: url(../img/next.gif);
+}
+div.nymodalH1{
+    font-size:14px;
+    font-weight:bold;
+    letter-spacing:2px;
+    width:100%;
+    margin:10px 0px 10px 0px;
+    text-align:center;
+}
+div.nymodalMSG{
+    margin:10px 0px 10px 0px;
+    font-size:12px;
+}
+div.nymodalBTN{
+    text-align:center;
+    margin:10px 0px 10px 0px;
+}
+div.nymodalBTN input{
+    font-size:14px;
+    letter-spacing:2px;
+    font-weight:bold;
+}
+div.nymodalVD{
+    text-align:center;
+    margin:10px 0px 10px 0px;
+}
+/**progress bar***********************************************************************************************/
+.progressbar-wrapper {
+    margin-top: 10px;
+    height:25px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    text-align: left;
+    border:solid #999 1px;
+    position:relative;
+}
+.progressbar-wrapper .progress-text{
+    height:25px;
+    line-height:25px;
+    text-align:center;
+    position:absolute;
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    z-index:6;
+}
+.progressbar-wrapper .progress-graphic {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background-color:#CCC;
+    height:25px;
+    line-height:25px;
+    text-align:center;
+    vertical-align:middle;
+    position:absolute;
+    z-index:5;
+}

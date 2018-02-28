@@ -78,7 +78,7 @@ public class IndexController extends BaseController{
             criteria.andStuIdEqualTo(student.getStuId());
             criteria.andCardNoEqualTo(student.getCardNo());
             List<EduStudentAnswer> studentAnswers = issuesService.selectByExample(studentAnswerExample);
-            if(studentAnswers!=null){
+            if(studentAnswers.size()>0){
                 studentAnswer = studentAnswers.get(0);
             }
         }

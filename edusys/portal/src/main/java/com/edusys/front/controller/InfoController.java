@@ -204,11 +204,12 @@ public class InfoController extends BaseController {
         criteria.andCardNoEqualTo(student.getCardNo());
         criteria.andStuIdEqualTo(student.getStuId());
         List<EduStudentAnswer> list = issuesService.selectByExample(studentAnswerExample);
-        EduStudentAnswer studentAnswer = list.get(0);
-        if(studentAnswer == null){
-            studentAnswer = new EduStudentAnswer();
+        EduStudentAnswer studentAnswer = new EduStudentAnswer();
+        if(list.size()==0){
             studentAnswer.setStuId(student.getStuId());
             studentAnswer.setCardNo(student.getCardNo());
+        }else{
+            studentAnswer = list.get(0);
         }
         if(questionId==null || answers==null){
             return new SysResult(SysResultConstant.FAILED,"error");

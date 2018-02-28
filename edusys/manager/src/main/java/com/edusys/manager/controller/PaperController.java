@@ -423,7 +423,15 @@ public class PaperController extends BaseController{
             return new SysResult(SysResultConstant.INVALID_LENGTH, result.getErrors());
         }
         paperCategory.setId(id);
-        int count = paperCategoryService.updateByPrimaryKeySelective(paperCategory);
+        if(paperCategory.getPid() == null){
+            paperCategory.setPid(0);
+        }
+        if(paperCategory.getLevel() == 1){
+            paperCategory.setOrderby(id);
+        }else{
+            paperCategory.setOrderby(paperCategory.getPid());
+        }
+        int count = paperCategoryService.updateByPrimaryKey(paperCategory);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }
 

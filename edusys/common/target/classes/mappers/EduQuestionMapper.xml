@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.common.dao.mapper.EduQuestionMapper">
+    <resultMap id="BaseResultMap" type="com.edu.common.dao.model.EduQuestion">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="question_type_id" jdbcType="INTEGER" property="questionTypeId"/>
+        <result column="duration" jdbcType="INTEGER" property="duration"/>
+        <result column="question_category_id" jdbcType="INTEGER" property="questionCategoryId"/>
+        <result column="create_time" jdbcType="INTEGER" property="createTime"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="answer" jdbcType="VARCHAR" property="answer"/>
+        <result column="expose_times" jdbcType="INTEGER" property="exposeTimes"/>
+        <result column="right_times" jdbcType="INTEGER" property="rightTimes"/>
+        <result column="wrong_times" jdbcType="INTEGER" property="wrongTimes"/>
+        <result column="difficulty" jdbcType="INTEGER" property="difficulty"/>
+        <result column="category_name" jdbcType="INTEGER" property="categoryName"/>
+        <result column="type_name" jdbcType="INTEGER" property="typeName"/>
+        <result column="qsum" jdbcType="INTEGER" property="qsum"/>
+        <result column="error_rate" jdbcType="DOUBLE" property="errorRate"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.edu.common.dao.model.EduQuestion">
+        <result column="answer" jdbcType="LONGVARCHAR" property="answer"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, name, content, question_type_id, duration, question_category_id, create_time, 
+    creator, answer, expose_times, right_times, wrong_times, difficulty, qsum, error_rate
+  </sql>
+
+    <sql id="Base_Column_List_Search">
+    id, name, content, question_type_id, duration, question_category_id, create_time,
+    creator, answer, expose_times, right_times, wrong_times, difficulty,
+    (select eqc.name from edu_question_category eqc where eqc.id = question_category_id) category_name,
+    (select eqt.name from edu_question_type eqt where eqt.id = question_type_id) type_name, qsum, error_rate
+    </sql>
+    <sql id="Blob_Column_List">
+    answer
+    </sql>
+    <select id="selectByExampleWithBLOBs" parameterType="com.edu.common.dao.model.EduQuestionExample"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from edu_question
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" parameterType="com.edu.common.dao.model.EduQuestionExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List_Search"/>
+        from edu_question
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from edu_question
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edu_question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.edu.common.dao.model.EduQuestionExample">
+        delete from edu_question
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into edu_question (name, content,
+        question_type_id, duration, question_category_id,
+        create_time, creator, expose_times,
+        right_times, wrong_times, difficulty,
+        answer)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.name,jdbcType=VARCHAR}, #{item.content,jdbcType=VARCHAR},
+            #{item.questionTypeId,jdbcType=INTEGER}, #{item.duration,jdbcType=INTEGER}, #{item.questionCategoryId,jdbcType=INTEGER},
+            #{item.createTime,jdbcType=INTEGER}, #{item.creator,jdbcType=VARCHAR}, #{item.exposeTimes,jdbcType=INTEGER},
+            #{item.rightTimes,jdbcType=INTEGER}, #{item.wrongTimes,jdbcType=INTEGER}, #{item.difficulty,jdbcType=INTEGER},
+            #{item.answer,jdbcType=LONGVARCHAR})
+        </foreach>
+    </insert>
+    <insert id="insert" parameterType="com.edu.common.dao.model.EduQuestion">
+    insert into edu_question (id, name, content, 
+      question_type_id, duration, question_category_id, 
+      create_time, creator, expose_times, 
+      right_times, wrong_times, difficulty, 
+      answer)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{questionTypeId,jdbcType=INTEGER}, #{duration,jdbcType=INTEGER}, #{questionCategoryId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{exposeTimes,jdbcType=INTEGER}, 
+      #{rightTimes,jdbcType=INTEGER}, #{wrongTimes,jdbcType=INTEGER}, #{difficulty,jdbcType=INTEGER}, 
+      #{answer,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduQuestion">
+        insert into edu_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="questionTypeId != null">
+                question_type_id,
+            </if>
+            <if test="duration != null">
+                duration,
+            </if>
+            <if test="questionCategoryId != null">
+                question_category_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="exposeTimes != null">
+                expose_times,
+            </if>
+            <if test="rightTimes != null">
+                right_times,
+            </if>
+            <if test="wrongTimes != null">
+                wrong_times,
+            </if>
+            <if test="difficulty != null">
+                difficulty,
+            </if>
+            <if test="answer != null">
+                answer,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="questionTypeId != null">
+                #{questionTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="duration != null">
+                #{duration,jdbcType=INTEGER},
+            </if>
+            <if test="questionCategoryId != null">
+                #{questionCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="exposeTimes != null">
+                #{exposeTimes,jdbcType=INTEGER},
+            </if>
+            <if test="rightTimes != null">
+                #{rightTimes,jdbcType=INTEGER},
+            </if>
+            <if test="wrongTimes != null">
+                #{wrongTimes,jdbcType=INTEGER},
+            </if>
+            <if test="difficulty != null">
+                #{difficulty,jdbcType=INTEGER},
+            </if>
+            <if test="answer != null">
+                #{answer,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.edu.common.dao.model.EduQuestionExample"
+            resultType="java.lang.Long">
+        select count(*) from edu_question
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update edu_question
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.content != null">
+                content = #{record.content,jdbcType=VARCHAR},
+            </if>
+            <if test="record.questionTypeId != null">
+                question_type_id = #{record.questionTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="record.duration != null">
+                duration = #{record.duration,jdbcType=INTEGER},
+            </if>
+            <if test="record.questionCategoryId != null">
+                question_category_id = #{record.questionCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=INTEGER},
+            </if>
+            <if test="record.creator != null">
+                creator = #{record.creator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.exposeTimes != null">
+                expose_times = #{record.exposeTimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.rightTimes != null">
+                right_times = #{record.rightTimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.wrongTimes != null">
+                wrong_times = #{record.wrongTimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.difficulty != null">
+                difficulty = #{record.difficulty,jdbcType=INTEGER},
+            </if>
+            <if test="record.answer != null">
+                answer = #{record.answer,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update edu_question
+        set id = #{record.id,jdbcType=INTEGER},
+        name = #{record.name,jdbcType=VARCHAR},
+        content = #{record.content,jdbcType=VARCHAR},
+        question_type_id = #{record.questionTypeId,jdbcType=INTEGER},
+        duration = #{record.duration,jdbcType=INTEGER},
+        question_category_id = #{record.questionCategoryId,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=INTEGER},
+        creator = #{record.creator,jdbcType=VARCHAR},
+        expose_times = #{record.exposeTimes,jdbcType=INTEGER},
+        right_times = #{record.rightTimes,jdbcType=INTEGER},
+        wrong_times = #{record.wrongTimes,jdbcType=INTEGER},
+        difficulty = #{record.difficulty,jdbcType=INTEGER},
+        answer = #{record.answer,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update edu_question
+        set id = #{record.id,jdbcType=INTEGER},
+        name = #{record.name,jdbcType=VARCHAR},
+        content = #{record.content,jdbcType=VARCHAR},
+        question_type_id = #{record.questionTypeId,jdbcType=INTEGER},
+        duration = #{record.duration,jdbcType=INTEGER},
+        question_category_id = #{record.questionCategoryId,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=INTEGER},
+        creator = #{record.creator,jdbcType=VARCHAR},
+        expose_times = #{record.exposeTimes,jdbcType=INTEGER},
+        right_times = #{record.rightTimes,jdbcType=INTEGER},
+        wrong_times = #{record.wrongTimes,jdbcType=INTEGER},
+        difficulty = #{record.difficulty,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.edu.common.dao.model.EduQuestion">
+        update edu_question
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="questionTypeId != null">
+                question_type_id = #{questionTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="duration != null">
+                duration = #{duration,jdbcType=INTEGER},
+            </if>
+            <if test="questionCategoryId != null">
+                question_category_id = #{questionCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="exposeTimes != null">
+                expose_times = #{exposeTimes,jdbcType=INTEGER},
+            </if>
+            <if test="rightTimes != null">
+                right_times = #{rightTimes,jdbcType=INTEGER},
+            </if>
+            <if test="wrongTimes != null">
+                wrong_times = #{wrongTimes,jdbcType=INTEGER},
+            </if>
+            <if test="difficulty != null">
+                difficulty = #{difficulty,jdbcType=INTEGER},
+            </if>
+            <if test="answer != null">
+                answer = #{answer,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.edu.common.dao.model.EduQuestion">
+    update edu_question
+    set name = #{name,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      question_type_id = #{questionTypeId,jdbcType=INTEGER},
+      duration = #{duration,jdbcType=INTEGER},
+      question_category_id = #{questionCategoryId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      expose_times = #{exposeTimes,jdbcType=INTEGER},
+      right_times = #{rightTimes,jdbcType=INTEGER},
+      wrong_times = #{wrongTimes,jdbcType=INTEGER},
+      difficulty = #{difficulty,jdbcType=INTEGER},
+      answer = #{answer,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.edu.common.dao.model.EduQuestion">
+    update edu_question
+    set name = #{name,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      question_type_id = #{questionTypeId,jdbcType=INTEGER},
+      duration = #{duration,jdbcType=INTEGER},
+      question_category_id = #{questionCategoryId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      expose_times = #{exposeTimes,jdbcType=INTEGER},
+      right_times = #{rightTimes,jdbcType=INTEGER},
+      wrong_times = #{wrongTimes,jdbcType=INTEGER},
+      difficulty = #{difficulty,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectQuestionNameList" parameterType="java.lang.Integer" resultType="java.lang.String">
+      select name from edu_question
+      where question_category_id = #{qcId,jdbcType=INTEGER}
+  </select>
+
+  <update id="updateBatch" parameterType="java.util.List">
+      <foreach collection="list" item="item">
+          update edu_question set
+          qsum = #{item.qsum},
+          error_rate = #{item.errorRate}
+          where id = #{item.id};
+      </foreach>
+  </update>
+
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+</mapper>

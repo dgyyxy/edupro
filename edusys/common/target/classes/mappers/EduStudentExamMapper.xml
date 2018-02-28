@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.common.dao.mapper.EduStudentExamMapper">
+    <resultMap id="BaseResultMap" type="com.edu.common.dao.model.EduStudentExam">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="stu_id" jdbcType="INTEGER" property="stuId"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="exam_id" jdbcType="INTEGER" property="examId"/>
+        <result column="paper_id" jdbcType="INTEGER" property="paperId"/>
+        <result column="enabled" jdbcType="INTEGER" property="enabled"/>
+        <result column="point" jdbcType="INTEGER" property="point"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="duration" jdbcType="INTEGER" property="duration"/>
+        <result column="point_get" jdbcType="REAL" property="pointGet"/>
+        <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime"/>
+        <result column="approved" jdbcType="INTEGER" property="approved"/>
+        <result column="exam_password" jdbcType="VARCHAR" property="examPassword"/>
+        <result column="disorganize" jdbcType="INTEGER" property="disorganize"/>
+        <result column="stu_name" jdbcType="VARCHAR" property="stuName"/>
+        <result column="stu_organ" jdbcType="VARCHAR" property="stuOrgan"/>
+        <result column="islook" jdbcType="INTEGER" property="islook" />
+        <result column="examName" jdbcType="VARCHAR" property="examName" />
+        <result column="amount" jdbcType="INTEGER" property="amount" />
+        <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+        <result column="proctor" jdbcType="VARCHAR" property="proctor" />
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.edu.common.dao.model.EduStudentExam">
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="answer_sheet" jdbcType="LONGVARCHAR" property="answerSheet"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, stu_id, start_time, exam_id, paper_id, enabled, point, create_time, duration, 
+    point_get, submit_time, approved, exam_password, disorganize, islook, proctor
+    </sql>
+    <sql id="Base_Column_List_Search">
+        id, stu_id, start_time, exam_id, paper_id, enabled, point, create_time, duration,
+    point_get, submit_time, approved, exam_password, disorganize, islook, proctor, (select concat(es.stu_name,'(',es.card_no,')') from edu_student es where es.stu_id = ese.stu_id) stu_name,
+    (select concat(es.organization_name1,'--',es.organization_name2) from edu_student es where es.stu_id = ese.stu_id) stu_organ, (select es.card_no from edu_student es where es.stu_id = ese.stu_id) idcard
+    </sql>
+    <sql id="Blob_Column_List">
+    content, answer_sheet
+    </sql>
+    <select id="selectByExampleWithBLOBs" parameterType="com.edu.common.dao.model.EduStudentExamExample"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from edu_student_exam
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" parameterType="com.edu.common.dao.model.EduStudentExamExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List_Search"/>
+        from edu_student_exam ese
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from edu_student_exam
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getStuIdList" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select stu_id
+        from edu_student_exam
+        where exam_id = #{examId,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectStuExamHistoryList" resultMap="BaseResultMap">
+        select ee.exam_name examName,ee.amount amount,ese.*
+        from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id
+        where ese.approved > 1 and ese.stu_id = #{stuId,jdbcType=INTEGER}
+        order by ese.start_time DESC
+    </select>
+
+
+    <update id="updateStudentExamByExamId" parameterType="com.edu.common.dao.model.EduExam">
+        update edu_student_exam
+        set duration = #{record.duration,jdbcType=INTEGER},
+        disorganize = #{record.disorganize,jdbcType=INTEGER},
+        islook = #{record.islook,jdbcType=INTEGER}
+        where exam_id = #{record.id,jdbcType=INTEGER}
+    </update>
+
+    
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from edu_student_exam
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.edu.common.dao.model.EduStudentExamExample">
+        delete from edu_student_exam
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.edu.common.dao.model.EduStudentExam">
+        insert into edu_student_exam (id, stu_id, start_time,
+          exam_id, paper_id, enabled,
+          point, create_time, duration,
+          point_get, submit_time, approved,
+          exam_password, disorganize, islook, content,
+          answer_sheet)
+        values (#{id,jdbcType=INTEGER}, #{stuId,jdbcType=INTEGER}, #{startTime,jdbcType=BIGINT},
+          #{examId,jdbcType=INTEGER}, #{paperId,jdbcType=INTEGER}, #{enabled,jdbcType=INTEGER},
+          #{point,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT}, #{duration,jdbcType=INTEGER},
+          #{pointGet,jdbcType=REAL}, #{submitTime,jdbcType=TIMESTAMP}, #{approved,jdbcType=INTEGER},
+          #{examPassword,jdbcType=VARCHAR}, #{disorganize,jdbcType=INTEGER}, #{islook,jdbcType=INTEGER},
+          #{content,jdbcType=LONGVARCHAR}, #{answerSheet,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertBatch" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into edu_student_exam (stu_id, start_time,
+          exam_id, paper_id, enabled,
+          point, create_time, duration,
+          point_get, submit_time, approved,
+          exam_password, disorganize, islook, content,
+          answer_sheet)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+        (#{item.stuId,jdbcType=INTEGER}, #{item.startTime,jdbcType=BIGINT},
+          #{item.examId,jdbcType=INTEGER}, #{item.paperId,jdbcType=INTEGER}, #{item.enabled,jdbcType=INTEGER},
+          #{item.point,jdbcType=INTEGER}, #{item.createTime,jdbcType=BIGINT}, #{item.duration,jdbcType=INTEGER},
+          #{item.pointGet,jdbcType=REAL}, #{item.submitTime,jdbcType=TIMESTAMP}, #{item.approved,jdbcType=INTEGER},
+          #{item.examPassword,jdbcType=VARCHAR}, #{item.disorganize,jdbcType=INTEGER}, #{item.islook,jdbcType=INTEGER},
+          #{item.content,jdbcType=LONGVARCHAR}, #{item.answerSheet,jdbcType=LONGVARCHAR})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduStudentExam">
+        insert into edu_student_exam
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="stuId != null">
+                stu_id,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="examId != null">
+                exam_id,
+            </if>
+            <if test="paperId != null">
+                paper_id,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+            <if test="point != null">
+                point,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="duration != null">
+                duration,
+            </if>
+            <if test="pointGet != null">
+                point_get,
+            </if>
+            <if test="submitTime != null">
+                submit_time,
+            </if>
+            <if test="approved != null">
+                approved,
+            </if>
+            <if test="examPassword != null">
+                exam_password,
+            </if>
+            <if test="disorganize != null">
+                disorganize,
+            </if>
+            <if test="islook != null">
+                islook,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="answerSheet != null">
+                answer_sheet,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="stuId != null">
+                #{stuId,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=BIGINT},
+            </if>
+            <if test="examId != null">
+                #{examId,jdbcType=INTEGER},
+            </if>
+            <if test="paperId != null">
+                #{paperId,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=INTEGER},
+            </if>
+            <if test="point != null">
+                #{point,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="duration != null">
+                #{duration,jdbcType=INTEGER},
+            </if>
+            <if test="pointGet != null">
+                #{pointGet,jdbcType=REAL},
+            </if>
+            <if test="submitTime != null">
+                #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="approved != null">
+                #{approved,jdbcType=INTEGER},
+            </if>
+            <if test="examPassword != null">
+                #{examPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="disorganize != null">
+                #{disorganize,jdbcType=INTEGER},
+            </if>
+            <if test="islook != null">
+                #{islook,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="answerSheet != null">
+                #{answerSheet,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.edu.common.dao.model.EduStudentExamExample"
+            resultType="java.lang.Long">
+        select count(*) from edu_student_exam
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update edu_student_exam
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.stuId != null">
+                stu_id = #{record.stuId,jdbcType=INTEGER},
+            </if>
+            <if test="record.startTime != null">
+                start_time = #{record.startTime,jdbcType=BIGINT},
+            </if>
+            <if test="record.examId != null">
+                exam_id = #{record.examId,jdbcType=INTEGER},
+            </if>
+            <if test="record.paperId != null">
+                paper_id = #{record.paperId,jdbcType=INTEGER},
+            </if>
+            <if test="record.enabled != null">
+                enabled = #{record.enabled,jdbcType=INTEGER},
+            </if>
+            <if test="record.point != null">
+                point = #{record.point,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=BIGINT},
+            </if>
+            <if test="record.duration != null">
+                duration = #{record.duration,jdbcType=INTEGER},
+            </if>
+            <if test="record.pointGet != null">
+                point_get = #{record.pointGet,jdbcType=REAL},
+            </if>
+            <if test="record.submitTime != null">
+                submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.approved != null">
+                approved = #{record.approved,jdbcType=INTEGER},
+            </if>
+            <if test="record.examPassword != null">
+                exam_password = #{record.examPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.disorganize != null">
+                disorganize = #{record.disorganize,jdbcType=INTEGER},
+            </if>
+            <if test="record.islook != null">
+                islook = #{record.islook,jdbcType=INTEGER},
+            </if>
+            <if test="record.content != null">
+                content = #{record.content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.answerSheet != null">
+                answer_sheet = #{record.answerSheet,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <update id="updateUserExamHist">
+        update edu_student_exam
+        <set>
+            answer_sheet = #{answerSheetStr},point=#{answerSheet.pointMax},point_get=#{answerSheet.pointRaw},submit_time=sysdate(),
+            start_time=#{answerSheet.startTime}
+            <if test="approved != 0">
+                ,approved=#{approved}
+            </if>
+        </set>
+        where id=#{answerSheet.examHistroyId}
+    </update>
+
+    <update id="updateExamQuestion">
+        update edu_student_exam
+        <set>
+            answer_sheet = #{answerSheetStr}
+            <if test="approved != 0">
+                ,approved=#{approved}
+            </if>
+        </set>
+        where id=#{answerSheet.examHistroyId}
+    </update>
+
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update edu_student_exam
+        set id = #{record.id,jdbcType=INTEGER},
+        stu_id = #{record.stuId,jdbcType=INTEGER},
+        start_time = #{record.startTime,jdbcType=BIGINT},
+        exam_id = #{record.examId,jdbcType=INTEGER},
+        paper_id = #{record.paperId,jdbcType=INTEGER},
+        enabled = #{record.enabled,jdbcType=INTEGER},
+        point = #{record.point,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=BIGINT},
+        duration = #{record.duration,jdbcType=INTEGER},
+        point_get = #{record.pointGet,jdbcType=REAL},
+        submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+        approved = #{record.approved,jdbcType=INTEGER},
+        exam_password = #{record.examPassword,jdbcType=VARCHAR},
+        disorganize = #{record.disorganize,jdbcType=INTEGER},
+        islook = #{record.islook,jdbcType=INTEGER},
+        content = #{record.content,jdbcType=LONGVARCHAR},
+        answer_sheet = #{record.answerSheet,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update edu_student_exam
+        set id = #{record.id,jdbcType=INTEGER},
+        stu_id = #{record.stuId,jdbcType=INTEGER},
+        start_time = #{record.startTime,jdbcType=BIGINT},
+        exam_id = #{record.examId,jdbcType=INTEGER},
+        paper_id = #{record.paperId,jdbcType=INTEGER},
+        enabled = #{record.enabled,jdbcType=INTEGER},
+        point = #{record.point,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=BIGINT},
+        duration = #{record.duration,jdbcType=INTEGER},
+        point_get = #{record.pointGet,jdbcType=REAL},
+        submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+        approved = #{record.approved,jdbcType=INTEGER},
+        exam_password = #{record.examPassword,jdbcType=VARCHAR},
+        disorganize = #{record.disorganize,jdbcType=INTEGER},
+        islook = #{record.islook,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.edu.common.dao.model.EduStudentExam">
+        update edu_student_exam
+        <set>
+            <if test="stuId != null">
+                stu_id = #{stuId,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=BIGINT},
+            </if>
+            <if test="examId != null">
+                exam_id = #{examId,jdbcType=INTEGER},
+            </if>
+            <if test="paperId != null">
+                paper_id = #{paperId,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled,jdbcType=INTEGER},
+            </if>
+            <if test="point != null">
+                point = #{point,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="duration != null">
+                duration = #{duration,jdbcType=INTEGER},
+            </if>
+            <if test="pointGet != null">
+                point_get = #{pointGet,jdbcType=REAL},
+            </if>
+            <if test="submitTime != null">
+                submit_time = #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="approved != null">
+                approved = #{approved,jdbcType=INTEGER},
+            </if>
+            <if test="examPassword != null">
+                exam_password = #{examPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="disorganize != null">
+                disorganize = #{disorganize,jdbcType=INTEGER},
+            </if>
+            <if test="islook != null">
+                islook = #{islook,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="answerSheet != null">
+                answer_sheet = #{answerSheet,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="proctor != null">
+                proctor = #{proctor,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.edu.common.dao.model.EduStudentExam">
+    update edu_student_exam
+    set stu_id = #{stuId,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=BIGINT},
+      exam_id = #{examId,jdbcType=INTEGER},
+      paper_id = #{paperId,jdbcType=INTEGER},
+      enabled = #{enabled,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=BIGINT},
+      duration = #{duration,jdbcType=INTEGER},
+      point_get = #{pointGet,jdbcType=REAL},
+      submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      approved = #{approved,jdbcType=INTEGER},
+      exam_password = #{examPassword,jdbcType=VARCHAR},
+      disorganize = #{disorganize,jdbcType=INTEGER},
+      islook = #{islook,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR},
+      answer_sheet = #{answerSheet,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.edu.common.dao.model.EduStudentExam">
+    update edu_student_exam
+    set stu_id = #{stuId,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=BIGINT},
+      exam_id = #{examId,jdbcType=INTEGER},
+      paper_id = #{paperId,jdbcType=INTEGER},
+      enabled = #{enabled,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=BIGINT},
+      duration = #{duration,jdbcType=INTEGER},
+      point_get = #{pointGet,jdbcType=REAL},
+      submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      approved = #{approved,jdbcType=INTEGER},
+      exam_password = #{examPassword,jdbcType=VARCHAR},
+      disorganize = #{disorganize,jdbcType=INTEGER},
+      islook = #{islook,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <update id="stopExamOperate" parameterType="java.util.List">
+        update edu_student_exam set approved = 4 where id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    
+    <select id="statisticalQuestion" resultType="String">
+        select answer_sheet from edu_student_exam  where answer_sheet is not null and approved > 1
+    </select>
+    
+
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+</mapper>
