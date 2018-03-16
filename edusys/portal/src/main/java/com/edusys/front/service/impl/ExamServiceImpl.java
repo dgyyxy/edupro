@@ -171,6 +171,11 @@ public class ExamServiceImpl extends BaseServiceImpl<EduExamMapper, EduExam, Edu
 
     }
 
+    @Override
+    public EduPaper getPaperById(Integer paperId) {
+        return eduPaperMapper.selectByPrimaryKey(paperId);
+    }
+
     /**
      * 获取试题分类对应的题目列表
      *

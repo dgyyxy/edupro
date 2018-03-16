@@ -183,11 +183,18 @@
                     data.stuId = stuId;
                     data.exampwd = pass;
 
+                    var layerIndex;
+
                     $.ajax({
                         type: 'post',
                         url: '${ctx}/exam/pwd',
                         data: data,
+                        async:false,
+                        beforeSend: function(){
+                            layerIndex = layer.load(0, { shade: [0.01, '#fff'] });
+                        },
                         success: function(result){
+                            layer.close(layerIndex);
                             if(result.status == 'fail') {
                                 layer.msg('考试密码输入有误，请重新输入！', {time: 1000})
                             }else if (result.status == 'success'){
@@ -197,14 +204,10 @@
                                     location.href = '${ctx}/exam/examdo/'+result.stuExamId+'/'+examId;
                                 }
                             }
-
-
                         }
                     });
                 });
         });
-
-
     } );
 
     var examing = function(point){

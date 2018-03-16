@@ -214,7 +214,8 @@
           #{item.content,jdbcType=LONGVARCHAR}, #{item.answerSheet,jdbcType=LONGVARCHAR})
         </foreach>
     </insert>
-    <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduStudentExam">
+    <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduStudentExam" useGeneratedKeys="true"
+            keyProperty="id">
         insert into edu_student_exam
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

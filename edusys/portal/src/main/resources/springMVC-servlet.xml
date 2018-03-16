@@ -64,6 +64,10 @@
             <mvc:mapping path="/task/**"/>
             <bean class="com.edusys.front.interceptor.LoginInterceptor"></bean>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.edusys.front.interceptor.SameUrlDataInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
     <beans:import resource="rabbitmq.xml"/>

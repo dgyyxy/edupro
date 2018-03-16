@@ -28,6 +28,7 @@
         <result column="teacher" jdbcType="VARCHAR" property="teacher" />
         <result column="watch" jdbcType="VARCHAR" property="watch" />
         <result column="paper_rule" jdbcType="VARCHAR" property="paperRule" />
+        <result column="authority" jdbcType="VARCHAR" property="authority" />
 
     </resultMap>
 
@@ -97,19 +98,19 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, 
+    id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
     disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, status, pointGet, teacher, paper_rule
     </sql>
     <sql id="Base_Column_List_Bak">
-        id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password,
+        id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
         disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, teacher, watch, paper_rule
     </sql>
     <sql id="Base_Column_List_Search">
-        id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password,
+        id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
         disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type,exam_pwd, (select ep.name from edu_paper ep where ep.id = paper_id) paper_name, teacher
     </sql>
     <sql id="Base_Column_List_Examing">
-        id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password,
+        id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
         disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type,exam_pwd, (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved = 1) examingCount,
         (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved > 1) submitCount, teacher, watch
     </sql>
@@ -161,7 +162,7 @@
     <select id="selectExamListByStu" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List"/>
-      from (select ee.*, ese.approved status, ese.point_get pointGet from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id where ese.stu_id = #{stuId} and ee.approved = 2) tab
+      from (select ee.*, ese.approved status, ese.point_get pointGet from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id where (ese.stu_id = #{stuId} or (ee.authority = 'all' and ese.stu_id IS NULL)) and ee.approved = 2) tab
         order by id desc
         limit ${offset}, ${limit}
     </select>
@@ -190,12 +191,13 @@
       start_time, end_time, creator, 
       approved, paper_id, exam_password, 
       disorganize, total_point, amount, 
-      pass_point, stu_num, duration, islook, exam_type, exam_pwd, paper_rule)
+      pass_point, stu_num, duration, islook, exam_type, exam_pwd, paper_rule, authority)
     values (#{id,jdbcType=INTEGER}, #{examName,jdbcType=VARCHAR}, #{createTime,jdbcType=BIGINT}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{approved,jdbcType=INTEGER}, #{paperId,jdbcType=INTEGER}, #{examPassword,jdbcType=INTEGER}, 
       #{disorganize,jdbcType=INTEGER}, #{totalPoint,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
-      #{passPoint,jdbcType=INTEGER}, #{stuNum,jdbcType=INTEGER}, #{duration,jdbcType=INTEGER}, #{islook,jdbcType=INTEGER}, #{examType,jdbcType=INTEGER}, #{examPwd,jdbcType=VARCHAR}, #{paperRule,jdbcType=VARCHAR})
+      #{passPoint,jdbcType=INTEGER}, #{stuNum,jdbcType=INTEGER}, #{duration,jdbcType=INTEGER},
+      #{islook,jdbcType=INTEGER}, #{examType,jdbcType=INTEGER}, #{examPwd,jdbcType=VARCHAR}, #{paperRule,jdbcType=VARCHAR}, #{authority, jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduExam" useGeneratedKeys="true"
             keyProperty="id">
@@ -258,6 +260,9 @@
             <if test="paperRule != null">
                 paper_rule,
             </if>
+            <if test="authority != null">
+                authority,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -316,6 +321,9 @@
             </if>
             <if test="paperRule != null">
                 #{paperRule,jdbcType=VARCHAR},
+            </if>
+            <if test="authority != null">
+                #{authority, jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -382,6 +390,9 @@
             <if test="record.examPwd != null">
                 exam_type = #{record.examPwd,jdbcType=VARCHAR},
             </if>
+            <if test="authority != null">
+                authority = #{authority, jdbcType=VARCHAR},
+            </if>
         </set>
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
@@ -406,7 +417,8 @@
         duration = #{record.duration,jdbcType=INTEGER},
         islook = #{record.islook,jdbcType=INTEGER},
         exam_type = #{record.examType,jdbcType=INTEGER},
-        exam_pwd = #{record.examPwd,jdbcType=VARCHAR}
+        exam_pwd = #{record.examPwd,jdbcType=VARCHAR},
+        authority = #{record.authority,jdbcType=VARCHAR},
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
@@ -471,6 +483,9 @@
             <if test="watch != null">
                 watch = #{watch,jdbcType=VARCHAR},
             </if>
+            <if test="authority != null">
+                watch = #{authority,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -492,7 +507,8 @@
       duration = #{duration,jdbcType=INTEGER},
       islook = #{islook,jdbcType=INTEGER},
       exam_type = #{examType,jdbcType=INTEGER},
-      exam_pwd = #{examPwd,jdbcType=VARCHAR}
+      exam_pwd = #{examPwd,jdbcType=VARCHAR},
+      authority = #{authority,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

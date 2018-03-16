@@ -149,6 +149,17 @@ public class EduExam implements Serializable {
 
     private String paperRule;//组卷规则
 
+    private String authority;//考试权限; all: 对所有考生开放
+
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
     public String getPaperRule() {
         return paperRule;
     }

@@ -8,6 +8,7 @@ import com.edu.common.dao.model.*;
 import com.edu.common.validator.LengthValidator;
 import com.edusys.front.common.SysResult;
 import com.edusys.front.common.SysResultConstant;
+import com.edusys.front.interfaces.SameUrlData;
 import com.edusys.front.listener.MemoryData;
 import com.edusys.front.listener.SessionListener;
 import com.edusys.front.service.*;
@@ -239,6 +240,7 @@ public class IndexController extends BaseController{
      * @param student
      * @return
      */
+    @SameUrlData
     @RequestMapping(value = "/register/done", method = RequestMethod.POST)
     @ResponseBody
     public Object register(EduStudent student,HttpServletRequest request){

@@ -57,6 +57,11 @@ v20171030
 --20180122 bug修复
     -- 修复pdf 关闭记录状态为学完
 
+--20180314
+
+    ALTER TABLE `edu_exam`
+            ADD COLUMN `authority` VARCHAR(50) DEFAULT NULL COMMENT '考试权限控制，all: 对所有考生开放';
+
 
 
 

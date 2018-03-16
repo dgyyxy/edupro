@@ -155,34 +155,42 @@ public class ExamController extends BaseController {
 
         // 参与学员
         String organizationIdstr = request.getParameter("organizationIds");
-        //处理数组只有一个元素
-        if (organizationIdstr.indexOf("[") == -1 && organizationIdstr.indexOf("]") == -1) {
-            organizationIdstr = "[" + organizationIdstr + "]";
-        }
-        String[] organIds = gson.fromJson(organizationIdstr, type);
-        List<Integer> ids = new ArrayList<>();
-        if (organIds.length > 0) {
-            for (String str : organIds) {
-                ids.add(Integer.parseInt(str));
+        //不选择机构，默认所有考生都有权限参加该考试
+        if(organizationIdstr == null){
+            exam.setAuthority("all");
+            //保存考试信息
+            examService.insertSelective(exam);
+        }else{
+            //处理数组只有一个元素
+            if (organizationIdstr.indexOf("[") == -1 && organizationIdstr.indexOf("]") == -1) {
+                organizationIdstr = "[" + organizationIdstr + "]";
+            }
+            String[] organIds = gson.fromJson(organizationIdstr, type);
+            List<Integer> ids = new ArrayList<>();
+            if (organIds.length > 0) {
+                for (String str : organIds) {
+                    ids.add(Integer.parseInt(str));
+                }
+            }
+            EduStudentExample studentExample = new EduStudentExample();
+            EduStudentExample.Criteria criteria = studentExample.createCriteria();
+            criteria.andOrganizationId2In(ids);
+            List<EduStudent> students = studentService.selectByExample(studentExample);
+            exam.setStuNum(students.size()); //保存考生数量
+
+            List<Integer> stuIds = new ArrayList<>();
+            for (int i = 0; i < students.size(); i++) {
+                stuIds.add(students.get(i).getStuId());
+            }
+
+            //保存考试信息
+            examService.insertSelective(exam);
+
+            if (stuIds.size() > 0) {
+                studentExamService.examByStudents(stuIds, paper, exam);
             }
         }
-        EduStudentExample studentExample = new EduStudentExample();
-        EduStudentExample.Criteria criteria = studentExample.createCriteria();
-        criteria.andOrganizationId2In(ids);
-        List<EduStudent> students = studentService.selectByExample(studentExample);
-        exam.setStuNum(students.size()); //保存考生数量
 
-        List<Integer> stuIds = new ArrayList<>();
-        for (int i = 0; i < students.size(); i++) {
-            stuIds.add(students.get(i).getStuId());
-        }
-
-        //保存考试信息
-        examService.insertSelective(exam);
-
-        if (stuIds.size() > 0) {
-            studentExamService.examByStudents(stuIds, paper, exam);
-        }
         return new SysResult(SysResultConstant.SUCCESS, "success");
     }
 

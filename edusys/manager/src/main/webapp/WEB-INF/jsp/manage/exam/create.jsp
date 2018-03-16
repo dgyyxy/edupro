@@ -241,10 +241,10 @@
                 }
             }
 
-            if(organizations.length==0){
+            /*if(organizations.length==0){
                 alertMsg('请选择参考机构！')
                 return false;
-            }
+            }*/
             return true;
         },
         calculateTotalPoints : function(){
@@ -300,7 +300,6 @@
 
                 entity.questionTypeRate = rateMap;
             }
-            console.log(entity);
             return entity;
         },
         // 选择自动组卷和手动组卷显示不同的操作
@@ -479,7 +478,6 @@
         examCreate.initial();
 
         $('#paperCategorySelect').change(function(){
-            console.log('==============='+$(this).val());
             examCreate.initPaper($(this).val());
         });
     });

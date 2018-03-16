@@ -48,6 +48,7 @@ $(function() {
 
 	// 上一题、下一题操作
 	$("a.nextsubject,a.previoussubject").on("click", function(e) {
+		eyeFocus();
 		e.preventDefault();
 		$body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
 		$body.stop();

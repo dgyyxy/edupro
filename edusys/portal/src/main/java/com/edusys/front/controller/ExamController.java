@@ -3,10 +3,7 @@ package com.edusys.front.controller;
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
 import com.edu.common.dao.pojo.AnswerSheet;
-import com.edu.common.util.Constants;
-import com.edu.common.util.Message;
-import com.edu.common.util.Paginator;
-import com.edu.common.util.RedisUtil;
+import com.edu.common.util.*;
 import com.edusys.front.service.ExamService;
 import com.edusys.front.service.StudentExamService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -86,15 +83,47 @@ public class ExamController extends BaseController{
     @ResponseBody
     public Object password(String exampwd, int examId, int stuId){
         int stuExamId = examService.exampwd(examId, stuId);
-        EduStudentExam studentExam = studentExamService.selectByPrimaryKey(stuExamId);
+        EduStudentExam studentExam = null;
         EduExam exam = examService.selectByPrimaryKey(examId);
+        EduPaper paper = new EduPaper();
         String pass = "fail";
         if(exam.getExamPwd().equals(exampwd)){
             pass = "success";
+
+
+            //将该考生加入到该考试中,考试处于进行中
+            if(exam.getAuthority()!=null){
+                if(stuExamId == 0){
+                    studentExam = new EduStudentExam();
+                    studentExam.setStuId(stuId);
+                    studentExam.setIslook(exam.getIslook());
+                    studentExam.setExamId(exam.getId());
+                    if(exam.getPaperId() != null){
+                        paper = examService.getPaperById(exam.getPaperId());
+                    }
+                    studentExam.setPaperId(paper.getId());
+                    studentExam.setContent(paper.getContent());
+                    studentExam.setDuration(exam.getDuration());
+                    studentExam.setApproved(0);//审核通过
+                    studentExam.setDisorganize(exam.getDisorganize());//是否打乱题目显示顺序
+                    studentExam.setPoint(exam.getTotalPoint());
+                    long time = System.currentTimeMillis();
+                    studentExam.setCreateTime(time);
+                    studentExamService.insertSelective(studentExam);
+                    int num = exam.getStuNum()==null ? 0 : 1;
+                    exam.setStuNum(num+1);
+                    examService.updateByPrimaryKeySelective(exam);
+                }else{
+                    studentExam = studentExamService.selectByPrimaryKey(stuExamId);
+                }
+            }else{
+                studentExam = studentExamService.selectByPrimaryKey(stuExamId);
+            }
+
             //按照考试规则组卷
             if(exam.getPaperRule()!=null){
                 Gson gson = new Gson();
-                EduPaper paper = gson.fromJson(exam.getPaperRule(), EduPaper.class);
+                paper = gson.fromJson(exam.getPaperRule(), EduPaper.class);
                 try {
                     examService.createPaper(paper, exam, studentExam);
                 } catch (Exception e) {
@@ -109,7 +138,7 @@ public class ExamController extends BaseController{
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", pass);
-        result.put("stuExamId", stuExamId);
+        result.put("stuExamId", studentExam.getId());
         result.put("examStatus", examStatus);
         result.put("score",score);
         return result;
