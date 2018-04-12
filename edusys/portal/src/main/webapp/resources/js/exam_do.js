@@ -48,7 +48,6 @@ $(function() {
 
 	// 上一题、下一题操作
 	$("a.nextsubject,a.previoussubject").on("click", function(e) {
-		eyeFocus();
 		e.preventDefault();
 		$body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
 		$body.stop();
@@ -367,12 +366,12 @@ var startTimer = function() {
             exam_clock.addClass("question-time-warning");
         }
         var period = parseInt(timestamp / 60);
-		if(tag && period===10){
+		if(tag && timestamp === 600){
 			tipMsg(10);
 			tag = false;
 		}
 
-		if(vtag && period===5){
+		if(vtag && timestamp===300){
 			tipMsg(5);
 			vtag = false;
 		}
@@ -526,7 +525,7 @@ var checkFloater = function() {
 	$("#exam-do-floatbar-hover").css("position", "absolute");
 	$("#exam-do-floatbar-hover").css("left", $("#workspace").offset().left-92);
 	positionOnTop("#exam-do-floatbar-hover");
-
+	positionOnBottom('#exam-do-floor');
 
 	$("#menuwapper").css("position", "absolute");
 	$("#menuwapper").css("left", $("#menuwapper").parent().offset().left);
@@ -641,7 +640,7 @@ var construtDetermineSubject = function(subjects, index) {
 			var answerObj = answerMap.get('qid_'+subject.questionId);//获取答案
 			var qindex = index + i + 1;
 			var content = JSON.parse(subject.content);
-			var bullet = '<li class="exam-subject"><div class="exam-subject-tip">第<span class="exam-subject-no">{no}</span>题，是非题（{score}分）</div><div class="exam-subject-title">{title}</div><div class="exam-subject-option-container">';
+			var bullet = '<li class="exam-subject"><div class="exam-subject-tip">第<span class="exam-subject-no">{no}</span>题，判断题（{score}分）</div><div class="exam-subject-title">{title}</div><div class="exam-subject-option-container">';
 			bullet = bullet.replace(/{no}/ig, qindex);
 			bullet = bullet.replace(/{title}/ig, content.title);
 			bullet = bullet.replace(/{score}/ig, subject.questionPoint);

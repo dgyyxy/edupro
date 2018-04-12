@@ -93,6 +93,7 @@
                 <a href="#" target="_self" class="nextsubject">下一题</a>
                 <a href="#" target="_self" class="leftmenutrriger">关闭面板</a>
             </div>
+            <div id="exam-do-floor"></div>
         </div>
         <div class="clear">&nbsp;</div>
     </div>
@@ -136,6 +137,17 @@
         layer.alert('您已提交试卷，得分${stuExam.pointGet}分',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:0,btn: ['进入考试中心'],shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
             layer.closeAll();
             location.href = '${ctx}/exam/list';
+        });
+    }
+
+    if(document.addEventListener){
+        document.addEventListener('webkitvisibilitychange', function(){
+            var show = document.webkitVisibilityState;
+            if(show === 'hidden'){
+                alert('该考试将会被中止！');
+                return;
+            }
+            console.log('window-------------------'+document.webkitVisibilityState);
         });
     }
 

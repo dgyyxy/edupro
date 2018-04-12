@@ -115,7 +115,7 @@ function initTree() {
 				subNode.id = subList[j].id;
 				subNode.pid = subList[j].pid;
 				var subName = subList[j].name;
-				if(subName.length>5) subName = subName.substring(0,4)+'...';
+				if(subName.length>11) subName = subName.substring(0,10)+'...';
 				subNode.text = subName;
 
 				subNode.level = subList[j].level;
@@ -125,7 +125,7 @@ function initTree() {
 			datas.push(node);
 		}
 		var nodeId;
-		$('#tree').treeview({
+		var myTree = $('#tree').treeview({
 			data: datas,
 			selectedBackColor: '#29A176',
 			emptyIcon: 'glyphicon glyphicon-file',
@@ -142,6 +142,7 @@ function initTree() {
 				$table.bootstrapTable('refresh',{url:'${basePath}/manage/question/list'});
 			}
 		});
+		$('#tree').treeview('collapseAll', { silent: true });
 	});
 }
 

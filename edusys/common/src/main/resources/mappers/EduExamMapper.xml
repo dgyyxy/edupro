@@ -29,6 +29,7 @@
         <result column="watch" jdbcType="VARCHAR" property="watch" />
         <result column="paper_rule" jdbcType="VARCHAR" property="paperRule" />
         <result column="authority" jdbcType="VARCHAR" property="authority" />
+        <result column="stu_id" jdbcType="INTEGER" property="stuId" />
 
     </resultMap>
 
@@ -99,7 +100,7 @@
     </sql>
     <sql id="Base_Column_List">
     id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
-    disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, status, pointGet, teacher, paper_rule
+    disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type, exam_pwd, status, pointGet, teacher, paper_rule, stu_id
     </sql>
     <sql id="Base_Column_List_Bak">
         id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
@@ -159,16 +160,21 @@
             </if>
         </if>
     </select>
+
     <select id="selectExamListByStu" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List"/>
-      from (select ee.*, ese.approved status, ese.point_get pointGet from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id where (ese.stu_id = #{stuId} or (ee.authority = 'all' and ese.stu_id IS NULL)) and ee.approved = 2) tab
-        order by id desc
-        limit ${offset}, ${limit}
+      from (
+        select ee.*, ese.approved status, ese.point_get pointGet, ese.stu_id from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id where (ese.stu_id = #{stuId} or ee.authority = 'all') and ee.approved = 2 group by id
+      ) tab
+      order by id desc
+      limit ${offset}, ${limit}
     </select>
     <select id="countByStu" parameterType="java.lang.Integer" resultType="java.lang.Long">
         select count(1)
-        from (select ee.* from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id where ese.stu_id = #{stuId} and ee.approved = 2) tab
+        from (
+        select ee.*, ese.approved status, ese.point_get pointGet, ese.stu_id from edu_exam ee left join edu_student_exam ese on ee.id = ese.exam_id where (ese.stu_id = #{stuId} or ee.authority = 'all') and ee.approved = 2 group by id
+      ) tab
     </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select

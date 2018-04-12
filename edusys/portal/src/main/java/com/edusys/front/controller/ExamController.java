@@ -21,10 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gary on 2017/5/16.
@@ -67,9 +64,24 @@ public class ExamController extends BaseController{
         List<EduExam> list = examService.selectExamListByStu(student.getStuId(), limit, offset);
         long total = examService.countByStu(student.getStuId());
 
+        List<EduExam> newList = new ArrayList<>();
+        //公共权限考试
+        if(list!=null){
+            if(list.size()>0){
+                for(EduExam exam : list){
+                    if(exam.getStuId() != student.getStuId()){
+                        exam.setStatus(null);
+                        exam.setStuId(null);
+                        exam.setPointGet(null);
+                    }
+                    newList.add(exam);
+                }
+            }
+        }
+
         Paginator paginator = new Paginator(total, page, limit, request);
         String htmlstr = paginator.getHtml();
-        modelMap.put("list", list);
+        modelMap.put("list", newList);
         modelMap.put("pageHtml", htmlstr);
         modelMap.put("total", total);
         return "/exam-list.jsp";
@@ -87,9 +99,10 @@ public class ExamController extends BaseController{
         EduExam exam = examService.selectByPrimaryKey(examId);
         EduPaper paper = new EduPaper();
         String pass = "fail";
+
+        Map<String, Object> result = new HashMap<>();
         if(exam.getExamPwd().equals(exampwd)){
             pass = "success";
-
 
             //将该考生加入到该考试中,考试处于进行中
             if(exam.getAuthority()!=null){
@@ -131,16 +144,13 @@ public class ExamController extends BaseController{
                 }
             }
 
+            int examStatus = studentExam.getApproved();
+            double score = studentExam.getPointGet()==null ? 0 : studentExam.getPointGet();
+            result.put("stuExamId", studentExam.getId());
+            result.put("examStatus", examStatus);
+            result.put("score",score);
         }
-
-        int examStatus = studentExam.getApproved();
-        double score = studentExam.getPointGet()==null ? 0 : studentExam.getPointGet();
-
-        Map<String, Object> result = new HashMap<>();
         result.put("status", pass);
-        result.put("stuExamId", studentExam.getId());
-        result.put("examStatus", examStatus);
-        result.put("score",score);
         return result;
     }
 

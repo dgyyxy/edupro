@@ -1,5 +1,6 @@
 com\edusys\front\service\TaskService.class
 com\edusys\front\service\impl\StudentExamServiceImpl.class
+com\edusys\front\interfaces\SameUrlData.class
 com\edusys\front\listener\SessionContext.class
 com\edusys\front\service\impl\EduAdvertServiceImpl.class
 com\edusys\front\controller\IndexController.class
@@ -9,6 +10,7 @@ com\edusys\front\service\impl\TaskServiceImpl.class
 com\edusys\front\service\IssuesService.class
 com\edusys\front\service\StuJobCourseService.class
 com\edusys\front\service\impl\StudentServiceImpl.class
+com\edusys\front\interceptor\SameUrlDataInterceptor.class
 com\edusys\front\service\impl\EduNoticeServiceImpl.class
 com\edusys\front\service\impl\IssuesServiceImpl.class
 com\edusys\front\service\impl\StuJobCourseServiceImpl.class

@@ -151,6 +151,16 @@ public class EduExam implements Serializable {
 
     private String authority;//考试权限; all: 对所有考生开放
 
+    private Integer stuId;//学员ID
+
+
+    public Integer getStuId() {
+        return stuId;
+    }
+
+    public void setStuId(Integer stuId) {
+        this.stuId = stuId;
+    }
 
     public String getAuthority() {
         return authority;

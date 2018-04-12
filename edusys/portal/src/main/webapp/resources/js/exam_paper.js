@@ -277,7 +277,7 @@ var construtDetermineSubject = function(subjects, index) {
 			var answerObj = answerMap.get('qid_'+subject.questionId);//获取答案
 			var qindex = index + i + 1;
 			var content = JSON.parse(subject.content);
-			var bullet = '<li class="exam-subject"><div class="exam-subject-tip">第<span class="exam-subject-no">{no}</span>题，是非题（{score}分）</div><div class="exam-subject-title">{title}</div><div class="exam-subject-option-container">';
+			var bullet = '<li class="exam-subject"><div class="exam-subject-tip">第<span class="exam-subject-no">{no}</span>题，判断题（{score}分）</div><div class="exam-subject-title">{title}</div><div class="exam-subject-option-container">';
 			bullet = bullet.replace(/{no}/ig, qindex);
 			bullet = bullet.replace(/{title}/ig, content.title);
 			bullet = bullet.replace(/{score}/ig, subject.questionPoint);
