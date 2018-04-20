@@ -9,6 +9,7 @@ import com.edu.common.dao.pojo.AnswerSheet;
 import com.edu.common.util.ExportExcelUtils;
 import com.edu.common.util.RandomUtil;
 import com.edusys.manager.service.EduStudentExamService;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,7 +73,7 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
     }
 
     @Override
-    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList, String examName) {
+    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList, String examName, String className, String companyName, String passRate) {
         // 创建一个workbook 对应的一个excel应用文件
         XSSFWorkbook workbook = new XSSFWorkbook();
         // 在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -84,6 +86,7 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
         sheet.setColumnWidth((short) 5, (short) 25*256);
         sheet.setColumnWidth((short) 6, (short) 25*256);
         sheet.setColumnWidth((short) 7, (short) 15*256);
+        sheet.setColumnWidth((short) 8, (short) 15*256);
         ExportExcelUtils exportExcelUtils = new ExportExcelUtils(workbook, sheet);
         XSSFCellStyle headStyle = exportExcelUtils.getHeadStyle();
         XSSFCellStyle bodyStyle = exportExcelUtils.getBodyStyle();
@@ -131,26 +134,24 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
 
                 cell = bodyRow.createCell(5);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(organs[1]);
+                cell.setCellValue(className);
 
                 cell = bodyRow.createCell(6);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(organs[0]);
+                cell.setCellValue(companyName);
 
                 cell = bodyRow.createCell(7);
                 cell.setCellStyle(bodyStyle);
-                int approved = studentExam.getApproved();
-                String approvedStr = "";
-                if(approved == 2){
-                    cell.setCellStyle(exportExcelUtils.getBodyStyle(2));
-                    approvedStr = "及格";
-                }else if(approved == 3){
-                    cell.setCellStyle(exportExcelUtils.getBodyStyle(1));
-                    approvedStr = "不及格";
-                }else{
-                    approvedStr = "";
+                cell.setCellValue(passRate+'%');
+
+                cell = bodyRow.createCell(8);
+                cell.setCellStyle(bodyStyle);
+                Date examDate = studentExam.getSubmitTime();
+                String examDateStr = "";
+                if(examDate!=null){
+                    examDateStr = DateFormatUtils.format(studentExam.getSubmitTime(), "yyyy-MM-dd HH:mm:ss");
                 }
-                cell.setCellValue(approvedStr);
+                cell.setCellValue(studentExam.getSubmitTime());
             }
         }
 

@@ -161,17 +161,27 @@ public class ExamHistoryController extends BaseController {
         return result;
     }
 
+    @ApiOperation("导出成绩界面")
+    @RequestMapping(value = "/exportPage/{id}", method = RequestMethod.GET)
+    public String export(@PathVariable("id") int id, ModelMap map, String passRate) {
+        map.put("id", id);
+        map.put("passRate", passRate);
+        return "/manage/examHistory/export.jsp";
+    }
+
     @ApiOperation(value = "导出学员成绩")
     @RequestMapping(value = "/export/{examId}", method = RequestMethod.GET)
-    public String export(HttpServletResponse response, String ids, int isAll, @PathVariable("examId") int examId) {
+    public String export(HttpServletResponse response, String ids, int isAll, @PathVariable("examId") int examId, HttpServletRequest request) {
         response.setContentType("application/binary;charset=ISO8859_1");
+        String className = request.getParameter("className");
+        String companyName = request.getParameter("companyName");
+        String passRate = request.getParameter("passRate");
         try {
+            EduExam exam = examService.selectByPrimaryKey(examId);
             ServletOutputStream outputStream = response.getOutputStream();
-            String fileName = new String(("学员成绩").getBytes(), "ISO8859_1") + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+            String fileName = new String(exam.getExamName().getBytes(), "ISO8859_1") + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
             response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
             List<EduStudentExam> studentExamList = new ArrayList<>();
-
-            EduExam exam = examService.selectByPrimaryKey(examId);
 
             EduStudentExamExample studentExamExample = new EduStudentExamExample();
             EduStudentExamExample.Criteria criteria = studentExamExample.createCriteria();
@@ -188,8 +198,8 @@ public class ExamHistoryController extends BaseController {
                 }
             }
             studentExamList = studentExamService.selectByExample(studentExamExample);
-            String[] titles = new String[]{"序号", "考生姓名", "考生身份证号", "考试名称", "得分", "二级机构", "一级机构", "是否通过"};
-            studentExamService.exportExcel(titles, outputStream, studentExamList, exam.getExamName());
+            String[] titles = new String[]{"序号", "考生姓名", "考生身份证号", "考试名称", "得分", "班级名称", "航空公司", "及格率", "考试日期"};
+            studentExamService.exportExcel(titles, outputStream, studentExamList, exam.getExamName(), className, companyName, passRate);
         } catch (Exception e) {
             e.printStackTrace();
         }

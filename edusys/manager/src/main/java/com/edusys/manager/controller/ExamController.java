@@ -137,6 +137,8 @@ public class ExamController extends BaseController {
                 int paperId = RandomUtil.getArrayRandItem(paperIds);
                 paper = paperService.selectByPrimaryKey(paperId);
             }
+        } else if (examType.equals("3")) {//跳转到考试规则设置页面
+            return new SysResult(SysResultConstant.SUCCESS, exam);
         }
 
         Subject subject = SecurityUtils.getSubject();
@@ -452,6 +454,12 @@ public class ExamController extends BaseController {
         studentExamService.examByStudents(stuIds, paper, exam);
         examService.updateByPrimaryKeySelective(exam);//更新参考人员数量
         return new SysResult(SysResultConstant.SUCCESS, "success");
+    }
+
+    @ApiOperation(value = "制定考试规则")
+    @RequestMapping(value = "/rule/{id}", method = RequestMethod.GET)
+    public String exam_rule(){
+        return "/manage/exam/examRule.jsp";
     }
 
 }

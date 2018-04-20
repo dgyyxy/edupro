@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.common.dao.mapper.EduPaperMapper">
+  <resultMap id="BaseResultMap" type="com.edu.common.dao.model.EduPaper">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="total_point" jdbcType="INTEGER" property="totalPoint" />
+    <result column="pass_point" jdbcType="INTEGER" property="passPoint" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.edu.common.dao.model.EduPaper">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="answer_sheet" jdbcType="LONGVARCHAR" property="answerSheet" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, duration, total_point, pass_point, category_id, status, create_time, summary, 
+    creator, paper_type, amount
+  </sql>
+  <sql id="Base_Column_List_Search">
+    id, name, duration, total_point, pass_point, category_id, (select epc.name from edu_paper_category epc where epc.id = category_id) category_name, status, create_time, summary,
+    creator, paper_type, amount
+  </sql>
+  <sql id="Blob_Column_List">
+    content, answer_sheet
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.edu.common.dao.model.EduPaperExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from edu_paper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.edu.common.dao.model.EduPaperExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List_Search" />
+    from edu_paper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from edu_paper
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edu_paper
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.edu.common.dao.model.EduPaperExample">
+    delete from edu_paper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.edu.common.dao.model.EduPaper">
+    insert into edu_paper (id, name, duration, 
+      total_point, pass_point, category_id, 
+      status, create_time, summary, 
+      creator, paper_type, amount, 
+      content, answer_sheet)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{duration,jdbcType=INTEGER}, 
+      #{totalPoint,jdbcType=INTEGER}, #{passPoint,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
+      #{status,jdbcType=BIT}, #{createTime,jdbcType=BIGINT}, #{summary,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{paperType,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
+      #{content,jdbcType=LONGVARCHAR}, #{answerSheet,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.edu.common.dao.model.EduPaper" useGeneratedKeys="true" keyProperty="id">
+    insert into edu_paper
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="duration != null">
+        duration,
+      </if>
+      <if test="totalPoint != null">
+        total_point,
+      </if>
+      <if test="passPoint != null">
+        pass_point,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="summary != null">
+        summary,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="paperType != null">
+        paper_type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="answerSheet != null">
+        answer_sheet,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="totalPoint != null">
+        #{totalPoint,jdbcType=INTEGER},
+      </if>
+      <if test="passPoint != null">
+        #{passPoint,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null">
+        #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="answerSheet != null">
+        #{answerSheet,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.edu.common.dao.model.EduPaperExample" resultType="java.lang.Long">
+    select count(*) from edu_paper
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update edu_paper
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duration != null">
+        duration = #{record.duration,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalPoint != null">
+        total_point = #{record.totalPoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.passPoint != null">
+        pass_point = #{record.passPoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryId != null">
+        category_id = #{record.categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.summary != null">
+        summary = #{record.summary,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paperType != null">
+        paper_type = #{record.paperType,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.answerSheet != null">
+        answer_sheet = #{record.answerSheet,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update edu_paper
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      duration = #{record.duration,jdbcType=INTEGER},
+      total_point = #{record.totalPoint,jdbcType=INTEGER},
+      pass_point = #{record.passPoint,jdbcType=INTEGER},
+      category_id = #{record.categoryId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=BIGINT},
+      summary = #{record.summary,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      paper_type = #{record.paperType,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=LONGVARCHAR},
+      answer_sheet = #{record.answerSheet,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update edu_paper
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      duration = #{record.duration,jdbcType=INTEGER},
+      total_point = #{record.totalPoint,jdbcType=INTEGER},
+      pass_point = #{record.passPoint,jdbcType=INTEGER},
+      category_id = #{record.categoryId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=BIGINT},
+      summary = #{record.summary,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      paper_type = #{record.paperType,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.edu.common.dao.model.EduPaper">
+    update edu_paper
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="totalPoint != null">
+        total_point = #{totalPoint,jdbcType=INTEGER},
+      </if>
+      <if test="passPoint != null">
+        pass_point = #{passPoint,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null">
+        paper_type = #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="answerSheet != null">
+        answer_sheet = #{answerSheet,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.edu.common.dao.model.EduPaper">
+    update edu_paper
+    set name = #{name,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=INTEGER},
+      total_point = #{totalPoint,jdbcType=INTEGER},
+      pass_point = #{passPoint,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=BIGINT},
+      summary = #{summary,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      paper_type = #{paperType,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR},
+      answer_sheet = #{answerSheet,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.edu.common.dao.model.EduPaper">
+    update edu_paper
+    set name = #{name,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=INTEGER},
+      total_point = #{totalPoint,jdbcType=INTEGER},
+      pass_point = #{passPoint,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=BIGINT},
+      summary = #{summary,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      paper_type = #{paperType,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+</mapper>
