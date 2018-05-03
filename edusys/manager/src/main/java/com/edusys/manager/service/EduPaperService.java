@@ -26,4 +26,6 @@ public interface EduPaperService extends BaseService<EduPaper, EduPaperExample> 
 
     public void createExamPaper(EduPaper paper)  throws Exception;
 
+    public void createExamRulePaper(EduPaper paper)  throws Exception;
+
 }

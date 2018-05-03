@@ -37,6 +37,9 @@ public interface ExamService extends BaseService<EduExam, EduExamExample>{
     // 创建临时试卷
     public void createPaper(EduPaper paper, EduExam exam, EduStudentExam studentExam) throws Exception;
 
+    // 创建临时试卷-题库分类
+    public void createPaperRule(EduPaper paper, EduExam exam, EduStudentExam studentExam) throws Exception;
+
     // 获取试卷
     public EduPaper getPaperById(Integer paperId);
 }

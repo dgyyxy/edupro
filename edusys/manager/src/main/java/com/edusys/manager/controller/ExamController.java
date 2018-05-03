@@ -2,6 +2,7 @@ package com.edusys.manager.controller;
 
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
+import com.edu.common.dao.pojo.QueryTypeRate;
 import com.edu.common.util.RandomUtil;
 import com.edusys.manager.common.SysResult;
 import com.edusys.manager.common.SysResultConstant;
@@ -102,13 +103,16 @@ public class ExamController extends BaseController {
     @ApiOperation("考试新增保存操作")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public Object create(EduExam exam, EduPaper paper, HttpServletRequest request) {
-
+    public Object create(EduExam exam, EduPaper paper, HttpServletRequest request ) {
+        // 参与学员
+        String organizationIdstr = request.getParameter("organizationIds");
+        Object questionTypeRateList = request.getParameter("questionTypeRateList");
         Type type = new TypeToken<String[]>() {
         }.getType();
         Gson gson = new Gson();
 
         String examType = request.getParameter("examType");
+        String examRule = request.getParameter("examRule");
         long time = System.currentTimeMillis();
         if (examType.equals("1")) {//随机抽取试题并进行组卷
             paper.setCreateTime(time);
@@ -137,8 +141,29 @@ public class ExamController extends BaseController {
                 int paperId = RandomUtil.getArrayRandItem(paperIds);
                 paper = paperService.selectByPrimaryKey(paperId);
             }
-        } else if (examType.equals("3")) {//跳转到考试规则设置页面
-            return new SysResult(SysResultConstant.SUCCESS, exam);
+        } else if (examType.equals("3") && examRule == null) {//跳转到考试规则设置页面
+            Map map = new HashMap();
+            map.put("exam", exam);
+            map.put("organizationIdstr", organizationIdstr);
+            return new SysResult(SysResultConstant.SUCCESS, map);
+        }
+        if (examRule.equals("rule")) {//按照考试题库分类组卷考试
+            List<QueryTypeRate> list = gson.fromJson(questionTypeRateList.toString(), new TypeToken<List<QueryTypeRate>>() {}.getType());
+            paper.setCreateTime(time);
+            paper.setQueryTypeRateList(list);
+            Subject subject = SecurityUtils.getSubject();
+            String username = (String) subject.getPrincipal();
+            paper.setCreator(username);
+            paper.setName("");
+            paper.setPaperType(3);
+            //保存创建试卷规则
+            exam.setPaperRule(gson.toJson(paper));
+            // 创建试卷
+            try {
+                paperService.createExamRulePaper(paper);
+            } catch (Exception e) {
+                return new SysResult(SysResultConstant.FAILED, e.getMessage());
+            }
         }
 
         Subject subject = SecurityUtils.getSubject();
@@ -155,10 +180,9 @@ public class ExamController extends BaseController {
         exam.setExamPwd(RandomUtil.getFourRandNum());
 
 
-        // 参与学员
-        String organizationIdstr = request.getParameter("organizationIds");
+
         //不选择机构，默认所有考生都有权限参加该考试
-        if(organizationIdstr == null){
+        if(organizationIdstr == null || organizationIdstr.equals("null")){
             exam.setAuthority("all");
             //保存考试信息
             examService.insertSelective(exam);
@@ -457,9 +481,17 @@ public class ExamController extends BaseController {
     }
 
     @ApiOperation(value = "制定考试规则")
-    @RequestMapping(value = "/rule/{id}", method = RequestMethod.GET)
-    public String exam_rule(){
+    @RequestMapping(value = "/rule", method = RequestMethod.GET)
+    public String exam_rule(EduExam exam, ModelMap map, String organizationIdstr){
+        map.put("exam", exam);
+        map.put("organizationIdstr", organizationIdstr);
         return "/manage/exam/examRule.jsp";
+    }
+
+    @ApiOperation(value = "考试规则确认列表")
+    @RequestMapping(value = "/ruleList", method = RequestMethod.GET)
+    public String rule_list(){
+        return "/manage/exam/ruleList.jsp";
     }
 
 }

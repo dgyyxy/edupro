@@ -134,11 +134,22 @@ public class ExamController extends BaseController{
             }
 
             //按照考试规则组卷
-            if(exam.getPaperRule()!=null){
+            if(exam.getExamType() == 1 && exam.getPaperRule()!=null){
                 Gson gson = new Gson();
                 paper = gson.fromJson(exam.getPaperRule(), EduPaper.class);
                 try {
                     examService.createPaper(paper, exam, studentExam);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //按照考试规则组卷-题库分类
+            if(exam.getExamType() == 3 && exam.getPaperRule()!=null){
+                Gson gson = new Gson();
+                paper = gson.fromJson(exam.getPaperRule(), EduPaper.class);
+                try {
+                    examService.createPaperRule(paper, exam, studentExam);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

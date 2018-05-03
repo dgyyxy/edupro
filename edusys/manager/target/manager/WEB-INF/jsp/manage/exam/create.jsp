@@ -10,14 +10,14 @@
                 <option value="0">请选择考卷设置方式</option>
                 <option value="2">选择试卷</option>
                 <option value="1">考题范围</option>
-                <option value="3">考试规则</option>
+                <option value="3">题库选题</option>
             </select>
         </div>
-        <div class="form-group questionShowDiv" hidden>
+        <div class="form-group questionShowDiv1" hidden>
             <label for="total_point">总分</label>
             <input type="text" id="total_point" name="totalPoint" maxlength="20" class="form-control"/>
         </div>
-        <div class="form-group questionShowDiv" hidden>
+        <div class="form-group questionShowDiv1" hidden>
             <label for="pass_point">及格分</label>
             <input type="text" id="pass_point" name="passPoint" maxlength="20" class="form-control"/>
         </div>
@@ -34,7 +34,7 @@
             <div class="form-group add-ques-type">
                 <input type="hidden" class="ques-id" value="3">
                 <div class="col-md-6">
-                    <label for="question3">是非题数</label>
+                    <label for="question3">判断题数</label>
                     <input type="text" id="question3" class="form-control add-ques-amount"/>
                 </div>
                 <div class="col-md-6">
@@ -153,7 +153,6 @@
                     beforeSend: function() {
                     },
                     success: function(result) {
-                        console.log(result);
                         if (result.code != 1) {
                             if (result.data instanceof Array) {
                                 $.each(result.data, function(index, value) {
@@ -163,8 +162,18 @@
                                 alertMsg(result.data);
                             }
                         } else {
-                            createDialog.close();
-                            $table.bootstrapTable('refresh');
+                            if(result.data!='success'){
+                                var examobj = result.data.exam;
+                                examobj.startTime = new Date(examobj.startTime).Format('yyyy-MM-dd HH:mm:ss');
+                                examobj.endTime = new Date(examobj.endTime).Format('yyyy-MM-dd HH:mm:ss');
+                                var organizationIdstr = result.data.organizationIdstr;
+                                console.log(organizationIdstr);
+                                var paramstr = $.param(examobj)+'&organizationIdstr='+organizationIdstr;
+                                location.href = '${basePath}/manage/exam/rule?'+paramstr;
+                            }else{
+                                createDialog.close();
+                                $table.bootstrapTable('refresh');
+                            }
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -200,6 +209,10 @@
             }
             if(typeId == 0){
                 alertMsg('请选择考卷设置方式！');
+                return false;
+            }
+            if(duration == ''){
+                alertMsg('请输入考试时长！');
                 return false;
             }
             if(startTime == '' || endTime == ''){
@@ -337,18 +350,22 @@
                 if(type == 0){
                     $('.questionShowDiv').hide();
                     $('.paperSelectDiv').hide();
+                    $('.questionShowDiv1').hide();
                     $('#questionCategory').empty();
                 }else if(type == 1){
                     $('.paperSelectDiv').hide();
                     $('.questionShowDiv').show();
+                    $('.questionShowDiv1').show();
                     examCreate.initQuestionCategory();
                     $('#paperSelect').empty();//清空试卷
                 }else if(type == 2){
                     $('.paperSelectDiv').show();
                     $('.questionShowDiv').hide();
+                    $('.questionShowDiv1').hide();
                     var typeId = $('#paperCategorySelect').select2('val');
                     examCreate.initPaper(typeId);
                 }else if(type == 3){
+                    $('.questionShowDiv1').show();
                     $('.questionShowDiv').hide();
                     $('.paperSelectDiv').hide();
                     $('#questionCategory').empty();

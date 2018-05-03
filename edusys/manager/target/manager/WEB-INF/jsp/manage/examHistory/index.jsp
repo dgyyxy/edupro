@@ -68,10 +68,10 @@
 		var teacher = row.teacher;
 		var passRate = row.passRate;
 		var returnObj = [];
+        returnObj.push('<a class="update" href="javascript:;" onclick="exportScoreAction('+id+', \''+passRate+'\')" data-toggle="tooltip"><i class="zmdi zmdi-download"></i>&nbsp;导出成绩</a>&nbsp;&nbsp;&nbsp;');
 		if(teacher!=null && teacher!=''){
-		    returnObj.push('<a class="update" href="javascript:;" onclick="watchExamAction('+id+')" data-toggle="tooltip"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;监考记录</a>&nbsp;&nbsp;');
+		    returnObj.push('<a class="update" href="javascript:;" onclick="watchExamAction('+id+')" data-toggle="tooltip"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;监考记录</a>');
 		}
-		returnObj.push('<a class="update" href="javascript:;" onclick="exportScoreAction('+id+', \''+passRate+'\')" data-toggle="tooltip"><i class="zmdi zmdi-download"></i>&nbsp;导出成绩</a>');
 		return returnObj.join('');
 
 	}

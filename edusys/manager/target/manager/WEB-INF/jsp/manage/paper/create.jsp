@@ -37,7 +37,7 @@
             <div class="form-group add-ques-type">
                 <input type="hidden" class="ques-id" value="3">
                 <div class="col-md-6">
-                    <label for="question3">是非题数</label>
+                    <label for="question3">判断题数</label>
                     <input type="text" id="question3" class="form-control add-ques-amount"/>
                 </div>
                 <div class="col-md-6">

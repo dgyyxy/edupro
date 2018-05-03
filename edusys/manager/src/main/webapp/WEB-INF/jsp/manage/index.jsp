@@ -39,7 +39,7 @@
         </li>
         <li id="logo" class="hidden-xs">
             <a href="index.html">
-                <img src="${basePath}/resources/images/logo_image.png"/>
+                <img src="${basePath}/resources/images/logo_image.bak.png"/>
             </a>
         </li>
         <li class="pull-right">

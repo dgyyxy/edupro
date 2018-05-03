@@ -1,7 +1,10 @@
 package com.edu.common.dao.model;
 
+import com.edu.common.dao.pojo.QueryTypeRate;
+
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 
 public class EduPaper implements Serializable {
     /**
@@ -117,8 +120,17 @@ public class EduPaper implements Serializable {
 
     private String categoryName;
 
+    private List<QueryTypeRate> queryTypeRateList;
 
     private static final long serialVersionUID = 1L;
+
+    public List<QueryTypeRate> getQueryTypeRateList() {
+        return queryTypeRateList;
+    }
+
+    public void setQueryTypeRateList(List<QueryTypeRate> queryTypeRateList) {
+        this.queryTypeRateList = queryTypeRateList;
+    }
 
     public String getCategoryName() {
         return categoryName;

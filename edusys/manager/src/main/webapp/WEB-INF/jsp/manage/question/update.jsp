@@ -313,7 +313,7 @@
             }
         }
 
-        if(3 == question_type){//是非题
+        if(3 == question_type){//判断题
             var answerRight = $('#answerRight').val();
             if(answerRight == ''){
                 alertMsg('请选择正确答案！');

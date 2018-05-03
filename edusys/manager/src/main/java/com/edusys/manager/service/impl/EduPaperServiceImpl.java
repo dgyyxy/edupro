@@ -9,9 +9,11 @@ import com.edu.common.dao.mapper.EduQuestionTypeMapper;
 import com.edu.common.dao.model.*;
 import com.edu.common.dao.pojo.AnswerSheet;
 import com.edu.common.dao.pojo.AnswerSheetItem;
+import com.edu.common.dao.pojo.QueryTypeRate;
 import com.edu.common.util.Roulette;
 import com.edusys.manager.service.EduPaperService;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -258,6 +260,137 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
     }
 
     /**
+     * 自动组卷
+     *
+     * @param questionMap
+     */
+    public HashMap<Integer, EduQuestion> getPaperQuestionMapRule(HashMap<Integer, HashMap<Integer, List<EduQuestion>>> questionMap, Map<Integer, QueryTypeRate> paperMap) throws Exception {
+
+        //试卷试题列表
+        HashMap<Integer, EduQuestion> paperQuestionMap = new HashMap<Integer, EduQuestion>();
+        Iterator<Integer> iterator1 = questionMap.keySet().iterator();
+        // 遍历每一个题库分类
+        while (iterator1.hasNext()) {
+            int key = (Integer) iterator1.next();
+            Iterator<Integer> iterator2 = questionMap.get(key).keySet().iterator();
+            // 保存数据库中读取的每种题型的数量
+            HashMap<Integer, Integer> questionTypeNumCheck = new HashMap<Integer, Integer>();
+            // 遍历题库分类下每一种题型
+            while (iterator2.hasNext()) {
+                // 题型ID
+                int typeNum = (Integer) iterator2.next();
+                // 如果题型校验Map包含这个题型ID
+                if (questionTypeNumCheck.containsKey(typeNum)) {
+                    questionTypeNumCheck.put(typeNum,
+                            questionTypeNumCheck.get(typeNum)
+                                    + questionMap.get(key).get(typeNum).size());
+                }else {
+                    questionTypeNumCheck.put(typeNum,
+                            questionMap.get(key).get(typeNum).size());
+                }
+            }
+
+            QueryTypeRate queryTypeRate = paperMap.get(key);
+            //检查每个题库分类下面的题型数量
+            HashMap<Integer, Integer> questionTypeNum = queryTypeRate.getQuestionTypeNum();
+            //试题类型字典
+            HashMap<Integer, String> typeMap = (HashMap<Integer, String>) getQuestionTypeMap();
+            Iterator<Integer> iterator3 = questionTypeNum.keySet().iterator();
+            while(iterator3.hasNext()){
+                int key3 = (Integer) iterator3.next();
+                if(!questionTypeNumCheck.containsKey(key3)){
+                    throw new Exception("试题清单中无试题类型" + typeMap.get(key3));
+                }
+                if(questionTypeNum.get(key3) > questionTypeNumCheck.get(key3)){
+                    throw new Exception("试题库中试题类型：" + typeMap.get(key3) + "数量不足");
+                }
+            }
+
+            // 选择题型
+            List<Integer> resultList1 = new ArrayList<Integer>();//题型列表
+            Iterator<Integer> it1 = questionTypeNum.keySet().iterator();
+            HashMap<Integer, Float> hm1 = new HashMap<Integer, Float>();
+
+            int count1 = 0;
+            // 题目总数，通过questionNum计算
+            int questionNum = 0;
+
+            while (it1.hasNext()) {
+                int key1 = it1.next();
+                resultList1.add(key1);
+                // 获取题型数量
+                count1++;
+                // 获取题量
+                questionNum += questionTypeNum.get(key1);
+            }
+            _log.info("题型数量=" + count1);
+
+            it1 = questionMap.keySet().iterator();
+
+            // 每种题型的概率
+            float avg1 = (float) (Math.round((1f / (float) count1) * 1000)) / 1000;
+            // 所有题型的概率相加和1之间的差值加上平均值
+            float dt1 = (float) (Math
+                    .round(((1f - (float) (avg1 * (count1 - 1)))) * 1000)) / 1000;
+
+            for (int i = 0; i < count1; i++) {
+                // 最后一种题型概率加上差值
+                if (i == count1 - 1)
+                    hm1.put(i, dt1);
+                else
+                    hm1.put(i, avg1);
+                _log.info("题型" + i + "的选择概率:" + hm1.get(i));
+            }
+            // 轮盘赌选择题型
+            Roulette<Integer> r1 = new Roulette<Integer>(resultList1, hm1);
+
+            // 每种题型的分数
+            HashMap<Integer, Float> questionTypePoint = queryTypeRate.getQuestionTypePoint();
+
+            int i = 0;
+            // 如果没有选择足够的题量，循环选择试题
+            while (questionNum > i) {
+                int categoryId = -1;
+                int typeId = -1;
+                try {
+                    categoryId = key;
+                    typeId = r1.getResult();
+                    List<EduQuestion> qs = questionMap.get(categoryId).get(typeId);
+                    if (qs == null) {
+                        _log.info("categoryId=" + categoryId + "typeId=" + typeId);
+                        _log.info(String.valueOf(questionMap.get(categoryId)));
+                        continue;
+                    }
+
+                    Random random = new Random();
+                    int typeNum = questionTypeNum.get(typeId);
+                    if (typeNum > 0) {
+                        EduQuestion q = qs.get(random.nextInt(qs.size()));
+
+                        if (paperQuestionMap.containsKey(q.getId()))
+                            continue;
+                        if (questionTypePoint != null) {
+                            if (questionTypePoint.containsKey(typeId)) {
+                                q.setPoint(questionTypePoint.get(typeId));
+                            }
+                        }
+                        paperQuestionMap.put(q.getId(), q);
+                        i++;
+                        typeNum--;
+                        questionTypeNum.put(typeId, typeNum);
+                    }
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        return paperQuestionMap;
+
+    }
+
+    /**
      * 创建试卷
      * @param paper
      */
@@ -360,6 +493,61 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
         eduPaperMapper.updateByPrimaryKeySelective(paper);*/
     }
 
+    @Override
+    public void createExamRulePaper(EduPaper paper) throws Exception {
+        List<Integer> idList = new ArrayList<Integer>();
+        //处理题目分类
+        List<QueryTypeRate> queryTypeRateList = paper.getQueryTypeRateList();
+        Map<Integer, QueryTypeRate> maps = new HashMap<>();
+        for(int i = 0;i<queryTypeRateList.size();i++){
+            QueryTypeRate queryTypeRate = queryTypeRateList.get(i);
+            idList.add(queryTypeRate.getQuestionTypeId());
+            maps.put(queryTypeRate.getQuestionTypeId(), queryTypeRate);
+        }
+        HashMap<Integer, HashMap<Integer, List<EduQuestion>>> questionMap = getQuestionMap(idList);
+        //创建试卷
+        HashMap<Integer, EduQuestion> paperQuestionMap = getPaperQuestionMapRule(questionMap, maps);
+        Iterator<Integer> qits = paperQuestionMap.keySet().iterator();
+        List<Integer> qids = new ArrayList<Integer>();
+        while(qits.hasNext()){
+            qids.add(qits.next());
+        }
+
+        EduQuestionExample questionExample = new EduQuestionExample();
+        EduQuestionExample.Criteria criteria = questionExample.createCriteria();
+        criteria.andIdIn(qids);
+        List<EduQuestion> questionList = questionMapper.selectByExample(questionExample);
+        List<QuestionResult> questionResults = new ArrayList<>();
+
+        float sum = 0;
+        AnswerSheet as = new AnswerSheet();
+        as.setExamPaperId(0);
+        List<AnswerSheetItem> asList = new ArrayList<AnswerSheetItem>();
+
+        for(EduQuestion question : questionList){
+            QueryTypeRate queryTypeRate = maps.get(question.getQuestionCategoryId());
+            QuestionResult qr = new QuestionResult(question.getId(), question.getContent(),question.getAnswer(),
+                    question.getQuestionTypeId(),queryTypeRate.getQuestionTypePoint().get(question.getQuestionTypeId()),0);
+            questionResults.add(qr);
+            AnswerSheetItem item = new AnswerSheetItem();
+            item.setAnswer(qr.getAnswer());
+            item.setQuestionId(qr.getQuestionId());
+            item.setPoint(qr.getQuestionPoint());
+            item.setQuestionTypeId(qr.getQuestionTypeId());
+            sum += qr.getQuestionPoint();
+            asList.add(item);
+        }
+        Gson gson = new Gson();
+        //试卷题量
+        paper.setAmount(qids.size());
+        //paper.setContent(gson.toJson(questionResults));
+        System.out.println(gson.toJson(questionResults));
+
+        as.setPointMax(sum);
+        as.setAnswerSheetItems(asList);
+        as.setPointPass(paper.getPassPoint());
+        String answerSheet = gson.toJson(as);
+    }
 
 
     /**
@@ -389,5 +577,13 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
             typeMap.put(tp.getId(), tp.getName());
         }
         return typeMap;
+    }
+
+    public static void main(String[] args) {
+        Gson gson = new Gson();
+        String liststr = "\"[{\"questionTypeId\":13,\"questionTypeNum\":{\"1\":5,\"3\":5},\"questionTypePoint\":{\"1\":5,\"3\":5}},{\"questionTypeId\":16,\"questionTypeNum\":{\"1\":5,\"3\":5},\"questionTypePoint\":{\"1\":5,\"3\":5}}]\"";
+        List<QueryTypeRate> list = gson.fromJson(liststr, new TypeToken<List<QueryTypeRate>>() {}.getType());
+
+
     }
 }

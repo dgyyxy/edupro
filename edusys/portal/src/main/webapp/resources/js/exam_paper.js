@@ -289,7 +289,7 @@ var construtDetermineSubject = function(subjects, index) {
             bullet = bullet.replace(/{questionId}/ig, subject.questionId);
 			var option_checked_no = -1;
 			var answered = (subject.answer != null && subject.answer.length > 0);
-			var options = {"T":"正确","F":"错误"};
+			var options = {"T":"对","F":"错"};
 			for (var obj in options) { //
 				bullet += '<label for="{optionID}" {label_selected}><span class="exam-subject-optionNo">{optionNo}</span><input type="radio" name="{fieldName}" value="{optionValue}" id="{optionID}" {option_checked}>{optionText}</label>';
 				bullet = bullet.replace(/{optionID}/ig, qindex + '_' + obj);

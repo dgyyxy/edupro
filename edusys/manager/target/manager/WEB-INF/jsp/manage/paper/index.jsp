@@ -101,7 +101,7 @@ function initTree() {
 			node.id = list[i].id;
 			node.pid = list[i].pid;
 			var nodeName = list[i].name;
-			if(nodeName.length > 6) nodeName = nodeName.substring(0,5)+'...';
+			if(nodeName.length > 10) nodeName = nodeName.substring(0,9)+'...';
 			node.text =  nodeName;
 
 			node.level = list[i].level;
@@ -114,7 +114,7 @@ function initTree() {
 				subNode.id = subList[j].id;
 				subNode.pid = subList[j].pid;
 				var subName = subList[j].name;
-				if(subName.length>5) subName = subName.substring(0,4)+'...';
+				if(subName.length>10) subName = subName.substring(0,9)+'...';
 				subNode.text = subName;
 
 				subNode.level = subList[j].level;
@@ -135,12 +135,18 @@ function initTree() {
 				$('#tree').treeview('selectNode', [ nodeId, { silent: true } ]);
 			},
 			onNodeSelected: function(event, node){
+                if(node.level == 1){
+                    $('#tree').treeview('unselectNode', [ node.nodeId, { silent: true } ]);
+                    $('#tree').treeview('toggleNodeExpanded', [ node.nodeId, { silent: true } ]);
+                    return;
+                }
 				if(nodeId != undefined) $('#tree').treeview('unselectNode', [ nodeId, { silent: true } ]);
 				typeId = node.id;
 				typePid = node.pid;
 				$table.bootstrapTable('refresh',{url:'${basePath}/manage/paper/list'});
 			}
 		});
+        $('#tree').treeview('collapseAll', { silent: true });
 	});
 }
 

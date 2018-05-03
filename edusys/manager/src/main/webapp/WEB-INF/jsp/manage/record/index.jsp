@@ -17,10 +17,7 @@
 </head>
 <body>
 <div id="main">
-	<div id="toolbar" style="width:405px;">
-		<div style="float: right;">
-			<select id="organSelect" style="float:right;"></select>
-		</div>
+	<div id="toolbar">
 	</div>
 	<table id="table"></table>
 </div>

@@ -4,12 +4,14 @@ import com.edu.common.annotation.BaseService;
 import com.edu.common.base.BaseServiceImpl;
 import com.edu.common.dao.mapper.EduStudentExamMapper;
 import com.edu.common.dao.mapper.EduStudentMapper;
-import com.edu.common.dao.model.*;
+import com.edu.common.dao.model.EduExam;
+import com.edu.common.dao.model.EduPaper;
+import com.edu.common.dao.model.EduStudentExam;
+import com.edu.common.dao.model.EduStudentExamExample;
 import com.edu.common.dao.pojo.AnswerSheet;
 import com.edu.common.util.ExportExcelUtils;
 import com.edu.common.util.RandomUtil;
 import com.edusys.manager.service.EduStudentExamService;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,7 +75,8 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
     }
 
     @Override
-    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList, String examName, String className, String companyName, String passRate) {
+    public int exportExcel(String[] titles, ServletOutputStream outputStream, List<EduStudentExam> studentExamList, String examName, String className, String companyName, String passRate, EduExam exam) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // 创建一个workbook 对应的一个excel应用文件
         XSSFWorkbook workbook = new XSSFWorkbook();
         // 在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -85,8 +88,9 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
         sheet.setColumnWidth((short) 4, (short) 15*256);
         sheet.setColumnWidth((short) 5, (short) 25*256);
         sheet.setColumnWidth((short) 6, (short) 25*256);
-        sheet.setColumnWidth((short) 7, (short) 15*256);
-        sheet.setColumnWidth((short) 8, (short) 15*256);
+        sheet.setColumnWidth((short) 7, (short) 25*256);
+        sheet.setColumnWidth((short) 8, (short) 25*256);
+        sheet.setColumnWidth((short) 9, (short) 15*256);
         ExportExcelUtils exportExcelUtils = new ExportExcelUtils(workbook, sheet);
         XSSFCellStyle headStyle = exportExcelUtils.getHeadStyle();
         XSSFCellStyle bodyStyle = exportExcelUtils.getBodyStyle();
@@ -99,6 +103,7 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
             cell.setCellValue(titles[i]);
         }
 
+        boolean tag = true;
         //构建表体数据
         if(studentExamList!=null && studentExamList.size()>0){
             for (int j = 0; j<studentExamList.size(); j++){
@@ -134,24 +139,30 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
 
                 cell = bodyRow.createCell(5);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(className);
+                cell.setCellValue(tag ? className : "");
 
                 cell = bodyRow.createCell(6);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(companyName);
+                cell.setCellValue(tag ? companyName : "");
 
                 cell = bodyRow.createCell(7);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(passRate+'%');
+                /*Date examDate = studentExam.getSubmitTime();
+                String examDateStr = "";
+                if(examDate!=null){
+                    examDateStr = sdf.format(studentExam.getSubmitTime());
+                }*/
+                cell.setCellValue(tag ? sdf.format(exam.getStartTime()) : "");
 
                 cell = bodyRow.createCell(8);
                 cell.setCellStyle(bodyStyle);
-                Date examDate = studentExam.getSubmitTime();
-                String examDateStr = "";
-                if(examDate!=null){
-                    examDateStr = DateFormatUtils.format(studentExam.getSubmitTime(), "yyyy-MM-dd HH:mm:ss");
-                }
-                cell.setCellValue(studentExam.getSubmitTime());
+                cell.setCellValue(tag ? sdf.format(exam.getEndTime()) : "");
+
+                cell = bodyRow.createCell(9);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(tag ? passRate+'%' : "");
+
+                tag = false;
             }
         }
 

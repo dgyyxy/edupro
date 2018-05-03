@@ -14,6 +14,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>考试管理</title>
 	<jsp:include page="../../common/css.jsp" flush="true"/>
+    <style type="text/css">
+        .timeinput {
+            width: 130px;
+            height: 24px
+        }
+    </style>
 </head>
 <body>
 <div id="main">

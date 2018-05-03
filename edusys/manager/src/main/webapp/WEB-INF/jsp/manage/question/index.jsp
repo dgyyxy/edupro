@@ -136,6 +136,11 @@ function initTree() {
 				$('#tree').treeview('selectNode', [ nodeId, { silent: true } ]);
 			},
 			onNodeSelected: function(event, node){
+                if(node.level == 1){
+                    $('#tree').treeview('unselectNode', [ node.nodeId, { silent: true } ]);
+                    $('#tree').treeview('toggleNodeExpanded', [ node.nodeId, { silent: true } ]);
+                    return;
+                }
 				if(nodeId != undefined) $('#tree').treeview('unselectNode', [ nodeId, { silent: true } ]);
 				typeId = node.id;
 				typePid = node.pid;

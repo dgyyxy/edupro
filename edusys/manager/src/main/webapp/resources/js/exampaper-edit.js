@@ -176,7 +176,7 @@ var examing = {
         }
     },
     questiontypes: new Array({
-        "name": "是非题",
+        "name": "判断题",
         "code": "qt-trueorfalse"
     }, {
         "name": "单选题",

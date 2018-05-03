@@ -652,7 +652,7 @@ var construtDetermineSubject = function(subjects, index) {
             bullet = bullet.replace(/{questionId}/ig, subject.questionId);
 			var option_checked_no = -1;
 			var answered = (subject.answer != null && subject.answer.length > 0);
-			var options = {"T":"正确","F":"错误"};
+			var options = {"T":"对","F":"错"};
 
 			var answer_text = "";
 			if(answerObj != undefined) answer_text = answerObj.answer;

@@ -161,7 +161,7 @@ public class QuestionAdapter {
             case 3:
                 sb.append("trueorfalse").append("</span>");
                 sb.append("<span class=\"question-type-id\" style=\"display: none;\">").append(questionResult.getQuestionTypeId()).append("</span>");
-                sb.append("<span>[是非题]</span>");
+                sb.append("<span>[判断题]</span>");
                 sb.append("<span class=\"question-point-content\">");
                 sb.append("<span>(</span><span class=\"question-point\">").append(pointStrFormat(questionResult.getQuestionPoint())).append("</span><span>分)</span>");
                 sb.append("</span>");
@@ -177,10 +177,10 @@ public class QuestionAdapter {
 
                 sb.append("<li class=\"question-list-item\">").append(
                         "<input type=\"radio\" value=\"T\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">正确</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">对</span>").append("</li>");
 
                 sb.append("<li class=\"question-list-item\">").append("<input type=\"radio\" value=\"F\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">错误</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">错</span>").append("</li>");
 
                 sb.append("</ul>");
                 sb.append("</form>");
@@ -325,7 +325,7 @@ public class QuestionAdapter {
             case 3:
                 sb.append("trueorfalse").append("</span>");
                 sb.append("<span class=\"question-type-id\" style=\"display: none;\">").append(questionResult.getQuestionTypeId()).append("</span>");
-                sb.append("<span>[是非题]</span>");
+                sb.append("<span>[判断题]</span>");
                 sb.append("<span class=\"question-point-content\">");
                 sb.append("<span>(</span><span class=\"question-point\">").append(pointStrFormat(questionResult.getQuestionPoint())).append("</span><span>分)</span>");
                 sb.append("</span>");
@@ -341,10 +341,10 @@ public class QuestionAdapter {
 
                 sb.append("<li class=\"question-list-item\">").append(
                         "<input type=\"radio\" value=\"T\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">正确</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">对</span>").append("</li>");
 
                 sb.append("<li class=\"question-list-item\">").append("<input type=\"radio\" value=\"F\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">错误</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">错</span>").append("</li>");
 
                 sb.append("</ul>");
                 sb.append("</form>");
@@ -687,10 +687,10 @@ public class QuestionAdapter {
 
                 sb.append("<li class=\"question-list-item\">").append(
                         "<input type=\"radio\" value=\"T\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">正确</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">对</span>").append("</li>");
 
                 sb.append("<li class=\"question-list-item\">").append("<input type=\"radio\" value=\"F\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">错误</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">错</span>").append("</li>");
 
                 sb.append("</ul>");
                 sb.append("</form>");
@@ -865,10 +865,10 @@ public class QuestionAdapter {
 
                 sb.append("<li class=\"question-list-item\">").append(
                         "<input type=\"radio\" value=\"T\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">正确</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">对</span>").append("</li>");
 
                 sb.append("<li class=\"question-list-item\">").append("<input type=\"radio\" value=\"F\" name=\"question-radio2\" class=\"question-input\">")
-                        .append("<span class=\"question-li-text\">错误</span>").append("</li>");
+                        .append("<span class=\"question-li-text\">错</span>").append("</li>");
 
                 sb.append("</ul>");
                 sb.append("</form>");

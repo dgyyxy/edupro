@@ -2,7 +2,6 @@ package com.edusys.manager.controller;
 
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
-import com.edu.common.dao.pojo.AnswerSheet;
 import com.edu.common.dao.pojo.ExamPassRate;
 import com.edu.common.dao.pojo.QuestionAdapter;
 import com.edu.common.util.NumberUtils;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -179,7 +177,7 @@ public class ExamHistoryController extends BaseController {
         try {
             EduExam exam = examService.selectByPrimaryKey(examId);
             ServletOutputStream outputStream = response.getOutputStream();
-            String fileName = new String(exam.getExamName().getBytes(), "ISO8859_1") + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+            String fileName = new String(exam.getExamName().getBytes(), "ISO8859_1") + "-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
             response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
             List<EduStudentExam> studentExamList = new ArrayList<>();
 
@@ -198,8 +196,8 @@ public class ExamHistoryController extends BaseController {
                 }
             }
             studentExamList = studentExamService.selectByExample(studentExamExample);
-            String[] titles = new String[]{"序号", "考生姓名", "考生身份证号", "考试名称", "得分", "班级名称", "航空公司", "及格率", "考试日期"};
-            studentExamService.exportExcel(titles, outputStream, studentExamList, exam.getExamName(), className, companyName, passRate);
+            String[] titles = new String[]{"序号", "考生姓名", "考生身份证号", "考试名称", "得分", "班级名称", "航空公司", "考试开始日期", "考试结束日期", "及格率"};
+            studentExamService.exportExcel(titles, outputStream, studentExamList, exam.getExamName(), className, companyName, passRate, exam);
         } catch (Exception e) {
             e.printStackTrace();
         }
