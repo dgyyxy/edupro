@@ -3,7 +3,7 @@
     <form id="createForm" method="post">
         <div class="form-group">
             <label for="name">考试名称</label>
-            <input type="text" id="name" name="examName" class="form-control" maxlength="20"/>
+            <input type="text" id="name" name="examName" class="form-control" maxlength="50"/>
         </div>
         <div class="form-group">
             <select name="examType" id="type">
