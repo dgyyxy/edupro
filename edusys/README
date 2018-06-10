@@ -62,6 +62,8 @@ v20171030
     ALTER TABLE `edu_exam`
             ADD COLUMN `authority` VARCHAR(50) DEFAULT NULL COMMENT '考试权限控制，all: 对所有考生开放';
 
+---test push commit
+
 
 
 
