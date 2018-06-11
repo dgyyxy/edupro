@@ -17,9 +17,15 @@
 </head>
 <body>
 <div id="main">
-	<div id="toolbar">
+	<div id="toolbar" style="width: 1000px;">
 		<a class="waves-effect waves-button blue" href="javascript:void(0);" onclick="examStudentAction()"><i class="zmdi zmdi-accounts"></i> 学生成绩列表</a>
+
+		<dev style="float: right;width: 30%">
+			<label for="startTime" style="float: contour">起始时间：</label>
+			<input id="startTime" name="startTime" style="float: right;width: 200px" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+		</dev>
 	</div>
+
 	<table id="table"></table>
 </div>
 <jsp:include page="../../common/js.jsp" flush="true"/>
@@ -34,7 +40,7 @@
 			striped: true,
 			search: true,
 			strictSearch: true,
-			queryParams: 'queryParams',
+			queryParams: queryParams,
 			showRefresh: true,
 			showColumns: true,
 			minimumCountColumns: 2,
@@ -78,7 +84,22 @@
 
 
 	function queryParams(params){
-		return params;
+        var startTime = $("#startTime").val();
+        var temp = {
+            offset: params.offset,
+            limit:params.limit,
+            sort:params.sort,
+            pageNumber:params.pageNumber,
+            pageSize:params.pageSize,
+            order:params.order,
+            sortName:params.sortName,
+            sortOrder:params.sortOrder,
+            searchText:params.searchText,
+            search:params.search,
+            startTime:startTime
+		};
+
+		return temp;
 	}
 
 	function dateFormatter(value, row, index){

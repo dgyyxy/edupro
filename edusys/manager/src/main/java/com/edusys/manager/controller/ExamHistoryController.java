@@ -60,7 +60,7 @@ public class ExamHistoryController extends BaseController {
                        @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
                        @RequestParam(required = false, value = "sort") String sort,
                        @RequestParam(required = false, value = "order") String order,
-                       String search) {
+                       String search, Date startTime) {
         EduExamExample examExample = new EduExamExample();
         EduExamExample.Criteria criteria = examExample.createCriteria();
         examExample.setOffset(offset);
@@ -72,6 +72,9 @@ public class ExamHistoryController extends BaseController {
         if (StringUtils.isNotBlank(search)) {
             search = "%" + search + "%";
             criteria.andExamNameLike(search);
+        }
+        if(startTime != null){
+            criteria.andStartTimeGreaterThanOrEqualTo(startTime);
         }
         List<EduExam> rows = examService.selectByExample(examExample);
         //考试对应的及格率
@@ -196,7 +199,7 @@ public class ExamHistoryController extends BaseController {
                 }
             }
             studentExamList = studentExamService.selectByExample(studentExamExample);
-            String[] titles = new String[]{"序号", "考生姓名", "考生身份证号", "考试名称", "得分", "班级名称", "航空公司", "考试开始日期", "考试结束日期", "及格率"};
+            String[] titles = new String[]{"序号", "考生姓名", "考生身份证号", "考试名称", "得分", "班级名称", "航空公司", /*"考试开始日期", "考试结束日期",*/ "及格率"};
             studentExamService.exportExcel(titles, outputStream, studentExamList, exam.getExamName(), className, companyName, passRate, exam);
         } catch (Exception e) {
             e.printStackTrace();

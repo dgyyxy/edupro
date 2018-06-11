@@ -84,13 +84,14 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
         sheet.setColumnWidth((short) 0, (short) 15*256);
         sheet.setColumnWidth((short) 1, (short) 25*256);
         sheet.setColumnWidth((short) 2, (short) 30*256);
-        sheet.setColumnWidth((short) 3, (short) 15*256);
+        sheet.setColumnWidth((short) 3, (short) 30*256);
         sheet.setColumnWidth((short) 4, (short) 15*256);
         sheet.setColumnWidth((short) 5, (short) 25*256);
         sheet.setColumnWidth((short) 6, (short) 25*256);
-        sheet.setColumnWidth((short) 7, (short) 25*256);
-        sheet.setColumnWidth((short) 8, (short) 25*256);
-        sheet.setColumnWidth((short) 9, (short) 15*256);
+        /*sheet.setColumnWidth((short) 7, (short) 25*256);
+        sheet.setColumnWidth((short) 8, (short) 25*256);*/
+//        sheet.setColumnWidth((short) 9, (short) 15*256);
+        sheet.setColumnWidth((short) 7, (short) 15*256);
         ExportExcelUtils exportExcelUtils = new ExportExcelUtils(workbook, sheet);
         XSSFCellStyle headStyle = exportExcelUtils.getHeadStyle();
         XSSFCellStyle bodyStyle = exportExcelUtils.getBodyStyle();
@@ -139,26 +140,29 @@ public class EduStudentExamServiceImpl extends BaseServiceImpl<EduStudentExamMap
 
                 cell = bodyRow.createCell(5);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(tag ? className : "");
+//                cell.setCellValue(tag ? className : "");
+                cell.setCellValue(className);
 
                 cell = bodyRow.createCell(6);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(tag ? companyName : "");
-
-                cell = bodyRow.createCell(7);
+//                cell.setCellValue(tag ? companyName : "");
+                cell.setCellValue(companyName);
+                //去掉考试开始时间、结束时间
+               /* cell = bodyRow.createCell(7);
                 cell.setCellStyle(bodyStyle);
-                /*Date examDate = studentExam.getSubmitTime();
+                *//*Date examDate = studentExam.getSubmitTime();
                 String examDateStr = "";
                 if(examDate!=null){
                     examDateStr = sdf.format(studentExam.getSubmitTime());
-                }*/
+                }*//*
                 cell.setCellValue(tag ? sdf.format(exam.getStartTime()) : "");
 
                 cell = bodyRow.createCell(8);
                 cell.setCellStyle(bodyStyle);
-                cell.setCellValue(tag ? sdf.format(exam.getEndTime()) : "");
+                cell.setCellValue(tag ? sdf.format(exam.getEndTime()) : "");*/
 
-                cell = bodyRow.createCell(9);
+//                cell = bodyRow.createCell(9);
+                cell = bodyRow.createCell(7);
                 cell.setCellStyle(bodyStyle);
                 cell.setCellValue(tag ? passRate+'%' : "");
 

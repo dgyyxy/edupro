@@ -235,7 +235,7 @@
                 node.id = list[i].id;
                 node.pid = list[i].pid;
                 var nodeName = list[i].name;
-                if(nodeName.length > 6) nodeName = nodeName.substring(0,5)+'...';
+                if(nodeName.length > 16) nodeName = nodeName.substring(0,15)+'...';
                 node.text =  nodeName;
 
                 node.level = list[i].level;
@@ -251,7 +251,7 @@
                     subNode.id = subList[j].id;
                     subNode.pid = subList[j].pid;
                     var subName = subList[j].name;
-                    if(subName.length>5) subName = subName.substring(0,4)+'...';
+                    if(subName.length>16) subName = subName.substring(0,15)+'...';
                     subNode.text = subName;
 
                     subNode.level = subList[j].level;

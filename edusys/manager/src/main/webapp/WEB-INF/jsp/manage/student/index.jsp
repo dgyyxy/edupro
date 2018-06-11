@@ -111,7 +111,7 @@ function initTree() {
 			node.id = list[i].organizationId;
 			node.pid = list[i].parentId;
 			var nodeName = list[i].name;
-			if(nodeName.length > 6) nodeName = nodeName.substring(0,5)+'...';
+			if(nodeName.length > 16) nodeName = nodeName.substring(0,15)+'...';
 			node.text =  nodeName;
 
 			node.level = list[i].level;
@@ -124,7 +124,7 @@ function initTree() {
 				subNode.id = subList[j].organizationId;
 				subNode.pid = subList[j].parentId;
 				var subName = subList[j].name;
-				if(subName.length>5) subName = subName.substring(0,4)+'...';
+				if(subName.length>16) subName = subName.substring(0,15)+'...';
 				subNode.text = subName;
 
 				subNode.level = subList[j].level;

@@ -147,7 +147,7 @@ public class ExamController extends BaseController {
             map.put("organizationIdstr", organizationIdstr);
             return new SysResult(SysResultConstant.SUCCESS, map);
         }
-        if (examRule.equals("rule")) {//按照考试题库分类组卷考试
+        if (StringUtils.equals(examRule,"rule")) {//按照考试题库分类组卷考试
             List<QueryTypeRate> list = gson.fromJson(questionTypeRateList.toString(), new TypeToken<List<QueryTypeRate>>() {}.getType());
             paper.setCreateTime(time);
             paper.setQueryTypeRateList(list);
