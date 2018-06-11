@@ -64,6 +64,10 @@ v20171030
 
 ---test push commit
 
+---20180610
+
+    UPDATE  `edu_question_type` SET NAME ='判断题' WHERE NAME='是非题' ;
+
 
 
 
