@@ -367,8 +367,8 @@
 
     function composeObject(){
         var object = $('#createForm').serializeObject();
-        object.startTime = new Date(object.startTime).Format('yyyy-MM-dd HH:mm:ss');
-        object.endTime = new Date(object.endTime).Format('yyyy-MM-dd HH:mm:ss');
+        object.startTime = dateToGMT(object.startTime).Format('yyyy-MM-dd HH:mm:ss');
+        object.endTime = dateToGMT(object.endTime).Format('yyyy-MM-dd HH:mm:ss');
         object.organizationIds = '${organizationIdstr}';
         var arrays = new Array();
         questionRuleMap.each(function(key, value, index){
