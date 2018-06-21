@@ -21,8 +21,8 @@
 		<a class="waves-effect waves-button blue" href="javascript:void(0);" onclick="examStudentAction()"><i class="zmdi zmdi-accounts"></i> 学生成绩列表</a>
 
 		<dev style="float: right;width: 30%">
-			<label for="startTime" style="float: contour">起始时间：</label>
-			<input id="startTime" name="startTime" style="float: right;width: 200px" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+			<label for="startTime" style="float: contour">开考时间：</label>
+			<input id="startTime" name="startTime"  style="float: right;width: 200px" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00'})"/>
 		</dev>
 	</div>
 
