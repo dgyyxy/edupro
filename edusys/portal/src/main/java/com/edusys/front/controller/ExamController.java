@@ -246,6 +246,20 @@ public class ExamController extends BaseController{
     }
 
     /**
+     * 提交试卷后获取该试卷的得分情况
+     * @param stuExamId
+     * @return
+     */
+    @RequestMapping(value = "/query/score/{stuExamId}", method = RequestMethod.GET)
+    public @ResponseBody Message queryScore(@PathVariable("stuExamId") int stuExamId){
+        Message message = new Message();
+        String key =  stuExamId+"_key";
+        String val = RedisUtil.get(key);
+        message.setResult(val);
+        return message;
+    }
+
+    /**
      * 每答一道都进行提交
      * @param answerSheet
      * @return

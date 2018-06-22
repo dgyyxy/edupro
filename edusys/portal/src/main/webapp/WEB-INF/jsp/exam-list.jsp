@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +68,12 @@
                         <div class="course-card">
                             <div class="course-card-top cart-color ${colorstr}">
                                 <i class="icon icon-trophy"></i>
-                                <span>${item.examName}</span>
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${fn:length(item.examName) > 15}">${fn:substring(item.examName, 0, 15)}...</c:when>
+                                        <c:otherwise>${item.examName}</c:otherwise>
+                                    </c:choose>
+                                </span>
                                 <c:if test="${item.status == 2 || item.status == 3}">
                                     <div class="course-card-learning">
                                             已交卷
@@ -115,7 +121,7 @@
 <div id="exam-notice-panel" class="rl-modal-exam in modal" aria-hidden="true">
     <div class="rl-modal-header-exam">
         <h1>
-            <span class="active-title" style="width: 250px;float: left; text-align: left; padding-left: 8px;" id="showTitle"></span>
+            <span class="active-title" style="width: 100%;float: left; text-align: left; padding-left: 8px;" id="showTitle"></span>
         </h1>
         <button type="button" class="rl-close closeBtn" data-dismiss="modal" hidefocus="true" aria-hidden="true"></button>
     </div>

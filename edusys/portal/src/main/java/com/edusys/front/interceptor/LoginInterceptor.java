@@ -33,14 +33,20 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             EduStudent student = (EduStudent) obj;
             String userkey = "student-"+student.getStuId();
             String sessionId = MemoryData.getSessionIDMap().get(userkey);
-            if(sessionId.equals(request.getSession().getId())){
+            if(sessionId!=null){
+                if(sessionId.equals(request.getSession().getId())){
+                    request.setAttribute("user", student);
+                    return true;
+                }else{
+                    session.removeAttribute("user");
+                    response.sendRedirect("/index");
+                    return false;
+                }
+            }else{
                 request.setAttribute("user", student);
                 return true;
-            }else{
-                session.removeAttribute("user");
-                response.sendRedirect("/index");
-                return false;
             }
+
 
         }else{
             request.setAttribute("user", "");

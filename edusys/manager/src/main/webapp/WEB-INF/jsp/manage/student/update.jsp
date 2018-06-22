@@ -91,11 +91,11 @@
                     alertMsg("请输入学员姓名");
                     return false;
                 }
-                if ($('#stuNo').val() == '') {
-                    $('#stuNo').focus();
-                    alertMsg("请输入学号");
-                    return false;
-                }
+                // if ($('#stuNo').val() == '') {
+                //     $('#stuNo').focus();
+                //     alertMsg("请输入学号");
+                //     return false;
+                // }
                 if ($('#cardNo').val() == '') {
                     $('#cardNo').focus();
                     alertMsg("请输入身份证号");

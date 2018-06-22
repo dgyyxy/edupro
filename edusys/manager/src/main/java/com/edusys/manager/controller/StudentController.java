@@ -158,7 +158,6 @@ public class StudentController extends BaseController {
     public Object update(@PathVariable("id") int id, EduStudent student) {
         ComplexResult result = FluentValidator.checkAll()
                 .on(student.getStuName(), new LengthValidator(1, 20, "姓名"))
-                .on(student.getStuNo(), new NotNullValidator("学号"))
                 .on(student.getOrganizationName2(), new NotNullValidator("所属机构"))
                 .on(student.getCardNo(), new NotNullValidator("身份证号"))
                 .doValidate()
@@ -167,20 +166,23 @@ public class StudentController extends BaseController {
             return new SysResult(SysResultConstant.FAILED, result.getErrors());
         }
         EduStudent eduStudent = studentService.selectByPrimaryKey(id);
-        if (!eduStudent.getStuNo().equals(student.getStuNo())
-                || !eduStudent.getCardNo().equals(student.getCardNo())) {
-            EduStudentExample studentExample = new EduStudentExample();
+        if(eduStudent!=null){
+            if (!eduStudent.getCardNo().equals(student.getCardNo())) {
+                EduStudentExample studentExample = new EduStudentExample();
 
-            if (!eduStudent.getCardNo().equals(student.getCardNo()))
-                studentExample.or(studentExample.createCriteria().andCardNoEqualTo(student.getCardNo()));
-            if (!eduStudent.getStuNo().equals(student.getStuNo()))
-                studentExample.or(studentExample.createCriteria().andStuNoEqualTo(student.getStuNo()));
-            List<EduStudent> students = studentService.selectByExample(studentExample);
-            if (students.size() > 0) {
-                return new SysResult(SysResultConstant.FAILED, "该学员学号或身份证号重复使用！");
+                if (!eduStudent.getCardNo().equals(student.getCardNo()))
+                    studentExample.or(studentExample.createCriteria().andCardNoEqualTo(student.getCardNo()));
+//                if (!eduStudent.getStuNo().equals(student.getStuNo()))
+//                    studentExample.or(studentExample.createCriteria().andStuNoEqualTo(student.getStuNo()));
+                List<EduStudent> students = studentService.selectByExample(studentExample);
+                if (students.size() > 0) {
+                    return new SysResult(SysResultConstant.FAILED, "该学员学号或身份证号重复使用！");
+                }
             }
         }
+
         student.setStuId(id);
+        student.setPassword(eduStudent.getPassword());
         int count = studentService.updateByPrimaryKey(student);
         return new SysResult(SysResultConstant.SUCCESS, count);
     }

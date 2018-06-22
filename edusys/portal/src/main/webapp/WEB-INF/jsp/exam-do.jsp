@@ -147,7 +147,6 @@
                 alert('该考试将会被中止！');
                 return;
             }
-            console.log('window-------------------'+document.webkitVisibilityState);
         });
     }
 

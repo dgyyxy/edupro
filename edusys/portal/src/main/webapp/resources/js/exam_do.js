@@ -283,33 +283,40 @@ var finishExam = function(tag){
     request.done(function(message, tst, jqXHR) {
 		//延迟2秒提醒提交完毕
 		setTimeout(function(){
-			layer.closeAll('loading');
 			if (message.result == "success") {
-				//停止倒计时
-				window.clearInterval(timer);
-				if(islook == '0'){
-					if(tag == 0){
-						layer.alert('试卷已经提交完毕.请点击按钮退出页面.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-							location.href = ctx+'/';
-						});
-					}else{
-						layer.alert('您已经被强制提交试卷.请点击按钮退出页面.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-							location.href = ctx+'/';
-						});
-					}
+				//查询成绩
+				$.get(ctx+"/exam/query/score/"+examHistoryId,function(data, status){
+					if(data.result != null && data.result != 'null'){
+                        layer.closeAll('loading');
+                        //停止倒计时
+                        window.clearInterval(timer);
+                        var scoreArray = data.result.split('-');
+                        var alertStr = "<\/br>您的得分为"+scoreArray[0]+"分，考试"+scoreArray[1]+"。";
+                        if(islook == '0'){
+                            if(tag == 0){
+                                layer.alert('试卷已经提交完毕.请点击按钮退出页面.'+alertStr,{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+                                    location.href = ctx+'/';
+                                });
+                            }else{
+                                layer.alert('您已经被强制提交试卷.请点击按钮退出页面.'+alertStr,{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+                                    location.href = ctx+'/';
+                                });
+                            }
 
-				}else if(islook == '1'){
-					if(tag == 0){
-						layer.alert('试卷已经提交完毕.请点击按钮查看试卷（限时5分钟）.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-							location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
-						});
-					}else{
-						layer.alert('您已经被强制提交试卷.请点击按钮查看试卷（限时5分钟）.',{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
-							location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
-						});
-					}
+                        }else if(islook == '1'){
+                            if(tag == 0){
+                                layer.alert('试卷已经提交完毕.请点击按钮查看试卷（限时5分钟）.'+alertStr,{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+                                    location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
+                                });
+                            }else{
+                                layer.alert('您已经被强制提交试卷.请点击按钮查看试卷（限时5分钟）.'+alertStr,{skin: 'layui-layer-molv',shade: [0.9,'#696969'],closeBtn: 0,btn: ['查看试卷'],icon:1,shadeClose: false,title:'提示', offset: ['30%', '40%']}, function(){
+                                    location.href = ctx+'/exam/exampaper/'+seId+'/'+examId;
+                                });
+                            }
 
-				}
+                        }
+					}
+				});
 
 			} else {
 				layer.msg(message.result);
@@ -561,7 +568,7 @@ var positionOnTop = function(selecter) {
 }
 
 
-//screen height	
+//screen height
 var getTotalHeight = function() {
 	if ($.support) {
 		return document.compatMode == "CSS1Compat" ? document.documentElement.clientHeight : document.body.clientHeight;

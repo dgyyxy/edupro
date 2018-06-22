@@ -112,7 +112,7 @@
     </sql>
     <sql id="Base_Column_List_Examing">
         id, exam_name, create_time, start_time, end_time, creator, approved, paper_id, exam_password, authority,
-        disorganize, total_point, amount, pass_point, stu_num, duration, islook, exam_type,exam_pwd, (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved = 1) examingCount,
+        disorganize, total_point, amount, pass_point, (select count(1) from edu_student_exam ese where ese.exam_id = ee.id) stu_num, duration, islook, exam_type,exam_pwd, (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved = 1) examingCount,
         (select count(1) from edu_student_exam ese where ese.exam_id = ee.id and ese.approved > 1) submitCount, teacher, watch
     </sql>
     <select id="selectByExample" parameterType="com.edu.common.dao.model.EduExamExample" resultMap="BaseResultMap">
@@ -193,15 +193,15 @@
         </if>
     </delete>
     <insert id="insert" parameterType="com.edu.common.dao.model.EduExam">
-    insert into edu_exam (id, exam_name, create_time, 
-      start_time, end_time, creator, 
-      approved, paper_id, exam_password, 
-      disorganize, total_point, amount, 
+    insert into edu_exam (id, exam_name, create_time,
+      start_time, end_time, creator,
+      approved, paper_id, exam_password,
+      disorganize, total_point, amount,
       pass_point, stu_num, duration, islook, exam_type, exam_pwd, paper_rule, authority)
-    values (#{id,jdbcType=INTEGER}, #{examName,jdbcType=VARCHAR}, #{createTime,jdbcType=BIGINT}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{approved,jdbcType=INTEGER}, #{paperId,jdbcType=INTEGER}, #{examPassword,jdbcType=INTEGER}, 
-      #{disorganize,jdbcType=INTEGER}, #{totalPoint,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{examName,jdbcType=VARCHAR}, #{createTime,jdbcType=BIGINT},
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
+      #{approved,jdbcType=INTEGER}, #{paperId,jdbcType=INTEGER}, #{examPassword,jdbcType=INTEGER},
+      #{disorganize,jdbcType=INTEGER}, #{totalPoint,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER},
       #{passPoint,jdbcType=INTEGER}, #{stuNum,jdbcType=INTEGER}, #{duration,jdbcType=INTEGER},
       #{islook,jdbcType=INTEGER}, #{examType,jdbcType=INTEGER}, #{examPwd,jdbcType=VARCHAR}, #{paperRule,jdbcType=VARCHAR}, #{authority, jdbcType=VARCHAR})
   </insert>
