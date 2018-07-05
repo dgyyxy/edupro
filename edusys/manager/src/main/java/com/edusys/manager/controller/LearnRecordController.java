@@ -58,6 +58,8 @@ public class LearnRecordController extends BaseController{
         if (StringUtils.isNotBlank(search)) {
             search = "'%" + search + "%'";
             studentExample.or(studentExample.createCriteria().otherOperate("es.stu_name like "+search));
+            studentExample.or(studentExample.createCriteria().otherOperate("es.card_no like "+search));
+            studentExample.or(studentExample.createCriteria().otherOperate("es.organization_name2 like "+search));
         }
         List<EduStudent> rows = studentService.selectLearnRecordList(studentExample);
 

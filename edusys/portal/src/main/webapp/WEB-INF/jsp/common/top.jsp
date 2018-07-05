@@ -29,7 +29,7 @@
 <nav class="navbar navbar-fixed-top wowmenu" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand logo-nav" href="${ctx}/index"><img src="${ctx}/resources/img/logo.bak.png" alt="logo"></a>
+            <a class="navbar-brand logo-nav" href="${ctx}/index"><img src="${ctx}/resources/img/logo.png" alt="logo"></a>
         </div>
         <ul id="nav" class="nav navbar-nav pull-right">
             <li <c:if test="${menu=='index'}">class="active"</c:if>><a href="${ctx}/index">首页</a></li>

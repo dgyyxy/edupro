@@ -74,7 +74,9 @@ public class ExamHistoryController extends BaseController {
             criteria.andExamNameLike(search);
         }
         if(startTime != null){
-            criteria.andStartTimeGreaterThanOrEqualTo(startTime);
+            String datestr = DateFormatUtils.format(startTime, "yyyy-MM-dd");
+            criteria.equalStartTimeByDate(datestr);
+//            criteria.andStartTimeGreaterThanOrEqualTo(startTime);
         }
         List<EduExam> rows = examService.selectByExample(examExample);
         //考试对应的及格率

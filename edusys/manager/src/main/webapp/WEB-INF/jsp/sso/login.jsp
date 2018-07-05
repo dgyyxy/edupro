@@ -16,8 +16,7 @@
 </head>
 <body>
 <div style="position: relative;top: 20%;left: 40%;">
-    <%--<img src="${basePath}/resources/images/login.png" width="282" height="114"/>--%>
-    <img src="${basePath}/resources/images/login.bak.png" width="275" height="62"/>
+    <img src="${basePath}/resources/images/login.png" width="282" height="114"/>
 </div>
 <div id="login-window">
     <div class="input-group m-b-20">

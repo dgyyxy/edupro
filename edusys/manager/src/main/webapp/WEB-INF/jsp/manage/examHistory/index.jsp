@@ -20,9 +20,9 @@
 	<div id="toolbar" style="width: 1000px;">
 		<a class="waves-effect waves-button blue" href="javascript:void(0);" onclick="examStudentAction()"><i class="zmdi zmdi-accounts"></i> 学生成绩列表</a>
 
-		<dev style="float: right;width: 30%">
-			<label for="startTime" style="float: contour">开考时间：</label>
-			<input id="startTime" name="startTime"  style="float: right;width: 200px" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00'})"/>
+		<dev style="float: right;width: 30%;">
+			<label for="startTime" style="float: contour">开考日期：</label>
+			<input id="startTime" name="startTime"  style="float: right;width: 200px" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
 		</dev>
 	</div>
 
@@ -85,6 +85,8 @@
 
 	function queryParams(params){
         var startTime = $("#startTime").val();
+        if(startTime!='')
+        	startTime = new Date(startTime).Format('yyyy-MM-dd HH:mm:ss')
         var temp = {
             offset: params.offset,
             limit:params.limit,

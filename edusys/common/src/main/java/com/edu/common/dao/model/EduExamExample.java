@@ -323,6 +323,11 @@ public class EduExamExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria equalStartTimeByDate(String value){
+            addCriterion("DATE_FORMAT(start_time,'%Y-%m-%d') = '"+value+"'");
+            return (Criteria) this;
+        }
+
         public Criteria andStartTimeIsNotNull() {
             addCriterion("start_time is not null");
             return (Criteria) this;

@@ -108,6 +108,7 @@
     select esjc.*,ej.time duration,ej.name jobName
     from edu_jobs ej left join edu_stu_job_course esjc on ej.id = esjc.job_id
     where esjc.stu_id = #{stuId,jdbcType=INTEGER}
+    order by esjc.job_id desc
   </select>
 
   <select id="selectJobsByStuIdPage" resultMap="BaseResultMap">
@@ -198,7 +199,7 @@
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from edu_stu_job_course
     where id = #{id,jdbcType=INTEGER}
@@ -214,12 +215,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.edu.common.dao.model.EduStuJobCourse">
-    insert into edu_stu_job_course (id, stu_id, job_id, 
-      course_id, status, time, 
+    insert into edu_stu_job_course (id, stu_id, job_id,
+      course_id, status, time,
       favorite, course_num, total_course
       )
-    values (#{id,jdbcType=INTEGER}, #{stuId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}, 
-      #{courseId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{time,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{stuId,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER},
+      #{courseId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{time,jdbcType=INTEGER},
       #{favorite,jdbcType=INTEGER}, #{courseNum,jdbcType=INTEGER}, #{totalCourse,jdbcType=INTEGER}
       )
   </insert>
