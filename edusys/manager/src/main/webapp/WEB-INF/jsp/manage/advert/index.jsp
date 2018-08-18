@@ -6,6 +6,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro"%>
 <c:set var="basePath" value="${pageContext.request.contextPath}"/>
+<c:set var="ipstr" value="${pageContext.request.getServerName()}"/>
 <!DOCTYPE HTML>
 <html lang="zh-cn">
 <head>
@@ -52,11 +53,16 @@ $(function() {
 		columns: [
 			{field: 'ck', checkbox: true},
 			{field: 'id', title: '编号', sortable: true, align: 'center'},
-			{field: 'imgurl', title: '图片地址'},
+			{field: 'imgurl', title: '图片地址', formatter: 'imgFormatter'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]
 	});
 });
+//查看广告图片
+function imgFormatter(value,row,index){
+    return ['<a target="_blank" href="http://${ipstr}/upload'+value+'">查看广告图片</a>'].join('');
+}
+
 // 格式化操作按钮
 function actionFormatter(value, row, index) {
     return [

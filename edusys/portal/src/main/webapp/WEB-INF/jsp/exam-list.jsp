@@ -70,7 +70,7 @@
                                 <i class="icon icon-trophy"></i>
                                 <span>
                                     <c:choose>
-                                        <c:when test="${fn:length(item.examName) > 15}">${fn:substring(item.examName, 0, 15)}...</c:when>
+                                        <c:when test="${fn:length(item.examName) > 12}">${fn:substring(item.examName, 0, 12)}...</c:when>
                                         <c:otherwise>${item.examName}</c:otherwise>
                                     </c:choose>
                                 </span>

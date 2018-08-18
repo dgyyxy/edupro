@@ -79,7 +79,7 @@
                     <ul>
                         <li>点击“关闭面板”可将试卷左侧的面板关闭；</li>
                         <li>点击题号，可以快速跳到该题；</li>
-                        <li>答题过程中，请不要刷新页面；</li>
+                        <li>答题时严禁刷新和离开页面，否则中止考试；</li>
                         <li>答题完成，请点击“提交试卷”完成考试；</li>
                         <li>如您未在限时内完成，系统将强制交卷。</li>
                     </ul>
@@ -144,7 +144,12 @@
         document.addEventListener('webkitvisibilitychange', function(){
             var show = document.webkitVisibilityState;
             if(show === 'hidden'){
-                alert('该考试将会被中止！');
+                layer.open({
+                    skin: 'layui-layer-molv',
+                    title: '提醒',
+                    content: "严禁在考试时离开本页面，否则系统将自动交卷并中止您的考试！",
+                    offset: ['30%', '40%']
+                });
                 return;
             }
         });
