@@ -2,22 +2,25 @@ package com.edusys.manager.controller;
 
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
+import com.edu.common.dao.pojo.ExportStudyVo;
 import com.edu.common.util.NumberUtils;
 import com.edusys.manager.service.EduStuJobCourseService;
 import com.edusys.manager.service.EduStudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by Gary on 2017/8/13.
@@ -158,6 +161,30 @@ public class LearnRecordController extends BaseController{
         result.put("rows", rows);
         result.put("total", total);
         return result;
+    }
+
+    @ApiOperation(value = "导出学习记录页面")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    public String export(){
+        return "/manage/record/export.jsp";
+    }
+
+    @ApiOperation(value = "导出学习记录")
+    @RequestMapping(value = "/exportdo", method = RequestMethod.GET)
+    public String exportLearnRecord(HttpServletResponse response, int jobId, int organId, HttpServletRequest request) {
+        response.setContentType("application/binary;charset=ISO8859_1");
+        try {
+            String fileNameStr = "学习记录";
+            ServletOutputStream outputStream = response.getOutputStream();
+            String fileName = new String(fileNameStr.getBytes(), "ISO8859_1") + "-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
+            String[] titles = new String[]{"序号", "姓名", "证件号", "所属机构", "学习任务", "学习时长", "学习进度",  "已学课件"};
+            List<ExportStudyVo> list = jobCourseService.exportLearnRecord(organId, jobId);
+            jobCourseService.exportOperate(titles, outputStream, list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

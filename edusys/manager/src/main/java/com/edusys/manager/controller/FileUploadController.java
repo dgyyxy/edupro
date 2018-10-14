@@ -2,6 +2,7 @@ package com.edusys.manager.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.edu.common.util.PropertiesFileUtil;
+import com.edu.common.util.ZipUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,12 +43,24 @@ public class FileUploadController {
         String fileAlias = multipartFile.getName();
         //获得文件原始名称
         String name = multipartFile.getOriginalFilename();
+        String suffix = name.substring(name.indexOf("."), name.length());
         //新的文件名
-        String newName = new Date().getTime() + name.substring(name.indexOf("."), name.length());
+        String namestr = new Date().getTime()+"";
+        String newName = namestr  + suffix;
         PropertiesFileUtil propertiesFileUtil = PropertiesFileUtil.getInstance("config");
         String realPath = propertiesFileUtil.get("uploadDir");
+        if(suffix.equals(".zip")) realPath = propertiesFileUtil.get("zipDir");
         String filePath = realPath + "/" + newName;
         saveFile(filePath, multipartFile.getBytes());
+        //当课件包为zip,进行解压操作
+        if(suffix.equals(".zip")){
+            try {
+                ZipUtil.decompress(filePath, realPath+"/"+namestr);
+                newName = namestr+"/index.html";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Map<String, String> resultMap = new HashMap<String, String>(5);
         resultMap.put("result", "success");
         resultMap.put("newName", newName);

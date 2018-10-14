@@ -131,7 +131,7 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 .content_tab>ul>.cur>a:after{left:0;bottom:1px;width:100%;opacity:1;transition:all linear .2s}
 
 .content_main{height:calc(100% - 48px);-webkit-overflow-scrolling:touch;}
-.content_main>.cur{display:block;}
+.content_main>.cur{display:block;line-height: 200%}
 .iframe{height:100%;display:none;}
 
 

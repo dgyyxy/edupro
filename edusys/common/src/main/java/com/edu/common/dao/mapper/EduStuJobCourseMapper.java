@@ -2,6 +2,7 @@ package com.edu.common.dao.mapper;
 
 import com.edu.common.dao.model.EduStuJobCourse;
 import com.edu.common.dao.model.EduStuJobCourseExample;
+import com.edu.common.dao.pojo.ExportStudyVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -44,4 +45,6 @@ public interface EduStuJobCourseMapper {
     long jobsCountByStuId(@Param("stuId") Integer stuId, @Param("search") String search);
 
     long courseCountByStuId(@Param("stuId") Integer stuId, @Param("jobId") Integer jobId, @Param("search") String search);
+
+    List<ExportStudyVo> exportStudyCourseListBy(@Param("organId") Integer organId, @Param("jobId") Integer jobId);
 }

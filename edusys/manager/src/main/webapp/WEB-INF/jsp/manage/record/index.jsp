@@ -17,7 +17,8 @@
 </head>
 <body>
 <div id="main">
-	<div id="toolbar">
+	<div id="toolbarMain">
+		<a class="waves-effect waves-button green" href="javascript:;" onclick="exportAction()"><i class="zmdi zmdi-download"></i> 导出学习记录</a>
 	</div>
 	<table id="table"></table>
 </div>
@@ -47,6 +48,7 @@ $(function() {
 		escape: true,
 		idField: 'id',
 		maintainSelected: true,
+        toolbar: '#toolbarMain',
 		columns: [
 			{field: 'stuId', title: '编号', sortable: true, align: 'center'},
             {field: 'stuName', title: '姓名'},
@@ -102,6 +104,21 @@ function courseListAction(stuId, jobId) {
 		title: '已学课件列表',
 		content: 'url:${basePath}/manage/record/course-list/'+stuId+'/'+jobId,
 		onContentReady: function () {
+			initMaterialInput();
+		}
+	});
+}
+
+//导出成绩
+var exportDialog;
+function exportAction() {
+	exportDialog = $.dialog({
+		type: 'green',
+		animationSpeed: 300,
+		columnClass: 'col-md-6 col-md-offset-3',
+		title: '导出学习记录',
+		content: 'url:${basePath}/manage/record/export',
+		onContentReady: function(){
 			initMaterialInput();
 		}
 	});

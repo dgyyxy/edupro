@@ -42,13 +42,16 @@
             <input type="hidden" id="mp4url"/>
             <%--<span style="color:red;float:left;">上传文件小于100M!</span>--%>
         </div>
-
-        <div class="form-group" id="soft" hidden>
-            <label for="softurl">输入课件包地址</label>
-            <input id="softurl" type="text" class="form-control">
+        <div class="form-group" id="courseZip" hidden>
+            <input id="zipfile" name="file" type="file"/>
+            <%--<span style="color:red;float:left;">上传文件小于100M!</span>--%>
+            <%--<input id="softurl" type="hidden" class="form-control">--%>
             <input id="uriStr" name="uriStr" type="hidden" class="form-control">
         </div>
-
+        <div class="form-group" id="softDiv" hidden>
+            <label for="softurl">请输入课件包地址</label>
+            <input id="softurl"type="text" class="form-control input-mask">
+        </div>
         <div class="form-group">
             <label for="time">播放时长(分钟)</label>
             <input id="time" name="time" type="text" class="form-control input-mask" data-mask="00:00:00" maxlength="8" autocomplete="off">
@@ -83,17 +86,22 @@
         });
 
         fileUpload('imgfile', '选择上传课件图片', '50MB', "请选择jpg|png|gif图片文件", '*.jpg;*.png;*.gif', 'picture');
-        fileUpload('coursefile', '选择上传MP4或PDF文件', '100MB', '请选择mp4视频文件或PDF文件', '*.mp4;*.pdf', 'mp4url');
+        fileUpload('coursefile', '选择上传MP4或PDF文件', '500MB', '请选择mp4视频文件或PDF文件', '*.mp4;*.pdf', 'mp4url');
+        fileUpload('zipfile', '选择上传zip课件压缩包', '500MB', '请选择上传zip课件压缩包', '*.zip', 'softurl');
 
         // 选择分类
         $('input:radio[name="type"]').change(function() {
             var type = $(this).val();
             if(type == 1){
                 $('#mp4').show();
+                $('#courseZip').hide();
                 $('#soft').hide();
+                $('#softDiv').hide();
             }else if(type == 2){
                 $('#mp4').hide();
+                $('#courseZip').show();
                 $('#soft').show();
+                $('#softDiv').show();
             }
         });
 
@@ -150,6 +158,25 @@
                     $('#categoryId').val($('#subId').val());
                     $('#category').val($('#subId option:selected').text());
                 }
+                var typeval = $('input:radio[name="type"]:checked').val();
+
+                var urlstrVal = '';
+
+                if(typeval == 1) {
+                    if ($('#mp4url').val() == '') {
+                        alertMsg('上传Mp4课件文件！');
+                        return false;
+                    }
+                    urlstrVal = $('#mp4url').val();
+                }else if(typeval == 2) {
+
+                    if ($('#softurl').val() == '') {
+                        alertMsg('请上传课件包或者输入课件包地址！');
+                        return false;
+                    }
+                    urlstrVal = $('#softurl').val();
+                }
+                $('#uriStr').val(urlstrVal);
                 var timeval = $('#time').val();
                 if(timeval == '' || isNaN(timeval)){
                     alertMsg("输入的课件时长,只能为数字！");
@@ -165,25 +192,7 @@
                     return false;
                 }
 
-                var typeval = $('input:radio[name="type"]:checked').val();
 
-                var urlstrVal = '';
-
-                if(typeval == 1) {
-                    if ($('#mp4url').val() == '') {
-                        alertMsg('上传Mp4课件文件！');
-                        return false;
-                    }
-                    urlstrVal = $('#mp4url').val();
-                }else if(typeval == 2) {
-
-                    if ($('#softurl').val() == '') {
-                        alertMsg('请选择课件包文件！');
-                        return false;
-                    }
-                    urlstrVal = $('#softurl').val();
-                }
-                $('#uriStr').val(urlstrVal);
                 this.data = new FormData($('#createForm')[0]);
                 console.log(this.data);
                 loading = $.dialog({

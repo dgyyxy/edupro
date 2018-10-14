@@ -3,7 +3,9 @@ package com.edusys.manager.service;
 import com.edu.common.base.BaseService;
 import com.edu.common.dao.model.EduStuJobCourse;
 import com.edu.common.dao.model.EduStuJobCourseExample;
+import com.edu.common.dao.pojo.ExportStudyVo;
 
+import javax.servlet.ServletOutputStream;
 import java.util.List;
 
 /**
@@ -23,4 +25,9 @@ public interface EduStuJobCourseService extends BaseService<EduStuJobCourse, Edu
 
     //根据学员ID和任务ID获取课件数
     public long courseCountByStuId(Integer stuId, Integer jobId, String search);
+
+    //导出学习记录
+    public List<ExportStudyVo> exportLearnRecord(Integer organId, Integer jobId);
+
+    public void exportOperate(String[] titles, ServletOutputStream outputStream, List<ExportStudyVo> list);
 }

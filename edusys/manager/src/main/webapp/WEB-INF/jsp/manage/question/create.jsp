@@ -26,19 +26,19 @@
             <div class="form-group row" id="answerList">
                 <div class="col-md-6 answer">
                     <label for="answerA">A</label>
-                    <input id="answerA" type="text" class="form-control" name="answerA" maxlength="20">
+                    <input id="answerA" type="text" class="form-control" name="answerA">
                 </div>
                 <div class="col-md-6 answer">
                     <label for="answerB">B</label>
-                    <input id="answerB" type="text" class="form-control" name="answerB" maxlength="20">
+                    <input id="answerB" type="text" class="form-control" name="answerB">
                 </div>
                 <div class="col-md-6 answer">
                     <label for="answerC">C</label>
-                    <input id="answerC" type="text" class="form-control" name="answerC" maxlength="20">
+                    <input id="answerC" type="text" class="form-control" name="answerC">
                 </div>
                 <div class="col-md-6 answer">
                     <label for="answerD">D</label>
-                    <input id="answerD" type="text" class="form-control" name="answerD" maxlength="20">
+                    <input id="answerD" type="text" class="form-control" name="answerD">
                 </div>
             </div>
         </fieldset>
@@ -397,7 +397,7 @@
         var optval = String.fromCharCode(65 + optlen);
         var htmlstr = '<div class="col-md-6 answer">'
                 +'<label for="answer'+optval+'">'+optval+'</label>'
-                +'<input id="answer'+optval+'" type="text" class="form-control" name="answer" maxlength="20">'
+                +'<input id="answer'+optval+'" type="text" class="form-control" name="answer">'
                 +'</div>'
         $('#answerList').append(htmlstr);
         if(typeId == 1) initAnswer(optlen+1);

@@ -13,12 +13,12 @@
         </div>
         <div class="form-group">
             <label for="time1">开始时间</label>
-            <input id="time1" name="time1" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'time2\')||\'2020-10-01\'}'})"/>
+            <input id="time1" autocomplete="off" name="time1" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'time2\')||\'2020-10-01\'}'})"/>
             <input id="startTime" name="startTime" type="hidden"/>
         </div>
         <div class="form-group">
             <label for="time2">结束时间</label>
-            <input id="time2" name="time2" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'time1\')}',maxDate:'2020-10-01'})"/>
+            <input id="time2" autocomplete="off" name="time2" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'time1\')}',maxDate:'2020-10-01'})"/>
             <input id="endTime" name="endTime" type="hidden"/>
         </div>
 

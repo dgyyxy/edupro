@@ -20,6 +20,15 @@
     <result column="timeval" jdbcType="INTEGER" property="timeval" />
     <result column="studycount" jdbcType="INTEGER" property="studycount" />
   </resultMap>
+  <resultMap id="ExportStudyVo" type="com.edu.common.dao.pojo.ExportStudyVo">
+    <result column="stu_name" jdbcType="VARCHAR" property="stuName" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardno" />
+    <result column="organization_name2" jdbcType="VARCHAR" property="organStr" />
+    <result column="name" jdbcType="VARCHAR" property="jobName" />
+    <result column="time" jdbcType="INTEGER" property="stuTime" />
+    <result column="course_num" jdbcType="INTEGER" property="courseNum" />
+    <result column="total_course" jdbcType="INTEGER" property="totalCourse" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -102,6 +111,13 @@
         limit ${limit}
       </if>
     </if>
+  </select>
+
+  <select id="exportStudyCourseListBy" resultMap="ExportStudyVo">
+    SELECT es.stu_name,es.card_no,organization_name2,ej.name,esjc.time,esjc.course_num,esjc.total_course
+    FROM edu_student es,edu_jobs ej,edu_stu_job_course esjc
+    WHERE es.stu_id = esjc.stu_id AND ej.id = esjc.job_id AND esjc.total_course>0
+    and esjc.job_id = #{jobId,jdbcType=INTEGER} and es.organization_id2 = #{organId,jdbcType=INTEGER}
   </select>
 
   <select id="selectJobsByStuId" resultMap="BaseResultMap">

@@ -34,7 +34,8 @@ public class ExcelUtil {
 		if("xls".equals(filetype.toLowerCase())){
 			try {
 				HSSFWorkbook wookbook = new HSSFWorkbook(fi);
-				HSSFSheet sheet = wookbook.getSheet("Sheet1");
+				HSSFSheet sheet = wookbook.getSheetAt(0);
+//				HSSFSheet sheet = wookbook.getSheet("Sheet1");
 				int rows = sheet.getPhysicalNumberOfRows();
 
 				//获取标题行
@@ -90,7 +91,7 @@ public class ExcelUtil {
 			//xlsx文件
 			try {
 				XSSFWorkbook wookbook = new XSSFWorkbook(fi);
-				XSSFSheet sheet = wookbook.getSheet("Sheet1");
+				XSSFSheet sheet = wookbook.getSheetAt(0);
 				int rows = sheet.getPhysicalNumberOfRows();
 				//获取标题行
 				XSSFRow title = sheet.getRow(0);

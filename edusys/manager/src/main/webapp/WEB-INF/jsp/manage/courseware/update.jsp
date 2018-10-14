@@ -43,6 +43,10 @@
             <%--<span style="color:red;float:left;">上传文件小于100M!</span>--%>
         </div>
 
+        <div class="form-group" id="courseZip" hidden>
+            <input id="zipfile" name="file" type="file"/>
+        </div>
+
         <div class="form-group" id="soft" hidden>
             <label for="softurl">输入课件包地址</label>
             <input id="softurl" type="text" class="form-control">
@@ -72,12 +76,14 @@
         $('#type_0').attr('checked','checked');
         $('#mp4').show();
         $('#soft').hide();
+        $('#courseZip').hide();
         $('#mp4url').val('${courseware.uriStr}');
     }else{
         $('#type_0').removeAttr('checked');
         $('#type_1').attr('checked', 'checked');
         $('#mp4').hide();
         $('#soft').show();
+        $('#courseZip').show();
         $('#softurl').val('${courseware.uriStr}');
     }
 
@@ -107,6 +113,7 @@
 
         fileUpload('imgfile', '选择上传课件图片', '50MB', "请选择jpg|png|gif图片文件", '*.jpg;*.png;*.gif', 'picture');
         fileUpload('coursefile', '选择上传MP4或PDF文件', '100MB', '请选择mp4视频文件或PDF文件', '*.mp4;*.pdf', 'mp4url');
+        fileUpload('zipfile', '选择上传zip课件压缩包', '100MB', '请选择上传zip课件压缩包', '*.zip', 'softurl');
 
         // 选择分类
         $('input:radio[name="type"]').change(function() {
@@ -114,10 +121,12 @@
             if(type == 1){
                 $('#mp4').show();
                 $('#soft').hide();
+                $('#courseZip').hide();
 
             }else if(type == 2){
                 $('#mp4').hide();
                 $('#soft').show();
+                $('#courseZip').show();
 
             }
         });
@@ -211,7 +220,6 @@
                 }
                 $('#uriStr').val(urlstrVal);
                 this.data = new FormData($('#updateForm')[0]);
-                console.log(this.data);
                 loading = $.dialog({
                     theme: 'white',
                     animation: 'rotateX',

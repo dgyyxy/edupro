@@ -19,13 +19,13 @@
         <div class="form-group">
             <fmt:formatDate var="startTime" pattern="yyyy-MM-dd HH:mm:ss" value="${exam.startTime}"/>
             <label for="time1">起始时间</label>
-            <input id="time1" name="startTime" value="${startTime}" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'time2\')||\'2020-10-01\'}'})"/>
+            <input id="time1" autocomplete="off" name="startTime" value="${startTime}" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'time2\')||\'2020-10-01\'}'})"/>
         </div>
 
         <div class="form-group">
             <fmt:formatDate var="endTime" pattern="yyyy-MM-dd HH:mm:ss" value="${exam.endTime}"/>
             <label for="time2">截止时间</label>
-            <input id="time2" name="endTime" value="${endTime}" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'time1\')}',maxDate:'2020-10-01'})"/>
+            <input id="time2" autocomplete="off" name="endTime" value="${endTime}" class="Wdate form-control" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'time1\')}',maxDate:'2020-10-01'})"/>
         </div>
         <div class="radio">
             <div class="radio radio-inline radio-success">

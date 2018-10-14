@@ -53,14 +53,14 @@ $(function() {
 		columns: [
 			{field: 'ck', checkbox: true},
 			{field: 'id', title: '编号', sortable: true, align: 'center'},
-			{field: 'imgurl', title: '图片地址', formatter: 'imgFormatter'},
+			{field: 'imgurl', title: '首页轮播图片', formatter: 'imgFormatter'},
 			{field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]
 	});
 });
 //查看广告图片
 function imgFormatter(value,row,index){
-    return ['<a target="_blank" href="http://${ipstr}/upload'+value+'">查看广告图片</a>'].join('');
+    return ['<a target="_blank" style="text-decoration:underline;" href="http://${ipstr}/upload'+value+'">查看图片</a>'].join('');
 }
 
 // 格式化操作按钮
