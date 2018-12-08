@@ -150,10 +150,13 @@ public class ExcelUtil {
 			return true;
 		for(int i=index; i < rowCount; i++){
 			HSSFCell cell = row.getCell(i);
-			if(cell != null &&
-					!"".equals(cell.getStringCellValue().trim())){
-				return false;
+			if(cell !=null ){
+				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+				if(!"".equals(cell.getStringCellValue().trim())){
+					return false;
+				}
 			}
+
 		}
 		return true;
 	}
@@ -163,9 +166,11 @@ public class ExcelUtil {
 			return true;
 		for(int i=index; i < rowCount; i++){
 			XSSFCell cell = row.getCell(i);
-			if(cell != null &&
-					!"".equals(cell.getStringCellValue().trim())){
-				return false;
+			if(cell != null){
+				cell.setCellType(XSSFCell.CELL_TYPE_STRING);
+				if(!"".equals(cell.getStringCellValue().trim())) {
+					return false;
+				}
 			}
 		}
 		return true;

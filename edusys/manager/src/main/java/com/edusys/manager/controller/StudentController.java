@@ -271,7 +271,7 @@ public class StudentController extends BaseController {
                 EduStudent student = new EduStudent();
                 String stuName = map.get("姓名(必填)");
                 student.setStuName(stuName);
-                String stuNo = map.get("学号(必填)");
+                String stuNo = map.get("学号");
                 student.setStuNo(stuNo);
                 String phone = map.get("手机");
                 student.setPhone(phone);
