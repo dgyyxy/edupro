@@ -40,6 +40,7 @@ import java.util.*;
  * Created by Gary on 2017/4/12.
  * 学员信息Controller
  */
+@SuppressWarnings("ALL")
 @Controller
 @Api(value = "学员信息管理", description = "学员信息管理")
 @RequestMapping("/manage/student")
@@ -264,6 +265,9 @@ public class StudentController extends BaseController {
         }
         String resultMsg = "";
         List<EduStudent> studentList = new ArrayList<>();
+
+        //获取所有学员证件号列表
+        List<String> cardnoList = studentService.selectCardNos();
         try {
             List<Map<String, String>> mapList = ExcelUtil.ExcelToList(file);
             for (int i = 0; i < mapList.size(); i++) {
@@ -277,6 +281,10 @@ public class StudentController extends BaseController {
                 student.setPhone(phone);
                 String cardNo = map.get("身份证号(必填)");
                 student.setCardNo(cardNo);
+                //判断导入的学员证件号是否已经存在
+                if(cardnoList.contains(cardNo)){
+                    continue;
+                }
                 if (StringUtils.isNotBlank(cardNo)) {
                     if (cardNo.length() > 4) {
                         student.setPassword(cardNo.substring(cardNo.length() - 4));

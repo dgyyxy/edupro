@@ -3,7 +3,6 @@ package com.edusys.manager.service;
 import com.edu.common.base.BaseService;
 import com.edu.common.dao.model.EduStudent;
 import com.edu.common.dao.model.EduStudentExample;
-import com.edu.common.dao.pojo.ExamPassRate;
 
 import javax.servlet.ServletOutputStream;
 import java.util.List;
@@ -23,5 +22,7 @@ public interface EduStudentService extends BaseService<EduStudent, EduStudentExa
     long countLearnRecord(EduStudentExample example);
 
     List<Integer> selectIdByOrganId(int organId);
+
+    List<String> selectCardNos();
 
 }

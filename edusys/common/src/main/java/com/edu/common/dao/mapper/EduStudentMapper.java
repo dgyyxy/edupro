@@ -36,4 +36,6 @@ public interface EduStudentMapper {
     long countLearnRecord(EduStudentExample example);
 
     List<Integer> selectIdByOrganId(int organId);
+
+    List<String> selectCardNos();
 }

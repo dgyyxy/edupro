@@ -5,7 +5,6 @@ import com.edu.common.base.BaseServiceImpl;
 import com.edu.common.dao.mapper.EduStudentMapper;
 import com.edu.common.dao.model.EduStudent;
 import com.edu.common.dao.model.EduStudentExample;
-import com.edu.common.dao.pojo.ExamPassRate;
 import com.edu.common.util.ExportExcelUtils;
 import com.edusys.manager.service.EduStudentService;
 import org.apache.poi.xssf.usermodel.*;
@@ -109,6 +108,11 @@ public class EduStudentServiceImpl extends BaseServiceImpl<EduStudentMapper, Edu
     @Override
     public List<Integer> selectIdByOrganId(int organId) {
         return eduStudentMapper.selectIdByOrganId(organId);
+    }
+
+    @Override
+    public List<String> selectCardNos() {
+        return eduStudentMapper.selectCardNos();
     }
 
     @Override
