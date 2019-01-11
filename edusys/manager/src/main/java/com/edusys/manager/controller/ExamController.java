@@ -34,6 +34,7 @@ import java.util.Map;
  * Created by Gary on 2017/5/10.
  * 考试管理Controller
  */
+@SuppressWarnings("ALL")
 @Api("考试管理")
 @Controller
 @RequestMapping("/manage/exam")
@@ -148,6 +149,8 @@ public class ExamController extends BaseController {
             return new SysResult(SysResultConstant.SUCCESS, map);
         }
         if (StringUtils.equals(examRule,"rule")) {//按照考试题库分类组卷考试
+            System.out.println("");
+            _log.info("create exam with rule::::"+questionTypeRateList.toString());
             List<QueryTypeRate> list = gson.fromJson(questionTypeRateList.toString(), new TypeToken<List<QueryTypeRate>>() {}.getType());
             paper.setCreateTime(time);
             paper.setQueryTypeRateList(list);

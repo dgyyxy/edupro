@@ -513,6 +513,11 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
             qids.add(qits.next());
         }
 
+        //判断所选择的题库分类中是否存在题目
+        if(qids.size()==0){
+            throw new Exception("选择的题库分类中不存在题目，请检查！");
+        }
+
         EduQuestionExample questionExample = new EduQuestionExample();
         EduQuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andIdIn(qids);
@@ -541,7 +546,7 @@ public class EduPaperServiceImpl extends BaseServiceImpl<EduPaperMapper, EduPape
         //试卷题量
         paper.setAmount(qids.size());
         //paper.setContent(gson.toJson(questionResults));
-        System.out.println(gson.toJson(questionResults));
+//        System.out.println(gson.toJson(questionResults));
 
         as.setPointMax(sum);
         as.setAnswerSheetItems(asList);

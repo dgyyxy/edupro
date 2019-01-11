@@ -561,7 +561,7 @@
         </foreach>
     </update>
     
-    <select id="statisticalQuestion" resultType="String">
+    <select id="statisticalQuestion"  fetchSize="-2147483648" resultType="String">
         select answer_sheet from edu_student_exam  where answer_sheet is not null and approved > 1
     </select>
     

@@ -170,7 +170,11 @@ public class ExcelUtil {
 				cell.setCellType(XSSFCell.CELL_TYPE_STRING);
 				if(!"".equals(cell.getStringCellValue().trim())) {
 					return false;
+				}else{
+					System.out.println("cell string eq null");
 				}
+			}else{
+				System.out.println("cell is null");
 			}
 		}
 		return true;
