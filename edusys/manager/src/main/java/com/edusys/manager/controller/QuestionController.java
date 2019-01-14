@@ -5,9 +5,7 @@ import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
 import com.edu.common.base.BaseController;
 import com.edu.common.dao.model.*;
-import com.edu.common.dao.pojo.StatisticBean;
 import com.edu.common.util.ExcelUtil;
-import com.edu.common.util.NumberUtils;
 import com.edu.common.validator.LengthValidator;
 import com.edusys.manager.common.SysResult;
 import com.edusys.manager.common.SysResultConstant;
@@ -16,7 +14,6 @@ import com.edusys.manager.service.EduQuestionService;
 import com.edusys.manager.service.EduQuestionTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -100,7 +97,7 @@ public class QuestionController extends BaseController {
             criteria.andIdNotIn(ids);
         }
 
-        //统计出错率和答题数
+        /*//统计出错率和答题数
         Map<Integer, StatisticBean> map = questionService.statisticalQuestion();
         if (map != null && map.size() > 0) {
             List<EduQuestion> updateQuestions = new ArrayList<>();
@@ -118,13 +115,13 @@ public class QuestionController extends BaseController {
             }
             //批量更新处理
             questionService.updateQuestionBatch(updateQuestions);
-        }
+        }*/
 
         List<EduQuestion> rows = questionService.selectByExample(questionExample);
         long total = questionService.countByExample(questionExample);
 
 
-/*
+        /*
         List<EduQuestion> list = new ArrayList<>();
         if(rows!=null && rows.size()>0){
 
