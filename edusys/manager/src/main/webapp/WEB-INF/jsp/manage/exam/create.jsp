@@ -243,8 +243,8 @@
                     alertMsg('及格分应该小于总分！')
                     return false;
                 }
-                if (questionCategories.length == 0 || questionCategories.length > 5) {
-                    alertMsg('请选择题库分类并且不得超过5个！');
+                if (questionCategories.length == 0 || questionCategories.length > 10) {
+                    alertMsg('请选择题库分类并且不得超过10个！');
                     return false;
                 }
                 if(totalPoint != nowTotalPoint){

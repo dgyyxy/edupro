@@ -109,6 +109,13 @@
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-quartz</artifactId>
                 <version>${shiro.version}</version>
+                <!-- 解决shiro和quartz的冲突问题 -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.opensymphony.quartz</groupId>
+                        <artifactId>quartz</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.shiro</groupId>
